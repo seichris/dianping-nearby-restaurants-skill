@@ -86,19 +86,48 @@ async function navigateTab(params) {
   return { tabId: tab.id, url: tab.url, title: tab.title };
 }
 
-async function evaluateTab(params) {
-  const tab = await chrome.tabs.get(params.tabId);
-  if (!isAllowedUrl(tab.url)) throw new Error(`Refusing to evaluate non-Dianping tab: ${tab.url}`);
+async function runScript(tabId, func) {
+  const tab = await chrome.tabs.get(tabId);
+  if (!isAllowedUrl(tab.url)) throw new Error(`Refusing to inspect non-Dianping tab: ${tab.url}`);
   const [{ result }] = await chrome.scripting.executeScript({
-    target: { tabId: params.tabId },
-    world: 'MAIN',
-    func: (source) => {
-      const fn = (0, eval)(`(${source})`);
-      return fn();
-    },
-    args: [params.source],
+    target: { tabId },
+    func,
   });
   return result;
+}
+
+async function extractLinks(params) {
+  return runScript(params.tabId, () => [...document.querySelectorAll('a')]
+    .map((a) => ({ text: a.innerText.trim(), href: a.href }))
+    .filter((link) => link.text && link.href));
+}
+
+async function extractListingShops(params) {
+  return runScript(params.tabId, () => {
+    const anchors = [...document.querySelectorAll('a[href*="/shop/"]')];
+    const seen = new Set();
+    const result = [];
+    for (const a of anchors) {
+      const href = new URL(a.href, location.href);
+      if (!/^\/shop\/[^/]+$/.test(href.pathname)) continue;
+      const text = a.innerText.trim();
+      if (!text || text.includes('条评价') || text.includes('人均')) continue;
+      if (seen.has(href.pathname)) continue;
+      seen.add(href.pathname);
+      result.push({ name: text, url: href.origin + href.pathname });
+    }
+    return result;
+  });
+}
+
+async function extractPageText(params) {
+  return runScript(params.tabId, () => {
+    const lines = document.body.innerText
+      .split(/\n+/)
+      .map((line) => line.trim())
+      .filter(Boolean);
+    return { title: document.title, href: location.href, lines };
+  });
 }
 
 async function closeTab(params) {
@@ -114,8 +143,12 @@ async function handleNativeMessage(message) {
     result = await createTab(params);
   } else if (message.method === 'navigate') {
     result = await navigateTab(params);
-  } else if (message.method === 'evaluate') {
-    result = await evaluateTab(params);
+  } else if (message.method === 'extractLinks') {
+    result = await extractLinks(params);
+  } else if (message.method === 'extractListingShops') {
+    result = await extractListingShops(params);
+  } else if (message.method === 'extractPageText') {
+    result = await extractPageText(params);
   } else if (message.method === 'closeTab') {
     result = await closeTab(params);
   } else if (message.method === 'healthcheck') {

@@ -100,10 +100,19 @@ class ClaudeBridgeTab {
     this.tabId = tabId;
     this.playwright = {
       waitForLoadState: async () => {},
-      evaluate: async (fn) => bridgeRequest('evaluate', {
-        tabId: this.tabId,
-        source: fn.toString(),
-      }),
+      evaluate: async (fn) => {
+        const source = fn.toString();
+        if (source.includes('document.querySelectorAll(\'a[href*="/shop/"]\')')) {
+          return bridgeRequest('extractListingShops', { tabId: this.tabId });
+        }
+        if (source.includes('document.body.innerText')) {
+          return bridgeRequest('extractPageText', { tabId: this.tabId });
+        }
+        if (source.includes('document.querySelectorAll(\'a\')')) {
+          return bridgeRequest('extractLinks', { tabId: this.tabId });
+        }
+        throw new Error('Unsupported browser evaluate function for Claude bridge.');
+      },
     };
   }
 

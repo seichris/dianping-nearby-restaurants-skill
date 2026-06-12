@@ -1,0 +1,726 @@
+{
+  "scan_id": "2026-06-12T14:07:52.400Z",
+  "base_url": "https://www.dianping.com/shanghai/ch10/r101937",
+  "station": {
+    "city": "shanghai",
+    "station_name": "静安寺",
+    "line_name": "2号线",
+    "base_url": "https://www.dianping.com/shanghai/ch10/r101937",
+    "notes": null
+  },
+  "updated_at": "2026-06-12T14:08:01.730Z",
+  "count": 10,
+  "shops_with_taocan": 3,
+  "records": [
+    {
+      "scan_id": "2026-06-12T14:07:52.400Z",
+      "source": {
+        "base_url": "https://www.dianping.com/shanghai/ch10/r101937",
+        "page_url": "https://www.dianping.com/shanghai/ch10/r101937",
+        "page_number": 1,
+        "result_index": 1
+      },
+      "shop": {
+        "name": "PAIN CHAUD 百丘(静安久光店)",
+        "url": "https://www.dianping.com/shop/G9ndRNFzqERFscf7",
+        "shop_id": "G9ndRNFzqERFscf7",
+        "address": "南京西路1618号久光百货1楼S102室",
+        "rating": 4.1,
+        "review_count": 10497,
+        "avg_price_per_person": 50,
+        "area": null,
+        "category": "静安寺商圈面包蛋糕",
+        "score_breakdown": {
+          "口味": 4.1,
+          "环境": 4.2,
+          "服务": 4.2
+        },
+        "ranking_badge": "静安寺商圈面包蛋糕打卡人气榜 · 第2名",
+        "open_status": "休息中",
+        "opening_hours": "次日07:30开始营业",
+        "distance_from_station": {
+          "raw_text": "距地铁静安寺站出入口步行150m",
+          "transit_text": "静安寺站出入口",
+          "walking_distance_meters": 150
+        },
+        "amenities": [
+          "付费停车"
+        ],
+        "recommended_dishes": [
+          "开心果泡芙",
+          "冰淇淋",
+          "柠檬挞",
+          "可颂",
+          "迷你红酒无花果",
+          "栗子挞",
+          "法棍",
+          "小玉米面包",
+          "小杂粮包",
+          "杏仁可颂"
+        ],
+        "menu_count": 4,
+        "review_section_count": null
+      },
+      "offers": [
+        {
+          "type": "voucher",
+          "title": "90元代金券",
+          "price": 86,
+          "currency": "CNY",
+          "discount": "9.6折",
+          "original_price": null,
+          "flags": [
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": null,
+            "valid_time": null,
+            "earliest_usable": null
+          },
+          "raw_text": "90元代金券 随时退 过期自动退 ¥ 86 9.6折 买券"
+        },
+        {
+          "type": "taocan",
+          "title": "【人气特惠】法式冰淇淋单人餐（口味4选1）",
+          "price": 19.9,
+          "currency": "CNY",
+          "discount": "6.7折",
+          "original_price": 30,
+          "flags": [
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": "单人",
+            "valid_time": "周一至周日",
+            "earliest_usable": null
+          },
+          "raw_text": "【人气特惠】法式冰淇淋单人餐（口味4选1） 周一至周日 随时退 过期自动退 ¥ 19.9 6.7折 ￥30 抢购"
+        },
+        {
+          "type": "taocan",
+          "title": "【福利】热拿铁双人餐",
+          "price": 54,
+          "currency": "CNY",
+          "discount": "8.5折",
+          "original_price": 64,
+          "flags": [
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": "双人",
+            "valid_time": "周一至周日",
+            "earliest_usable": null
+          },
+          "raw_text": "【福利】热拿铁双人餐 周一至周日 随时退 过期自动退 ¥ 54 8.5折 ￥64 抢购"
+        }
+      ],
+      "extraction": {
+        "status": "ok",
+        "details_hidden": false,
+        "captured_at": "2026-06-12T14:07:54.787Z",
+        "method": "codex-extension",
+        "elapsed_ms": 1092
+      }
+    },
+    {
+      "scan_id": "2026-06-12T14:07:52.400Z",
+      "source": {
+        "base_url": "https://www.dianping.com/shanghai/ch10/r101937",
+        "page_url": "https://www.dianping.com/shanghai/ch10/r101937",
+        "page_number": 1,
+        "result_index": 2
+      },
+      "shop": {
+        "name": "普通食堂·家庭式烤肉(铜仁路店)",
+        "url": "https://www.dianping.com/shop/H4UYBW3SeTO0E17U",
+        "shop_id": "H4UYBW3SeTO0E17U",
+        "address": "铜仁路88号L1层L114",
+        "rating": 4.3,
+        "review_count": 6331,
+        "avg_price_per_person": 165,
+        "area": null,
+        "category": "南京西路商圈韩式烤肉",
+        "score_breakdown": {
+          "口味": 4.3,
+          "环境": 4.4,
+          "服务": 4.4
+        },
+        "ranking_badge": "南京西路商圈烤肉打卡人气榜 · 第1名",
+        "open_status": "营业中",
+        "opening_hours": "17:30-次日01:00",
+        "distance_from_station": {
+          "raw_text": "距地铁7号线静安寺站8口步行280m",
+          "transit_text": "7号线静安寺站8口",
+          "walking_distance_meters": 280
+        },
+        "amenities": [],
+        "recommended_dishes": [
+          "奶奶的辣年糕条",
+          "冷三肉",
+          "火山芝士鸡蛋糕",
+          "黑猪五花肉",
+          "厚切吊龙",
+          "烤肉小哥哥",
+          "芝士玉米",
+          "辣炒海灵菇",
+          "大酱汤",
+          "厚切猪颈肉"
+        ],
+        "menu_count": 40,
+        "review_section_count": null
+      },
+      "offers": [],
+      "extraction": {
+        "status": "ok",
+        "details_hidden": false,
+        "captured_at": "2026-06-12T14:07:55.537Z",
+        "method": "codex-extension",
+        "elapsed_ms": 746
+      }
+    },
+    {
+      "scan_id": "2026-06-12T14:07:52.400Z",
+      "source": {
+        "base_url": "https://www.dianping.com/shanghai/ch10/r101937",
+        "page_url": "https://www.dianping.com/shanghai/ch10/r101937",
+        "page_number": 1,
+        "result_index": 3
+      },
+      "shop": {
+        "name": "浩海火燒雲傣家菜(芮欧百货店)",
+        "url": "https://www.dianping.com/shop/H90u0jvX1RDjX8dg",
+        "shop_id": "H90u0jvX1RDjX8dg",
+        "address": "南京西路1601号芮欧百货4层4A",
+        "rating": 4.6,
+        "review_count": 50796,
+        "avg_price_per_person": 108,
+        "area": null,
+        "category": "静安寺商圈云南菜|滇菜",
+        "score_breakdown": {
+          "口味": 4.6,
+          "环境": 4.5,
+          "服务": 4.6
+        },
+        "ranking_badge": "上海云南菜|滇菜热门榜 · 第1名",
+        "open_status": "休息中",
+        "opening_hours": "次日10:30开始营业",
+        "distance_from_station": {
+          "raw_text": "距地铁静安寺站4口步行200m",
+          "transit_text": "静安寺站4口",
+          "walking_distance_meters": 200
+        },
+        "amenities": [
+          "付费停车",
+          "有宝宝椅"
+        ],
+        "recommended_dishes": [
+          "土司铜锅油焖鸡",
+          "黑三剁",
+          "小锅米线",
+          "蒜香鸡脚",
+          "牛肉饵丝",
+          "蒜香拼盘",
+          "凉拌荷包蛋",
+          "确实自己酿的浓浆原味米酒",
+          "酸笋炒空心菜",
+          "玫瑰花生冰粉"
+        ],
+        "menu_count": 41,
+        "review_section_count": null
+      },
+      "offers": [],
+      "extraction": {
+        "status": "ok",
+        "details_hidden": false,
+        "captured_at": "2026-06-12T14:07:56.339Z",
+        "method": "codex-extension",
+        "elapsed_ms": 797
+      }
+    },
+    {
+      "scan_id": "2026-06-12T14:07:52.400Z",
+      "source": {
+        "base_url": "https://www.dianping.com/shanghai/ch10/r101937",
+        "page_url": "https://www.dianping.com/shanghai/ch10/r101937",
+        "page_number": 1,
+        "result_index": 4
+      },
+      "shop": {
+        "name": "Maki House寿司(CP静安店)",
+        "url": "https://www.dianping.com/shop/l47cLtydTj99mTJk",
+        "shop_id": "l47cLtydTj99mTJk",
+        "address": "愚园路8号CP静安四楼L4-12室",
+        "rating": 4.7,
+        "review_count": 27286,
+        "avg_price_per_person": 136,
+        "area": null,
+        "category": "静安寺商圈寿司",
+        "score_breakdown": {
+          "口味": 4.7,
+          "环境": 4.6,
+          "服务": 4.6
+        },
+        "ranking_badge": "静安区寿司热门榜 · 第2名",
+        "open_status": "休息中",
+        "opening_hours": "次日11:30开始营业",
+        "distance_from_station": {
+          "raw_text": "距地铁静安寺站3口步行370m",
+          "transit_text": "静安寺站3口",
+          "walking_distance_meters": 370
+        },
+        "amenities": [
+          "有大桌",
+          "免费停车",
+          "有宝宝椅"
+        ],
+        "recommended_dishes": [
+          "招牌鹅肝寿司",
+          "牛排饭",
+          "鳗鱼饭",
+          "三文鱼刺身",
+          "三文鱼腩",
+          "鲜虾牛油果卷",
+          "帝王蟹肉凯撒色拉",
+          "焦糖布丁",
+          "香煎牛舌",
+          "甜虾刺"
+        ],
+        "menu_count": 64,
+        "review_section_count": null
+      },
+      "offers": [],
+      "extraction": {
+        "status": "ok",
+        "details_hidden": false,
+        "captured_at": "2026-06-12T14:07:57.037Z",
+        "method": "codex-extension",
+        "elapsed_ms": 692
+      }
+    },
+    {
+      "scan_id": "2026-06-12T14:07:52.400Z",
+      "source": {
+        "base_url": "https://www.dianping.com/shanghai/ch10/r101937",
+        "page_url": "https://www.dianping.com/shanghai/ch10/r101937",
+        "page_number": 1,
+        "result_index": 5
+      },
+      "shop": {
+        "name": "FASCINO Selection(久光百货店)",
+        "url": "https://www.dianping.com/shop/Ga32MhZqsDPgepzN",
+        "shop_id": "Ga32MhZqsDPgepzN",
+        "address": "南京西路1618号久光百货b1",
+        "rating": 3.8,
+        "review_count": 2865,
+        "avg_price_per_person": 35,
+        "area": null,
+        "category": "静安寺商圈面包蛋糕",
+        "score_breakdown": {
+          "口味": 3.9,
+          "环境": 3.9,
+          "服务": 3.9
+        },
+        "ranking_badge": null,
+        "open_status": "休息中",
+        "opening_hours": "次日08:30开始营业",
+        "distance_from_station": {
+          "raw_text": "距地铁静安寺站2口步行20m",
+          "transit_text": "静安寺站2口",
+          "walking_distance_meters": 20
+        },
+        "amenities": [
+          "付费停车"
+        ],
+        "recommended_dishes": [
+          "乳酪贝果",
+          "京都三色贝果",
+          "伯爵苹果贝果",
+          "芝麻贝果",
+          "海盐生乳卷",
+          "芋泥奶霜泡芙",
+          "芝麻豆乳卷",
+          "姜黄金枪鱼贝果",
+          "桂花紫薯贝果",
+          "开心果布蕾泡芙"
+        ],
+        "menu_count": 2,
+        "review_section_count": null
+      },
+      "offers": [
+        {
+          "type": "taocan",
+          "title": "蜂蜜蛋糕礼盒",
+          "price": 70,
+          "currency": "CNY",
+          "discount": "8.8折",
+          "original_price": 80,
+          "flags": [
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": null,
+            "valid_time": "周一至周日",
+            "earliest_usable": null
+          },
+          "raw_text": "蜂蜜蛋糕礼盒 周一至周日 随时退 过期自动退 ¥ 70 8.8折 ￥80 抢购"
+        },
+        {
+          "type": "taocan",
+          "title": "馥郁伴手礼盒",
+          "price": 210,
+          "currency": "CNY",
+          "discount": "9.7折",
+          "original_price": 218,
+          "flags": [
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": null,
+            "valid_time": "周一至周日",
+            "earliest_usable": null
+          },
+          "raw_text": "馥郁伴手礼盒 周一至周日 随时退 过期自动退 ¥ 210 9.7折 ￥218 抢购"
+        }
+      ],
+      "extraction": {
+        "status": "ok",
+        "details_hidden": false,
+        "captured_at": "2026-06-12T14:07:57.893Z",
+        "method": "codex-extension",
+        "elapsed_ms": 853
+      }
+    },
+    {
+      "scan_id": "2026-06-12T14:07:52.400Z",
+      "source": {
+        "base_url": "https://www.dianping.com/shanghai/ch10/r101937",
+        "page_url": "https://www.dianping.com/shanghai/ch10/r101937",
+        "page_number": 1,
+        "result_index": 6
+      },
+      "shop": {
+        "name": "王家沙点心状元(静安寺店)",
+        "url": "https://www.dianping.com/shop/HasyBZXCJOHNiOKy",
+        "shop_id": "HasyBZXCJOHNiOKy",
+        "address": "北京西路1535号",
+        "rating": 3.9,
+        "review_count": 3412,
+        "avg_price_per_person": 37,
+        "area": "静安寺商圈",
+        "category": "小吃",
+        "score_breakdown": {
+          "口味": 3.9,
+          "环境": 3.9,
+          "服务": 3.9
+        },
+        "ranking_badge": "静安寺商圈小吃打卡人气榜 · 第2名",
+        "open_status": "营业中",
+        "opening_hours": "07:00-24:00",
+        "distance_from_station": {
+          "raw_text": "距地铁静安寺站3口步行560m",
+          "transit_text": "静安寺站3口",
+          "walking_distance_meters": 560
+        },
+        "amenities": [
+          "免费停车",
+          "有宝宝椅"
+        ],
+        "recommended_dishes": [
+          "马兰头青团",
+          "蟹粉小笼",
+          "辣肉冷面",
+          "艾叶细沙青团",
+          "虾肉小馄饨",
+          "榨菜鲜肉月饼",
+          "苔条净素月饼",
+          "点心",
+          "艾叶咸蛋黄肉松青团",
+          "铁板牛肉炒面"
+        ],
+        "menu_count": 6,
+        "review_section_count": null
+      },
+      "offers": [
+        {
+          "type": "taocan",
+          "title": "端午飘香礼盒",
+          "price": 100,
+          "currency": "CNY",
+          "discount": "9.2折",
+          "original_price": 109,
+          "flags": [
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": null,
+            "valid_time": "周一至周日",
+            "earliest_usable": null
+          },
+          "raw_text": "端午飘香礼盒 周一至周日 随时退 过期自动退 ¥ 100 9.2折 ￥109 抢购"
+        },
+        {
+          "type": "taocan",
+          "title": "粽横四海礼盒",
+          "price": 150,
+          "currency": "CNY",
+          "discount": "9.4折",
+          "original_price": 160,
+          "flags": [
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": null,
+            "valid_time": "周一至周日",
+            "earliest_usable": null
+          },
+          "raw_text": "粽横四海礼盒 周一至周日 随时退 过期自动退 ¥ 150 9.4折 ￥160 抢购"
+        }
+      ],
+      "extraction": {
+        "status": "ok",
+        "details_hidden": false,
+        "captured_at": "2026-06-12T14:07:58.694Z",
+        "method": "codex-extension",
+        "elapsed_ms": 795
+      }
+    },
+    {
+      "scan_id": "2026-06-12T14:07:52.400Z",
+      "source": {
+        "base_url": "https://www.dianping.com/shanghai/ch10/r101937",
+        "page_url": "https://www.dianping.com/shanghai/ch10/r101937",
+        "page_number": 1,
+        "result_index": 7
+      },
+      "shop": {
+        "name": "沪西老弄堂面馆(静安寺店)",
+        "url": "https://www.dianping.com/shop/l5uh6bCVt12QboDC",
+        "shop_id": "l5uh6bCVt12QboDC",
+        "address": "北京西路1738号",
+        "rating": 4.3,
+        "review_count": 18473,
+        "avg_price_per_person": 41,
+        "area": "静安寺商圈",
+        "category": "面馆",
+        "score_breakdown": {
+          "口味": 4.3,
+          "环境": 4.2,
+          "服务": 4.4
+        },
+        "ranking_badge": "静安寺商圈面馆好评榜 · 第1名",
+        "open_status": "休息中",
+        "opening_hours": "次日10:00开始营业",
+        "distance_from_station": {
+          "raw_text": "距地铁静安寺站1口步行330m",
+          "transit_text": "静安寺站1口",
+          "walking_distance_meters": 330
+        },
+        "amenities": [
+          "付费停车",
+          "有宝宝椅"
+        ],
+        "recommended_dishes": [
+          "蛤蜊猪肝拌面",
+          "炸猪排",
+          "辣肉拌面",
+          "大肠拌面",
+          "腰花拌面",
+          "素鸡",
+          "荷包蛋",
+          "葱油拌面",
+          "虎皮蛋",
+          "茄盒"
+        ],
+        "menu_count": null,
+        "review_section_count": null
+      },
+      "offers": [],
+      "extraction": {
+        "status": "ok",
+        "details_hidden": false,
+        "captured_at": "2026-06-12T14:07:59.400Z",
+        "method": "codex-extension",
+        "elapsed_ms": 700
+      }
+    },
+    {
+      "scan_id": "2026-06-12T14:07:52.400Z",
+      "source": {
+        "base_url": "https://www.dianping.com/shanghai/ch10/r101937",
+        "page_url": "https://www.dianping.com/shanghai/ch10/r101937",
+        "page_number": 1,
+        "result_index": 8
+      },
+      "shop": {
+        "name": "O'mills Sourdough Bakery&Bistro(嘉里中心店)",
+        "url": "https://www.dianping.com/shop/k1xGqLcipxN8Szch",
+        "shop_id": "k1xGqLcipxN8Szch",
+        "address": "距地铁7号线静安寺站6口步行170m",
+        "rating": 4.3,
+        "review_count": 9200,
+        "avg_price_per_person": 129,
+        "area": "静安寺商圈",
+        "category": "西餐",
+        "score_breakdown": {
+          "口味": 4.4,
+          "环境": 4.4,
+          "服务": 4.4
+        },
+        "ranking_badge": null,
+        "open_status": "休息中",
+        "opening_hours": "次日08:30开始营业",
+        "distance_from_station": {
+          "raw_text": "距地铁7号线静安寺站6口步行170m",
+          "transit_text": "7号线静安寺站6口",
+          "walking_distance_meters": 170
+        },
+        "amenities": [
+          "付费停车",
+          "有宝宝椅"
+        ],
+        "recommended_dishes": [
+          "超级牛肉帕尼尼",
+          "谷饲肉眼牛排沙拉",
+          "水牛芝士玛格丽特",
+          "无花果沙拉",
+          "酸面包",
+          "牛油果沙拉",
+          "有机温泉蛋牛油果乡村吐司",
+          "黑松露野酵母披萨",
+          "三文鱼意面",
+          "东坡牛肋排拼盘"
+        ],
+        "menu_count": 36,
+        "review_section_count": null
+      },
+      "offers": [],
+      "extraction": {
+        "status": "ok",
+        "details_hidden": false,
+        "captured_at": "2026-06-12T14:08:00.187Z",
+        "method": "codex-extension",
+        "elapsed_ms": 781
+      }
+    },
+    {
+      "scan_id": "2026-06-12T14:07:52.400Z",
+      "source": {
+        "base_url": "https://www.dianping.com/shanghai/ch10/r101937",
+        "page_url": "https://www.dianping.com/shanghai/ch10/r101937",
+        "page_number": 1,
+        "result_index": 9
+      },
+      "shop": {
+        "name": "春风松月楼(久光百货店)",
+        "url": "https://www.dianping.com/shop/E1GOy9LEdOq3cTFC",
+        "shop_id": "E1GOy9LEdOq3cTFC",
+        "address": "距地铁2号线静安寺地铁站出入口20m",
+        "rating": 3.8,
+        "review_count": 5788,
+        "avg_price_per_person": 32,
+        "area": null,
+        "category": "静安寺商圈包子",
+        "score_breakdown": {
+          "口味": 3.9,
+          "环境": 3.9,
+          "服务": 3.9
+        },
+        "ranking_badge": "静安寺商圈包子热门榜 · 第3名",
+        "open_status": "休息中",
+        "opening_hours": "次日09:00开始营业",
+        "distance_from_station": null,
+        "amenities": [
+          "付费停车",
+          "有宝宝椅"
+        ],
+        "recommended_dishes": [
+          "招牌净素菜包",
+          "松月楼素蟹粉拌面",
+          "金牌香菇面筋面",
+          "净素香菇馅烧麦",
+          "原创素蟹粉包子",
+          "传统香素鸭",
+          "本帮传统辣酱面",
+          "净素甜糯豆沙包",
+          "一口香素馄饨",
+          "本帮豆腐皮包子"
+        ],
+        "menu_count": 68,
+        "review_section_count": null
+      },
+      "offers": [],
+      "extraction": {
+        "status": "ok",
+        "details_hidden": false,
+        "captured_at": "2026-06-12T14:08:00.936Z",
+        "method": "codex-extension",
+        "elapsed_ms": 744
+      }
+    },
+    {
+      "scan_id": "2026-06-12T14:07:52.400Z",
+      "source": {
+        "base_url": "https://www.dianping.com/shanghai/ch10/r101937",
+        "page_url": "https://www.dianping.com/shanghai/ch10/r101937",
+        "page_number": 1,
+        "result_index": 10
+      },
+      "shop": {
+        "name": "龍记香港茶餐厅(久光百货店)",
+        "url": "https://www.dianping.com/shop/GagcZVZpLDQAiXyY",
+        "shop_id": "GagcZVZpLDQAiXyY",
+        "address": "南京西路1618号久光百货B1楼",
+        "rating": 3.5,
+        "review_count": 17781,
+        "avg_price_per_person": 83,
+        "area": "静安寺商圈",
+        "category": "茶餐厅",
+        "score_breakdown": {
+          "口味": 3.7,
+          "环境": 3.7,
+          "服务": 3.5
+        },
+        "ranking_badge": "静安区茶餐厅热门榜 · 第9名",
+        "open_status": "休息中",
+        "opening_hours": "次日10:00开始营业",
+        "distance_from_station": {
+          "raw_text": "距地铁静安寺站出入口步行110m",
+          "transit_text": "静安寺站出入口",
+          "walking_distance_meters": 110
+        },
+        "amenities": [
+          "付费停车"
+        ],
+        "recommended_dishes": [
+          "金牌烧鹅",
+          "玫瑰豉油鸡",
+          "金牌奶茶",
+          "驰名烧鸭",
+          "龙记四宝饭",
+          "港式菠萝油",
+          "鲜虾净云吞",
+          "干炒叉烧乌冬",
+          "烧味拼盘",
+          "招牌艇仔粥"
+        ],
+        "menu_count": 65,
+        "review_section_count": null
+      },
+      "offers": [],
+      "extraction": {
+        "status": "ok",
+        "details_hidden": false,
+        "captured_at": "2026-06-12T14:08:01.722Z",
+        "method": "codex-extension",
+        "elapsed_ms": 776
+      }
+    }
+  ]
+}

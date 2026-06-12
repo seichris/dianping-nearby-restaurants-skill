@@ -1,0 +1,1030 @@
+{
+  "scan_id": "2026-06-12T14:08:01.732Z",
+  "base_url": "https://www.dianping.com/beijing/ch10/r2511",
+  "station": {
+    "city": "beijing",
+    "station_name": "团结湖",
+    "line_name": "10号线",
+    "base_url": "https://www.dianping.com/beijing/ch10/r2511",
+    "notes": null
+  },
+  "updated_at": "2026-06-12T14:08:11.005Z",
+  "count": 10,
+  "shops_with_taocan": 9,
+  "records": [
+    {
+      "scan_id": "2026-06-12T14:08:01.732Z",
+      "source": {
+        "base_url": "https://www.dianping.com/beijing/ch10/r2511",
+        "page_url": "https://www.dianping.com/beijing/ch10/r2511",
+        "page_number": 1,
+        "result_index": 1
+      },
+      "shop": {
+        "name": "何贤记(瑞辰国际中心店)",
+        "url": "https://www.dianping.com/shop/k1cWKtyjHd7cmVGN",
+        "shop_id": "k1cWKtyjHd7cmVGN",
+        "address": "农展馆南路13号瑞辰国际中心2层",
+        "rating": 4.4,
+        "review_count": 15018,
+        "avg_price_per_person": 88,
+        "area": "朝阳公园",
+        "category": "团结湖粤菜馆",
+        "score_breakdown": {
+          "口味": 4.4,
+          "环境": 4.4,
+          "服务": 4.4
+        },
+        "ranking_badge": "朝阳公园/团结湖粤菜好评榜 · 第1名",
+        "open_status": "休息中",
+        "opening_hours": "次日11:00开始营业",
+        "distance_from_station": {
+          "raw_text": "距地铁10号线团结湖站C口步行630m",
+          "transit_text": "10号线团结湖站C口",
+          "walking_distance_meters": 630
+        },
+        "amenities": [
+          "有大桌",
+          "付费停车"
+        ],
+        "recommended_dishes": [
+          "经典烧鸭",
+          "何贤记当日靓汤",
+          "陈皮豆沙",
+          "八珍豆腐候",
+          "鸡蛋肠粉",
+          "烤鹅",
+          "腊肉饭",
+          "经典三拼",
+          "经典腊味煲仔饭",
+          "烧鹅例牌"
+        ],
+        "menu_count": null,
+        "review_section_count": null
+      },
+      "offers": [
+        {
+          "type": "voucher",
+          "title": "50元代金券",
+          "price": 48,
+          "currency": "CNY",
+          "discount": "9.6折",
+          "original_price": null,
+          "flags": [
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": null,
+            "valid_time": null,
+            "earliest_usable": null
+          },
+          "raw_text": "50元代金券 随时退 过期自动退 ¥ 48 9.6折 买券"
+        },
+        {
+          "type": "taocan",
+          "title": "【收鑶+拍照打卡专属福利】古法陈皮红豆沙",
+          "price": 0.99,
+          "currency": "CNY",
+          "discount": "0.6折",
+          "original_price": 18,
+          "flags": [
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": null,
+            "valid_time": "周一至周日",
+            "earliest_usable": null
+          },
+          "raw_text": "【收鑶+拍照打卡专属福利】古法陈皮红豆沙 周一至周日 随时退 过期自动退 ¥ 0.99 0.6折 ￥18 抢购"
+        },
+        {
+          "type": "taocan",
+          "title": "【尝鲜】老火煲汤（位）",
+          "price": 9.9,
+          "currency": "CNY",
+          "discount": "5.5折",
+          "original_price": 18,
+          "flags": [
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": null,
+            "valid_time": "周一至周日",
+            "earliest_usable": null
+          },
+          "raw_text": "【尝鲜】老火煲汤（位） 周一至周日 随时退 过期自动退 ¥ 9.9 5.5折 ￥18 抢购"
+        }
+      ],
+      "extraction": {
+        "status": "ok",
+        "details_hidden": false,
+        "captured_at": "2026-06-12T14:08:03.614Z",
+        "method": "codex-extension",
+        "elapsed_ms": 832
+      }
+    },
+    {
+      "scan_id": "2026-06-12T14:08:01.732Z",
+      "source": {
+        "base_url": "https://www.dianping.com/beijing/ch10/r2511",
+        "page_url": "https://www.dianping.com/beijing/ch10/r2511",
+        "page_number": 1,
+        "result_index": 2
+      },
+      "shop": {
+        "name": "THE TACO BAR(三里屯店)",
+        "url": "https://www.dianping.com/shop/l7F7wWC2wuZEFVwA",
+        "shop_id": "l7F7wWC2wuZEFVwA",
+        "address": "工人体育场北路4号院10号楼1层104（本垒隔壁）",
+        "rating": 4.7,
+        "review_count": 10779,
+        "avg_price_per_person": 105,
+        "area": "三里屯/工体",
+        "category": "西餐",
+        "score_breakdown": {
+          "口味": 4.7,
+          "环境": 4.7,
+          "服务": 4.6
+        },
+        "ranking_badge": null,
+        "open_status": "营业中",
+        "opening_hours": "11:30-23:00",
+        "distance_from_station": {
+          "raw_text": "距地铁3号线团结湖站H口步行260m",
+          "transit_text": "3号线团结湖站H口",
+          "walking_distance_meters": 260
+        },
+        "amenities": [
+          "有大桌",
+          "付费停车",
+          "有宝宝椅"
+        ],
+        "recommended_dishes": [
+          "外国佬taco",
+          "玉米片牛油果",
+          "法式吐司",
+          "炸鱼taco",
+          "牛肉Taco",
+          "羽衣甘蓝沙拉",
+          "烤大虾tacos",
+          "炸馒头",
+          "烟味辣椒鸡翅",
+          "猪碎肉吐司"
+        ],
+        "menu_count": 23,
+        "review_section_count": null
+      },
+      "offers": [
+        {
+          "type": "voucher",
+          "title": "50元代金券",
+          "price": 49,
+          "currency": "CNY",
+          "discount": "9.8折",
+          "original_price": null,
+          "flags": [
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": null,
+            "valid_time": null,
+            "earliest_usable": null
+          },
+          "raw_text": "50元代金券 随时退 过期自动退 ¥ 49 9.8折 买券"
+        },
+        {
+          "type": "taocan",
+          "title": "精选双人套餐",
+          "price": 288,
+          "currency": "CNY",
+          "discount": "7.8折",
+          "original_price": 374,
+          "flags": [
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": "双人",
+            "valid_time": "周一至周日",
+            "earliest_usable": null
+          },
+          "raw_text": "精选双人套餐 周一至周日 随时退 过期自动退 ¥ 288 7.8折 ￥374 抢购"
+        },
+        {
+          "type": "taocan",
+          "title": "经典双人套餐",
+          "price": 288,
+          "currency": "CNY",
+          "discount": "7.8折",
+          "original_price": 374,
+          "flags": [
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": "双人",
+            "valid_time": "周一至周日",
+            "earliest_usable": null
+          },
+          "raw_text": "经典双人套餐 周一至周日 随时退 过期自动退 ¥ 288 7.8折 ￥374 抢购"
+        }
+      ],
+      "extraction": {
+        "status": "ok",
+        "details_hidden": false,
+        "captured_at": "2026-06-12T14:08:04.437Z",
+        "method": "codex-extension",
+        "elapsed_ms": 819
+      }
+    },
+    {
+      "scan_id": "2026-06-12T14:08:01.732Z",
+      "source": {
+        "base_url": "https://www.dianping.com/beijing/ch10/r2511",
+        "page_url": "https://www.dianping.com/beijing/ch10/r2511",
+        "page_number": 1,
+        "result_index": 3
+      },
+      "shop": {
+        "name": "Scott's Family意大利家庭料理(三里屯店)",
+        "url": "https://www.dianping.com/shop/G3LKtwLzRzysf73t",
+        "shop_id": "G3LKtwLzRzysf73t",
+        "address": "三里屯东三街4号（博茨瓦纳使馆对面）",
+        "rating": 4.4,
+        "review_count": 4704,
+        "avg_price_per_person": 113,
+        "area": "三里屯/工体西式",
+        "category": "快餐",
+        "score_breakdown": {
+          "口味": 4.3,
+          "环境": 4.3,
+          "服务": 4.4
+        },
+        "ranking_badge": "三里屯/工体小吃快餐环境榜 · 第3名",
+        "open_status": "营业中",
+        "opening_hours": "11:00-22:30",
+        "distance_from_station": {
+          "raw_text": "距地铁10号线团结湖站A口步行470m",
+          "transit_text": "10号线团结湖站A口",
+          "walking_distance_meters": 470
+        },
+        "amenities": [
+          "有大桌",
+          "免费停车",
+          "有宝宝椅"
+        ],
+        "recommended_dishes": [
+          "餐前面包",
+          "意式千层面",
+          "玛格丽特比萨",
+          "家庭沙拉",
+          "奶油蘑菇汤",
+          "经典意大利肉面",
+          "提拉米苏",
+          "意大利肉酱意粉",
+          "奶酪菠菜鸡肉饺子",
+          "西冷牛排"
+        ],
+        "menu_count": null,
+        "review_section_count": null
+      },
+      "offers": [
+        {
+          "type": "taocan",
+          "title": "豪华牛排双人套餐",
+          "price": 398,
+          "currency": "CNY",
+          "discount": "6.9折",
+          "original_price": 580,
+          "flags": [
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": "双人",
+            "valid_time": "周一至周日",
+            "earliest_usable": null
+          },
+          "raw_text": "豪华牛排双人套餐 周一至周日 随时退 过期自动退 ¥ 398 6.9折 ￥580 抢购"
+        },
+        {
+          "type": "taocan",
+          "title": "超值双人商务套餐",
+          "price": 158,
+          "currency": "CNY",
+          "discount": "7折",
+          "original_price": 226,
+          "flags": [
+            "今日可用",
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": "双人",
+            "valid_time": null,
+            "earliest_usable": null
+          },
+          "raw_text": "超值双人商务套餐 今日可用 随时退 过期自动退 ¥ 158 7折 ￥226 抢购"
+        }
+      ],
+      "extraction": {
+        "status": "ok",
+        "details_hidden": false,
+        "captured_at": "2026-06-12T14:08:05.219Z",
+        "method": "codex-extension",
+        "elapsed_ms": 776
+      }
+    },
+    {
+      "scan_id": "2026-06-12T14:08:01.732Z",
+      "source": {
+        "base_url": "https://www.dianping.com/beijing/ch10/r2511",
+        "page_url": "https://www.dianping.com/beijing/ch10/r2511",
+        "page_number": 1,
+        "result_index": 4
+      },
+      "shop": {
+        "name": "Wood Garden(三里屯店)",
+        "url": "https://www.dianping.com/shop/G3mhIS3ktmfOJCRT",
+        "shop_id": "G3mhIS3ktmfOJCRT",
+        "address": "工人体育场北路工体北路4号院",
+        "rating": 4.6,
+        "review_count": 17806,
+        "avg_price_per_person": 105,
+        "area": "三里屯/工体",
+        "category": "西餐",
+        "score_breakdown": {
+          "口味": 4.6,
+          "环境": 4.8,
+          "服务": 4.7
+        },
+        "ranking_badge": "三里屯/工体西餐热门榜 · 第4名",
+        "open_status": "营业中",
+        "opening_hours": "11:00-24:00",
+        "distance_from_station": {
+          "raw_text": "距地铁3号线团结湖站H口步行350m",
+          "transit_text": "3号线团结湖站H口",
+          "walking_distance_meters": 350
+        },
+        "amenities": [
+          "有大桌",
+          "付费停车"
+        ],
+        "recommended_dishes": [
+          "整只鲜活波士顿龙虾海鲜饭",
+          "Wood精选西班牙海鲜饭",
+          "wood经典肉酱意面",
+          "蓝莓树莓巴斯克",
+          "鲜虾牛油果芒果花园沙拉",
+          "麻辣小龙虾意面",
+          "安格斯150天菲力牛排",
+          "果木烟熏谷饲安格斯眼肉牛排2+（235g)",
+          "芭乐奶酪火腿沙拉",
+          "西班牙油浸蒜香虾"
+        ],
+        "menu_count": 38,
+        "review_section_count": null
+      },
+      "offers": [
+        {
+          "type": "voucher",
+          "title": "100元代金券",
+          "price": 95,
+          "currency": "CNY",
+          "discount": "9.5折",
+          "original_price": null,
+          "flags": [
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": null,
+            "valid_time": null,
+            "earliest_usable": null
+          },
+          "raw_text": "100元代金券 随时退 过期自动退 ¥ 95 9.5折 买券"
+        },
+        {
+          "type": "taocan",
+          "title": "【夏日上新】经典双人餐•每晚驻唱",
+          "price": 265,
+          "currency": "CNY",
+          "discount": "6.1折",
+          "original_price": 440,
+          "flags": [
+            "今日可用",
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": "双人",
+            "valid_time": null,
+            "earliest_usable": null
+          },
+          "raw_text": "【夏日上新】经典双人餐•每晚驻唱 今日可用 随时退 过期自动退 ¥ 265 6.1折 ￥440 抢购"
+        },
+        {
+          "type": "taocan",
+          "title": "【鲜活海鲜】精选招牌海鲜饭双人餐",
+          "price": 366,
+          "currency": "CNY",
+          "discount": "5.7折",
+          "original_price": 650,
+          "flags": [
+            "今日可用",
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": "双人",
+            "valid_time": null,
+            "earliest_usable": null
+          },
+          "raw_text": "【鲜活海鲜】精选招牌海鲜饭双人餐 今日可用 随时退 过期自动退 ¥ 366 5.7折 ￥650 抢购"
+        }
+      ],
+      "extraction": {
+        "status": "ok",
+        "details_hidden": false,
+        "captured_at": "2026-06-12T14:08:06.075Z",
+        "method": "codex-extension",
+        "elapsed_ms": 849
+      }
+    },
+    {
+      "scan_id": "2026-06-12T14:08:01.732Z",
+      "source": {
+        "base_url": "https://www.dianping.com/beijing/ch10/r2511",
+        "page_url": "https://www.dianping.com/beijing/ch10/r2511",
+        "page_number": 1,
+        "result_index": 5
+      },
+      "shop": {
+        "name": "Q MEX 库迈墨西哥餐吧(三里屯店)",
+        "url": "https://www.dianping.com/shop/H5B4OsRxDyVni3Oj",
+        "shop_id": "H5B4OsRxDyVni3Oj",
+        "address": "工人体育场北路工体北路4号院80号楼1层107室",
+        "rating": 4.7,
+        "review_count": 18148,
+        "avg_price_per_person": 105,
+        "area": "三里屯/工体",
+        "category": "西餐",
+        "score_breakdown": {
+          "口味": 4.7,
+          "环境": 4.7,
+          "服务": 4.7
+        },
+        "ranking_badge": "三里屯/工体西餐销量榜 · 第5名",
+        "open_status": "营业中",
+        "opening_hours": "10:00-次日02:00",
+        "distance_from_station": {
+          "raw_text": "距地铁3号线团结湖站H口步行370m",
+          "transit_text": "3号线团结湖站H口",
+          "walking_distance_meters": 370
+        },
+        "amenities": [
+          "有大桌",
+          "付费停车",
+          "有宝宝椅"
+        ],
+        "recommended_dishes": [
+          "鲜虾脆皮塔可",
+          "加州风格墨西哥卷",
+          "taco",
+          "芝士玉米片",
+          "莎莎拼盘配玉米片",
+          "莫吉托",
+          "辣芝士薯条",
+          "法基塔",
+          "招牌墨西哥卷",
+          "焦糖布丁"
+        ],
+        "menu_count": 15,
+        "review_section_count": null
+      },
+      "offers": [
+        {
+          "type": "voucher",
+          "title": "指定商品可用",
+          "price": 98,
+          "currency": "CNY",
+          "discount": "9.8折",
+          "original_price": null,
+          "flags": [
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": null,
+            "valid_time": null,
+            "earliest_usable": null
+          },
+          "raw_text": "指定商品可用 随时退 过期自动退 ¥ 98 9.8折 买券"
+        },
+        {
+          "type": "taocan",
+          "title": "【踏夏寻味】招牌双人套餐",
+          "price": 231,
+          "currency": "CNY",
+          "discount": "6.2折",
+          "original_price": 373,
+          "flags": [
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": "双人",
+            "valid_time": "周一至周日",
+            "earliest_usable": null
+          },
+          "raw_text": "【踏夏寻味】招牌双人套餐 周一至周日 随时退 过期自动退 ¥ 231 6.2折 ￥373 抢购"
+        },
+        {
+          "type": "taocan",
+          "title": "经典双人套餐",
+          "price": 244,
+          "currency": "CNY",
+          "discount": "8.4折",
+          "original_price": 293,
+          "flags": [
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": "双人",
+            "valid_time": "周一至周日",
+            "earliest_usable": null
+          },
+          "raw_text": "经典双人套餐 周一至周日 随时退 过期自动退 ¥ 244 8.4折 ￥293 抢购"
+        }
+      ],
+      "extraction": {
+        "status": "ok",
+        "details_hidden": false,
+        "captured_at": "2026-06-12T14:08:06.965Z",
+        "method": "codex-extension",
+        "elapsed_ms": 884
+      }
+    },
+    {
+      "scan_id": "2026-06-12T14:08:01.732Z",
+      "source": {
+        "base_url": "https://www.dianping.com/beijing/ch10/r2511",
+        "page_url": "https://www.dianping.com/beijing/ch10/r2511",
+        "page_number": 1,
+        "result_index": 6
+      },
+      "shop": {
+        "name": "屋里厢上海菜馆",
+        "url": "https://www.dianping.com/shop/k1SFangFje74jJcT",
+        "shop_id": "k1SFangFje74jJcT",
+        "address": "工人体育场北路甲2号盈科中心临街底商一层",
+        "rating": 4.9,
+        "review_count": 7889,
+        "avg_price_per_person": 417,
+        "area": "三里屯",
+        "category": "工体本帮菜",
+        "score_breakdown": {
+          "口味": 4.9,
+          "环境": 4.8,
+          "服务": 4.9
+        },
+        "ranking_badge": null,
+        "open_status": "休息中",
+        "opening_hours": "次日11:00开始营业",
+        "distance_from_station": {
+          "raw_text": "距地铁10号线团结湖站出入口步行340m",
+          "transit_text": "10号线团结湖站出入口",
+          "walking_distance_meters": 340
+        },
+        "amenities": [
+          "免费停车",
+          "有宝宝椅"
+        ],
+        "recommended_dishes": [
+          "沪式牛肉粒",
+          "本帮熏鱼",
+          "响油鳝丝",
+          "腌笃鲜",
+          "元宝目鱼红烧肉",
+          "蟹粉豆腐",
+          "开洋葱油拌面",
+          "油爆小河虾",
+          "鲜肉生煎馒头",
+          "葱烤八宝葫芦鸭"
+        ],
+        "menu_count": null,
+        "review_section_count": null
+      },
+      "offers": [],
+      "extraction": {
+        "status": "ok",
+        "details_hidden": false,
+        "captured_at": "2026-06-12T14:08:07.678Z",
+        "method": "codex-extension",
+        "elapsed_ms": 707
+      }
+    },
+    {
+      "scan_id": "2026-06-12T14:08:01.732Z",
+      "source": {
+        "base_url": "https://www.dianping.com/beijing/ch10/r2511",
+        "page_url": "https://www.dianping.com/beijing/ch10/r2511",
+        "page_number": 1,
+        "result_index": 7
+      },
+      "shop": {
+        "name": "coops自然醒(三里屯机电院店)",
+        "url": "https://www.dianping.com/shop/l9lZTQ2KxV1OQvii",
+        "shop_id": "l9lZTQ2KxV1OQvii",
+        "address": "工人体育场北路三里屯四号院81号楼一层110室",
+        "rating": 4.2,
+        "review_count": 5685,
+        "avg_price_per_person": 51,
+        "area": "三里屯",
+        "category": "工体面包蛋糕",
+        "score_breakdown": {
+          "口味": 4.2,
+          "环境": 4.3,
+          "服务": 4.2
+        },
+        "ranking_badge": "三里屯/工体面包蛋糕好评榜 · 第7名",
+        "open_status": "休息中",
+        "opening_hours": "次日10:00开始营业",
+        "distance_from_station": null,
+        "amenities": [],
+        "recommended_dishes": [
+          "芭乐话梅青柠蛋糕",
+          "黑风抹茶蛋糕",
+          "开心果莓莓焙茶奶油蛋糕",
+          "提拉米苏戚风蛋糕",
+          "黑糖珍珠奶茶蛋糕",
+          "yuzu柚杏子蛋糕",
+          "多肉杨梅戚风蛋糕",
+          "燕麦椰椰慕斯蛋糕",
+          "低糖栗子裸蛋糕",
+          "巧克力蛋糕"
+        ],
+        "menu_count": 8,
+        "review_section_count": null
+      },
+      "offers": [
+        {
+          "type": "taocan",
+          "title": "【Coops精选】切角蛋糕四选二",
+          "price": 75,
+          "currency": "CNY",
+          "discount": "8.4折",
+          "original_price": 90,
+          "flags": [
+            "今日可用",
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": null,
+            "valid_time": null,
+            "earliest_usable": null
+          },
+          "raw_text": "【Coops精选】切角蛋糕四选二 今日可用 随时退 过期自动退 ¥ 75 8.4折 ￥90 抢购"
+        },
+        {
+          "type": "taocan",
+          "title": "抹茶热压可颂华夫下午茶",
+          "price": 68,
+          "currency": "CNY",
+          "discount": "8.4折",
+          "original_price": 81,
+          "flags": [
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": null,
+            "valid_time": "周一至周日",
+            "earliest_usable": null
+          },
+          "raw_text": "抹茶热压可颂华夫下午茶 周一至周日 随时退 过期自动退 ¥ 68 8.4折 ￥81 抢购"
+        }
+      ],
+      "extraction": {
+        "status": "ok",
+        "details_hidden": false,
+        "captured_at": "2026-06-12T14:08:08.519Z",
+        "method": "codex-extension",
+        "elapsed_ms": 836
+      }
+    },
+    {
+      "scan_id": "2026-06-12T14:08:01.732Z",
+      "source": {
+        "base_url": "https://www.dianping.com/beijing/ch10/r2511",
+        "page_url": "https://www.dianping.com/beijing/ch10/r2511",
+        "page_number": 1,
+        "result_index": 8
+      },
+      "shop": {
+        "name": "LA PLATEA兰蒂地中海餐吧(三里屯店)",
+        "url": "https://www.dianping.com/shop/l7DM07ymdxcfq7yq",
+        "shop_id": "l7DM07ymdxcfq7yq",
+        "address": "工人体育场北路四号院11号楼",
+        "rating": 3.9,
+        "review_count": 1410,
+        "avg_price_per_person": 131,
+        "area": "三里屯/工体",
+        "category": "西餐",
+        "score_breakdown": {
+          "口味": 3.9,
+          "环境": 3.9,
+          "服务": 3.9
+        },
+        "ranking_badge": null,
+        "open_status": "营业中",
+        "opening_hours": "11:00-次日01:00",
+        "distance_from_station": {
+          "raw_text": "距地铁3号线团结湖站H口步行320m",
+          "transit_text": "3号线团结湖站H口",
+          "walking_distance_meters": 320
+        },
+        "amenities": [
+          "付费停车",
+          "有宝宝椅"
+        ],
+        "recommended_dishes": [
+          "小份西班牙香辣肠",
+          "水牛奶酪披萨块",
+          "传统千层面",
+          "蘑菇黑松露面包片",
+          "牛油果虾仁沙拉",
+          "奶酪火腿炸土豆丸",
+          "帕玛森芝士薯条",
+          "地中海风味烤蔬菜",
+          "蒜味橄榄油鲜虾",
+          "提拉米苏"
+        ],
+        "menu_count": null,
+        "review_section_count": null
+      },
+      "offers": [
+        {
+          "type": "taocan",
+          "title": "下午茶 · 咖啡甜点套餐",
+          "price": 29.9,
+          "currency": "CNY",
+          "discount": "3.8折",
+          "original_price": 80,
+          "flags": [
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": null,
+            "valid_time": "周一至周日",
+            "earliest_usable": null
+          },
+          "raw_text": "下午茶 · 咖啡甜点套餐 周一至周日 随时退 过期自动退 ¥ 29.9 3.8折 ￥80 抢购"
+        },
+        {
+          "type": "taocan",
+          "title": "经典热销 · 咖啡单人份",
+          "price": 19.9,
+          "currency": "CNY",
+          "discount": "6.3折",
+          "original_price": 32,
+          "flags": [
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": "单人",
+            "valid_time": "周一至周日",
+            "earliest_usable": null
+          },
+          "raw_text": "经典热销 · 咖啡单人份 周一至周日 随时退 过期自动退 ¥ 19.9 6.3折 ￥32 抢购"
+        }
+      ],
+      "extraction": {
+        "status": "ok",
+        "details_hidden": false,
+        "captured_at": "2026-06-12T14:08:09.334Z",
+        "method": "codex-extension",
+        "elapsed_ms": 810
+      }
+    },
+    {
+      "scan_id": "2026-06-12T14:08:01.732Z",
+      "source": {
+        "base_url": "https://www.dianping.com/beijing/ch10/r2511",
+        "page_url": "https://www.dianping.com/beijing/ch10/r2511",
+        "page_number": 1,
+        "result_index": 9
+      },
+      "shop": {
+        "name": "芝心花SoulFlower(三里屯店)",
+        "url": "https://www.dianping.com/shop/k4nW98gDBmQA3l3o",
+        "shop_id": "k4nW98gDBmQA3l3o",
+        "address": "农展馆南路12号2号楼",
+        "rating": 4.3,
+        "review_count": 1211,
+        "avg_price_per_person": 136,
+        "area": "三里屯",
+        "category": "工体面包蛋糕",
+        "score_breakdown": {
+          "口味": 4.3,
+          "环境": 4.4,
+          "服务": 4.4
+        },
+        "ranking_badge": "三里屯/工体面包蛋糕服务榜 · 第7名",
+        "open_status": "休息中",
+        "opening_hours": "次日09:00开始营业",
+        "distance_from_station": {
+          "raw_text": "距地铁10号线团结湖站B口步行90m",
+          "transit_text": "10号线团结湖站B口",
+          "walking_distance_meters": 90
+        },
+        "amenities": [
+          "付费停车"
+        ],
+        "recommended_dishes": [
+          "四重奏蛋糕",
+          "椰子百香果慕斯",
+          "茉莉芭乐",
+          "足料榴莲蛋糕",
+          "桂花乌龙",
+          "芝心果园九宫格",
+          "海盐芝士蛋糕",
+          "咖啡车厘子慕斯",
+          "西柚茉莉",
+          "白桃乌龙"
+        ],
+        "menu_count": 1,
+        "review_section_count": null
+      },
+      "offers": [
+        {
+          "type": "taocan",
+          "title": "可配送",
+          "price": 228,
+          "currency": "CNY",
+          "discount": "4.8折",
+          "original_price": 476,
+          "flags": [
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": null,
+            "valid_time": null,
+            "earliest_usable": null
+          },
+          "raw_text": "可配送 随时退 过期自动退 ¥ 228 4.8折 ￥476 抢购"
+        },
+        {
+          "type": "taocan",
+          "title": "可配送",
+          "price": 218,
+          "currency": "CNY",
+          "discount": "6.6折",
+          "original_price": 335,
+          "flags": [
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": null,
+            "valid_time": null,
+            "earliest_usable": null
+          },
+          "raw_text": "可配送 随时退 过期自动退 ¥ 218 6.6折 ￥335 抢购"
+        }
+      ],
+      "extraction": {
+        "status": "ok",
+        "details_hidden": false,
+        "captured_at": "2026-06-12T14:08:10.218Z",
+        "method": "codex-extension",
+        "elapsed_ms": 878
+      }
+    },
+    {
+      "scan_id": "2026-06-12T14:08:01.732Z",
+      "source": {
+        "base_url": "https://www.dianping.com/beijing/ch10/r2511",
+        "page_url": "https://www.dianping.com/beijing/ch10/r2511",
+        "page_number": 1,
+        "result_index": 10
+      },
+      "shop": {
+        "name": "本垒美式烤肉(三里屯店)",
+        "url": "https://www.dianping.com/shop/EPm03omWa0rQ30Xo",
+        "shop_id": "EPm03omWa0rQ30Xo",
+        "address": "工人体育场北路4号10号楼一层106号",
+        "rating": 4.2,
+        "review_count": 8419,
+        "avg_price_per_person": 174,
+        "area": "三里屯/工体",
+        "category": "西餐",
+        "score_breakdown": {
+          "口味": 4.1,
+          "环境": 4.4,
+          "服务": 4.3
+        },
+        "ranking_badge": null,
+        "open_status": "营业中",
+        "opening_hours": "11:00-23:00",
+        "distance_from_station": {
+          "raw_text": "距地铁3号线团结湖站H口步行300m",
+          "transit_text": "3号线团结湖站H口",
+          "walking_distance_meters": 300
+        },
+        "amenities": [
+          "有大桌",
+          "付费停车",
+          "有宝宝椅"
+        ],
+        "recommended_dishes": [
+          "烤肉三拼",
+          "堪萨斯猪肋排",
+          "切牛胸板肉拼盘",
+          "薯条",
+          "手撕猪肉汉堡",
+          "奶油玉米",
+          "烤肉爱好者拼盘",
+          "鲜啤酒",
+          "香肠",
+          "烟熏烤玉米Smoke Corn"
+        ],
+        "menu_count": 48,
+        "review_section_count": null
+      },
+      "offers": [
+        {
+          "type": "voucher",
+          "title": "100元代金券",
+          "price": 95,
+          "currency": "CNY",
+          "discount": "9.5折",
+          "original_price": null,
+          "flags": [
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": null,
+            "valid_time": null,
+            "earliest_usable": "最早06.15可用"
+          },
+          "raw_text": "100元代金券 最早06.15可用 限用5张 随时退 过期自动退 ¥ 95 9.5折 买券"
+        },
+        {
+          "type": "taocan",
+          "title": "【优雅时光】烤肉拼盘双人餐（含烟熏烤玉米/可乐）",
+          "price": 320,
+          "currency": "CNY",
+          "discount": "8.5折",
+          "original_price": 380,
+          "flags": [
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": "双人",
+            "valid_time": null,
+            "earliest_usable": "最早06.15可用"
+          },
+          "raw_text": "【优雅时光】烤肉拼盘双人餐（含烟熏烤玉米/可乐） 最早06.15可用 随时退 过期自动退 ¥ 320 8.5折 ￥380 抢购"
+        },
+        {
+          "type": "taocan",
+          "title": "2人汉堡套餐",
+          "price": 218,
+          "currency": "CNY",
+          "discount": "8折",
+          "original_price": 273,
+          "flags": [
+            "今日可用",
+            "随时退",
+            "过期自动退"
+          ],
+          "details": {
+            "group_size": "2人",
+            "valid_time": null,
+            "earliest_usable": null
+          },
+          "raw_text": "2人汉堡套餐 今日可用 随时退 过期自动退 ¥ 218 8折 ￥273 抢购"
+        }
+      ],
+      "extraction": {
+        "status": "ok",
+        "details_hidden": false,
+        "captured_at": "2026-06-12T14:08:10.998Z",
+        "method": "codex-extension",
+        "elapsed_ms": 777
+      }
+    }
+  ]
+}

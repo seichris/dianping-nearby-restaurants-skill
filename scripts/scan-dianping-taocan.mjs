@@ -89,6 +89,12 @@ export function resolveOutDir(outDir = DEFAULT_OUT_DIR, cwd = defaultCwd()) {
   return path.isAbsolute(outDir) ? outDir : path.resolve(cwd, outDir);
 }
 
+export function sanitizeStationConfig(config) {
+  if (!config) return null;
+  const { address, ...safeConfig } = config;
+  return safeConfig;
+}
+
 export async function readStationConfig(options = {}) {
   const cwd = options.cwd || defaultCwd();
   const configPath = options.configPath
@@ -107,22 +113,39 @@ export async function writeStationConfig(config, options = {}) {
   const outDir = resolveOutDir(options.outDir || DEFAULT_OUT_DIR, cwd);
   await fs.mkdir(outDir, { recursive: true });
   const configPath = path.join(outDir, 'station.json');
-  const payload = {
-    address: config.address || null,
+  const payload = sanitizeStationConfig({
     city: config.city || cityFromBaseUrl(config.base_url || config.url || DEFAULT_BASE_URL),
     station_name: config.station_name || null,
     line_name: config.line_name || null,
     base_url: config.base_url || config.url || DEFAULT_BASE_URL,
     notes: config.notes || null,
     updated_at: new Date().toISOString(),
-  };
+  });
   await fs.writeFile(configPath, `${JSON.stringify(payload, null, 2)}\n`);
   return { configPath, config: payload };
 }
 
+export function canonicalListingBaseUrl(baseUrl = DEFAULT_BASE_URL) {
+  try {
+    const url = new URL(baseUrl);
+    url.search = '';
+    url.hash = '';
+    url.pathname = url.pathname
+      .replace(/d500p[0-9]+\/?$/, '')
+      .replace(/\/+$/, '');
+    return url.toString();
+  } catch {
+    return String(baseUrl)
+      .split(/[?#]/)[0]
+      .replace(/d500p[0-9]+\/?$/, '')
+      .replace(/\/+$/, '');
+  }
+}
+
 export function listingPageUrl(baseUrl, pageNumber) {
-  if (pageNumber === 1) return baseUrl;
-  return `${baseUrl}d500p${pageNumber}`;
+  const cleanBaseUrl = canonicalListingBaseUrl(baseUrl);
+  if (pageNumber === 1) return cleanBaseUrl;
+  return `${cleanBaseUrl}d500p${pageNumber}`;
 }
 
 function parseNumber(value) {
@@ -234,7 +257,7 @@ export function parseShopMetadata(lines) {
 }
 
 function parseOfferDetails(title, lines) {
-  const validTime = lines.find((line) => /^周[一二三四五六日至、-]+/.test(line) || /^[0-9]{1,2}:[0-9]{2}-[0-9]{1,2}:[0-9]{2}$/.test(line)) || null;
+  const validTime = lines.find((line) => /^周[周一二三四五六日至、-]+$/.test(line) || /^[0-9]{1,2}:[0-9]{2}-[0-9]{1,2}:[0-9]{2}$/.test(line)) || null;
   const earliestUsable = lines.find((line) => /^最早[0-9]{2}\.[0-9]{2}可用$/.test(line)) || null;
   const groupSizeMatch = title.match(/(单人|双人|[0-9]+-[0-9]+人|[0-9]+人)/);
   return {
@@ -242,6 +265,16 @@ function parseOfferDetails(title, lines) {
     valid_time: validTime,
     earliest_usable: earliestUsable,
   };
+}
+
+function isOfferDetailLine(line, flagSet) {
+  return flagSet.has(line) ||
+    /^周[周一二三四五六日至、-]+$/.test(line) ||
+    /^[0-9]{1,2}:[0-9]{2}-[0-9]{1,2}:[0-9]{2}$/.test(line) ||
+    /^最早[0-9]{2}\.[0-9]{2}可用$/.test(line) ||
+    /^限用[0-9]+张$/.test(line) ||
+    /^每.*限用[0-9]+张$/.test(line) ||
+    /^不可叠加/.test(line);
 }
 
 export function parseOffers(lines) {
@@ -261,7 +294,7 @@ export function parseOffers(lines) {
         !title ||
         title.includes('¥') ||
         title.includes('￥') ||
-        flagSet.has(title) ||
+        isOfferDetailLine(title, flagSet) ||
         actionSet.has(title) ||
         /^[0-9]+(?:\.[0-9]+)?折$/.test(title) ||
         /^[0-9]+(?:\.[0-9]+)?$/.test(title)
@@ -272,8 +305,8 @@ export function parseOffers(lines) {
 
       let j = i + 1;
       const flags = [];
-      while (flagSet.has(lines[j])) {
-        flags.push(lines[j]);
+      while (isOfferDetailLine(lines[j], flagSet)) {
+        if (flagSet.has(lines[j])) flags.push(lines[j]);
         j += 1;
       }
 
@@ -368,6 +401,12 @@ export async function extractShopRecord(browser, shop, scanId, baseUrl) {
     const addressIndex = lines.findIndex((line) => /^.+[0-9]+号/.test(line));
     const shopId = new URL(shop.url).pathname.split('/').pop();
     const metadata = parseShopMetadata(lines);
+    const offers = verificationRequired ? [] : parseOffers(lines);
+    const extractionStatus = verificationRequired
+      ? 'verification_required'
+      : detailsHidden && offers.length === 0
+        ? 'details_hidden'
+        : 'ok';
 
     return {
       scan_id: scanId,
@@ -382,9 +421,9 @@ export async function extractShopRecord(browser, shop, scanId, baseUrl) {
         address: addressIndex >= 0 ? lines[addressIndex] : null,
         ...metadata,
       },
-      offers: verificationRequired || detailsHidden ? [] : parseOffers(lines),
+      offers,
       extraction: {
-        status: verificationRequired ? 'verification_required' : 'ok',
+        status: extractionStatus,
         details_hidden: detailsHidden,
         captured_at: new Date().toISOString(),
         method: 'codex-extension',
@@ -402,8 +441,14 @@ export async function runScan(options = {}) {
   }
 
   const cwd = options.cwd || defaultCwd();
-  const stationConfig = options.baseUrl ? null : await readStationConfig({ cwd, configPath: options.configPath });
-  const baseUrl = options.baseUrl || stationConfig?.base_url || DEFAULT_BASE_URL;
+  const savedStationConfig = options.stationConfig || await readStationConfig({ cwd, configPath: options.configPath });
+  const baseUrl = options.baseUrl || savedStationConfig?.base_url || DEFAULT_BASE_URL;
+  const stationConfig = options.stationConfig || (
+    !options.baseUrl ||
+    (savedStationConfig?.base_url && canonicalListingBaseUrl(savedStationConfig.base_url) === canonicalListingBaseUrl(baseUrl))
+      ? savedStationConfig
+      : null
+  );
   const pages = Number(options.pages || DEFAULT_PAGES);
   const limit = Number.isFinite(Number(options.limit)) ? Number(options.limit) : DEFAULT_LIMIT;
   const outDir = resolveOutDir(options.outDir || DEFAULT_OUT_DIR, cwd);
@@ -453,11 +498,11 @@ export async function runScan(options = {}) {
 }
 
 export async function persistScan({ outDir, scanId, baseUrl, stationConfig, records }) {
-  const effectiveStationConfig = stationConfig || {
+  const effectiveStationConfig = sanitizeStationConfig(stationConfig || {
     city: cityFromBaseUrl(baseUrl),
     station_name: 'unknown-station',
     base_url: baseUrl,
-  };
+  });
   const stationDir = stationDataDir(outDir, effectiveStationConfig, baseUrl);
   await fs.mkdir(stationDir, { recursive: true });
   const snapshotPath = path.join(stationDir, snapshotFileName(scanId));

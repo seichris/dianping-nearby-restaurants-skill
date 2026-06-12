@@ -55,7 +55,7 @@ If you only want to inspect or try the skill without saving scan history, point 
 - `scripts/scan-dianping-taocan.mjs`: scanner module used from the Codex extension-backed browser.
 - `scripts/view-dianping-taocan.mjs`: local viewer for saved data.
 - `scripts/install-codex-skill.sh`: installs the native Codex skill payload.
-- `data/restaurants/station.json`: active saved address/station/listing URL.
+- `data/restaurants/station.json`: active saved station/listing URL.
 - `data/restaurants/<city>/<station>/station.json`: station copy used with scan output.
 - `data/restaurants/<city>/<station>/<scan-timestamp>.json`: immutable scan snapshot.
 - `data/restaurants/<city>/<station>/latest.json`: latest scan snapshot.
@@ -83,13 +83,15 @@ It intentionally does not copy `README.md` or `data/`; scan history stays in the
 
 The skill accepts either an address or a subway station.
 
-If given an address, Codex searches online for likely nearby Shanghai metro stations, asks the user to confirm the candidate, then opens Dianping and selects:
+If given an address, Codex uses it only to find likely nearby Shanghai metro stations, asks the user to confirm the candidate, then opens Dianping and selects:
 
 ```text
 地点 -> 地铁线 -> subway line -> station
 ```
 
 After Dianping navigates to the station listing page, the skill saves that URL in `data/restaurants/station.json`. Future scans use the saved URL directly.
+
+The raw address is not saved to `station.json`; only the confirmed station, city, line, and listing URL are stored.
 
 ## Scan
 

@@ -22,7 +22,7 @@ data/restaurants/<city>/<station>/
 └── latest.json
 ```
 
-- `station.json`: saved user address, subway line/station, city, and station listing URL.
+- `station.json`: saved subway line/station, city, and station listing URL. Do not store the user's raw address.
 - `<scan-timestamp>.json`: immutable full scan snapshot using a filename derived from the scan timestamp.
 - `latest.json`: latest full scan snapshot for querying and human review.
 
@@ -34,7 +34,7 @@ If multiple people write to the same repo, the timestamped JSON snapshots should
 
 If `data/restaurants/station.json` does not exist and the user did not provide a station listing URL, ask for either the user's address or the subway station they want to use.
 
-If the user gives a subway station, use it directly. If the user gives an address, search online for the closest Shanghai metro station and line. Present the likely candidate to the user for confirmation before saving it. If the search returns multiple plausible candidates, ask the user to choose from the top candidates.
+If the user gives a subway station, use it directly. If the user gives an address, use it only to find the closest Shanghai metro station and line. Present the likely candidate to the user for confirmation before saving the station. If the search returns multiple plausible candidates, ask the user to choose from the top candidates. Do not save or commit the raw address.
 
 Open `https://www.dianping.com/shanghai/ch10/d1` in the extension-backed browser. Use the Dianping location filters to select `地铁线`, then the confirmed subway line, then the confirmed station.
 
@@ -44,7 +44,6 @@ After Dianping navigates to the station result page, save the resulting URL:
 const { writeStationConfig } = await import(`${nodeRepl.homeDir}/.codex/skills/dianping-taocan-discovery/scripts/scan-dianping-taocan.mjs`);
 
 await writeStationConfig({
-  address: 'USER_ADDRESS',
   city: 'CITY_SLUG',
   line_name: 'SUBWAY_LINE',
   station_name: 'STATION_NAME',

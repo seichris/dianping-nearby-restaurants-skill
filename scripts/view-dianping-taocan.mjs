@@ -78,6 +78,15 @@ async function collectLatestFiles(dir) {
   return latestFiles;
 }
 
+async function pathExists(filePath) {
+  try {
+    await fs.access(filePath);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 async function resolveLatestFile(args) {
   const requestedPath = path.resolve(process.cwd(), args.file);
   if (args.fileProvided) return requestedPath;
@@ -85,7 +94,10 @@ async function resolveLatestFile(args) {
   const dataDir = path.resolve(process.cwd(), DEFAULT_DATA_DIR);
   const latestFiles = (await collectLatestFiles(dataDir))
     .filter((entry) => entry.path !== requestedPath);
-  if (latestFiles.length === 0) return requestedPath;
+  if (latestFiles.length === 0) {
+    if (await pathExists(requestedPath)) return requestedPath;
+    throw new Error(`No restaurant data found under ${DEFAULT_DATA_DIR}. Run a scan first or pass --file <latest.json>.`);
+  }
 
   latestFiles.sort((a, b) => b.mtimeMs - a.mtimeMs);
   return latestFiles[0].path;
@@ -189,14 +201,22 @@ function formatOffer(offer) {
   return bits.join(' | ');
 }
 
-function printHuman(data, records) {
+function printHuman(data, records, allRecords) {
   const station = data.station?.station_name
     ? `${data.station.station_name}${data.station.line_name ? ` (${data.station.line_name})` : ''}`
     : data.base_url;
+  const hiddenCount = allRecords.filter((record) => record.extraction?.status === 'details_hidden').length;
+  const noOfferCount = allRecords.filter((record) => (record.offers || []).length === 0).length;
 
   console.log(`Dianping taocan snapshot: ${data.updated_at || data.scan_id}`);
   console.log(`Station/listing: ${station}`);
-  console.log(`Showing ${records.length} shop${records.length === 1 ? '' : 's'}`);
+  console.log(`Showing ${records.length} of ${allRecords.length} shop${allRecords.length === 1 ? '' : 's'}`);
+  if (hiddenCount || noOfferCount) {
+    console.log(`Filtered context: ${noOfferCount} with no saved offers${hiddenCount ? `, ${hiddenCount} with hidden details` : ''}`);
+  }
+  if (records.length === 0 && allRecords.length > 0) {
+    console.log('No shops matched the current filters. Use --all to inspect every scanned shop.');
+  }
   console.log('');
 
   for (const record of records) {
@@ -237,7 +257,8 @@ async function main() {
 
   const filePath = await resolveLatestFile(args);
   const data = JSON.parse(await fs.readFile(filePath, 'utf8'));
-  let records = filterRecords(data.records || [], args);
+  const allRecords = data.records || [];
+  let records = filterRecords(allRecords, args);
   if (args.newOnly) {
     const previousOfferKeys = await readPreviousOfferKeys(filePath, data.scan_id);
     records = filterNewOffers(records, previousOfferKeys);
@@ -248,7 +269,7 @@ async function main() {
     return;
   }
 
-  printHuman(data, records);
+  printHuman(data, records, allRecords);
 }
 
 main().catch((error) => {

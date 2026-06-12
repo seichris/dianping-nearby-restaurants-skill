@@ -21,6 +21,32 @@ const socketPath = process.env.DIANPING_BROWSER_BRIDGE_SOCKET ||
 
 let requestBuffer = '';
 
+function safePathSegment(value, fallback) {
+  return String(value || fallback)
+    .trim()
+    .replace(/[\\/:*?"<>|]+/g, '-')
+    .replace(/\s+/g, '-')
+    .replace(/^-+|-+$/g, '') || fallback;
+}
+
+function assertInside(baseDir, targetPath) {
+  const base = path.resolve(baseDir);
+  const target = path.resolve(targetPath);
+  if (target !== base && !target.startsWith(`${base}${path.sep}`)) {
+    throw new Error(`Path is outside data directory: ${targetPath}`);
+  }
+  return target;
+}
+
+function stationDirFromArgs(outDir, args) {
+  if (!args.city || !args.station_name) throw new Error('city and station_name are required.');
+  return assertInside(outDir, path.join(
+    outDir,
+    safePathSegment(args.city, 'unknown-city'),
+    safePathSegment(args.station_name, 'unknown-station'),
+  ));
+}
+
 function send(message) {
   process.stdout.write(`${JSON.stringify(message)}\n`);
 }
@@ -180,9 +206,9 @@ async function queryRestaurants(args) {
   const outDir = resolveOutDir(args.outDir || 'data/restaurants', projectDir);
   let latestPath;
   if (args.city && args.station_name) {
-    latestPath = path.join(outDir, args.city, args.station_name, 'latest.json');
+    latestPath = path.join(stationDirFromArgs(outDir, args), 'latest.json');
   } else if (args.file) {
-    latestPath = path.resolve(projectDir, args.file);
+    latestPath = assertInside(outDir, path.resolve(projectDir, args.file));
   } else {
     throw new Error('Provide city and station_name, or file.');
   }
@@ -208,7 +234,9 @@ async function queryRestaurants(args) {
 
 async function publishScan(args) {
   const outDir = resolveOutDir(args.outDir || 'data/restaurants', projectDir);
-  const stationDir = args.stationDir || path.join(outDir, args.city, args.station_name);
+  const stationDir = args.stationDir
+    ? assertInside(outDir, path.resolve(projectDir, args.stationDir))
+    : stationDirFromArgs(outDir, args);
   await execFileAsync('git', ['pull', '--rebase', 'origin', 'main'], { cwd: projectDir });
   await execFileAsync('git', ['add', stationDir], { cwd: projectDir });
   const { stdout: diffStdout } = await execFileAsync('git', ['diff', '--cached', '--name-only'], { cwd: projectDir });

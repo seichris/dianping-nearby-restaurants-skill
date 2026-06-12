@@ -3,7 +3,7 @@
     "dianping-restaurants": {
       "command": "node",
       "args": [
-        "${CLAUDE_PLUGIN_ROOT}/claude/mcp-server.mjs"
+        "${CLAUDE_PLUGIN_ROOT:-.}/claude/mcp-server.mjs"
       ],
       "timeout": 900000
     }

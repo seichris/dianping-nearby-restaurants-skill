@@ -8,7 +8,6 @@ import { promisify } from 'node:util';
 import { fileURLToPath } from 'node:url';
 import {
   runScan,
-  readStationConfig,
   resolveOutDir,
 } from '../scripts/scan-dianping-taocan.mjs';
 
@@ -120,26 +119,32 @@ async function resolveStationUrl(args) {
     const direct = firstLinks.find((link) => link.text === stationName);
     if (direct) return { base_url: direct.href.replace(/^http:/, 'https:'), source: 'station-link' };
 
-    let lineLink = null;
+    let lineLinks = [];
     if (args.line_name) {
-      lineLink = firstLinks.find((link) => link.text === args.line_name);
+      const lineLink = firstLinks.find((link) => link.text === args.line_name);
+      if (lineLink) lineLinks = [lineLink];
+    } else {
+      lineLinks = firstLinks.filter((link) => /号线$/.test(link.text));
     }
-    if (!lineLink) {
-      lineLink = firstLinks.find((link) => /号线$/.test(link.text));
-    }
-    if (!lineLink) throw new Error(`Could not find a metro line link for ${city} ${stationName}.`);
+    if (lineLinks.length === 0) throw new Error(`Could not find a metro line link for ${city} ${stationName}.`);
 
-    await tab.goto(lineLink.href.replace(/^http:/, 'https:'));
-    const stationLinks = await tab.playwright.evaluate(() => [...document.querySelectorAll('a')]
-      .map((a) => ({ text: a.innerText.trim(), href: a.href }))
-      .filter((link) => link.text && link.href));
-    const stationLink = stationLinks.find((link) => link.text === stationName);
-    if (!stationLink) throw new Error(`Could not find station ${stationName} on ${lineLink.text}.`);
-    return {
-      base_url: stationLink.href.replace(/^http:/, 'https:'),
-      line_name: args.line_name || lineLink.text,
-      source: 'metro-filter',
-    };
+    const attemptedLines = [];
+    for (const lineLink of lineLinks) {
+      attemptedLines.push(lineLink.text);
+      await tab.goto(lineLink.href.replace(/^http:/, 'https:'));
+      const stationLinks = await tab.playwright.evaluate(() => [...document.querySelectorAll('a')]
+        .map((a) => ({ text: a.innerText.trim(), href: a.href }))
+        .filter((link) => link.text && link.href));
+      const stationLink = stationLinks.find((link) => link.text === stationName);
+      if (stationLink) {
+        return {
+          base_url: stationLink.href.replace(/^http:/, 'https:'),
+          line_name: args.line_name || lineLink.text,
+          source: 'metro-filter',
+        };
+      }
+    }
+    throw new Error(`Could not find station ${stationName} on metro lines: ${attemptedLines.join(', ')}.`);
   } finally {
     await tab.close();
   }

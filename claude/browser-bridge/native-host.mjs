@@ -92,6 +92,17 @@ process.stdin.on('data', (chunk) => {
   }
 });
 
+function cleanupAndExit(code = 0) {
+  try {
+    fs.unlinkSync(SOCKET_PATH);
+  } catch {}
+  process.exit(code);
+}
+
+process.stdin.on('end', () => cleanupAndExit(0));
+process.stdin.on('error', () => cleanupAndExit(1));
+process.on('SIGINT', () => cleanupAndExit(130));
+process.on('SIGTERM', () => cleanupAndExit(143));
 process.on('exit', () => {
   try {
     fs.unlinkSync(SOCKET_PATH);

@@ -1,7 +1,19 @@
 const NATIVE_HOST = 'com.seichris.dianping_nearby_restaurants_bridge';
 let nativePort = null;
 
+function isAllowedUrl(value) {
+  if (value === 'about:blank') return true;
+  try {
+    const url = new URL(value);
+    return url.protocol === 'https:' &&
+      (url.hostname === 'www.dianping.com' || url.hostname.endsWith('.dianping.com'));
+  } catch {
+    return false;
+  }
+}
+
 function connectNativeHost() {
+  if (nativePort) return;
   try {
     nativePort = chrome.runtime.connectNative(NATIVE_HOST);
     nativePort.onMessage.addListener((message) => {
@@ -54,17 +66,20 @@ function waitForTabComplete(tabId, timeoutMs = 30000) {
 }
 
 async function createTab(params = {}) {
+  const url = params.url || 'about:blank';
+  if (!isAllowedUrl(url)) throw new Error(`Refusing to open non-Dianping URL: ${url}`);
   const tab = await chrome.tabs.create({
-    url: params.url || 'about:blank',
+    url,
     active: Boolean(params.active),
   });
-  if (params.url && params.url !== 'about:blank') {
+  if (url !== 'about:blank') {
     await waitForTabComplete(tab.id, params.timeoutMs);
   }
   return { tabId: tab.id, url: tab.url };
 }
 
 async function navigateTab(params) {
+  if (!isAllowedUrl(params.url)) throw new Error(`Refusing to navigate to non-Dianping URL: ${params.url}`);
   await chrome.tabs.update(params.tabId, { url: params.url, active: Boolean(params.active) });
   await waitForTabComplete(params.tabId, params.timeoutMs);
   const tab = await chrome.tabs.get(params.tabId);
@@ -72,6 +87,8 @@ async function navigateTab(params) {
 }
 
 async function evaluateTab(params) {
+  const tab = await chrome.tabs.get(params.tabId);
+  if (!isAllowedUrl(tab.url)) throw new Error(`Refusing to evaluate non-Dianping tab: ${tab.url}`);
   const [{ result }] = await chrome.scripting.executeScript({
     target: { tabId: params.tabId },
     world: 'MAIN',

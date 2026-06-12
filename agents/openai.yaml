@@ -1,0 +1,4 @@
+interface:
+  display_name: "Dianping Taocan Discovery"
+  short_description: "Scan Dianping nearby restaurants for taocan."
+  default_prompt: "Scan Dianping restaurants near my saved station URL and show current taocan."

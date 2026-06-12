@@ -182,6 +182,9 @@ function formatOffer(offer) {
   const bits = [`${kind}: ${offer.title}`, `¥${offer.price}`];
   if (offer.discount) bits.push(offer.discount);
   if (offer.original_price) bits.push(`was ¥${offer.original_price}`);
+  if (offer.details?.group_size) bits.push(offer.details.group_size);
+  if (offer.details?.valid_time) bits.push(offer.details.valid_time);
+  if (offer.details?.earliest_usable) bits.push(offer.details.earliest_usable);
   if (offer.flags?.length) bits.push(offer.flags.join('/'));
   return bits.join(' | ');
 }
@@ -198,7 +201,21 @@ function printHuman(data, records) {
 
   for (const record of records) {
     console.log(record.shop.name);
+    const summary = [];
+    if (record.shop.rating) summary.push(`Rating: ${record.shop.rating}`);
+    if (record.shop.review_count) summary.push(`${record.shop.review_count} reviews`);
+    if (record.shop.avg_price_per_person) summary.push(`¥${record.shop.avg_price_per_person}/person`);
+    if (record.shop.category) summary.push(record.shop.category);
+    if (record.shop.area) summary.push(record.shop.area);
+    if (record.shop.open_status) summary.push(record.shop.open_status);
+    if (record.shop.distance_from_station?.walking_distance_meters) {
+      summary.push(`${record.shop.distance_from_station.walking_distance_meters}m from station`);
+    }
+    if (summary.length) console.log(`  ${summary.join(' | ')}`);
     if (record.shop.address) console.log(`  Address: ${record.shop.address}`);
+    if (record.shop.recommended_dishes?.length) {
+      console.log(`  Recommended: ${record.shop.recommended_dishes.slice(0, 6).join(', ')}`);
+    }
     console.log(`  URL: ${record.shop.url}`);
     if (record.offers.length === 0) {
       console.log('  Offers: none saved');

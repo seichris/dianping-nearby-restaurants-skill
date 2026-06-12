@@ -6,6 +6,47 @@ const DEFAULT_BASE_URL = 'https://www.dianping.com/shanghai/ch10/r101837';
 const DEFAULT_OUT_DIR = 'data/restaurants';
 const DEFAULT_PAGES = 1;
 const DEFAULT_LIMIT = Number.POSITIVE_INFINITY;
+const KNOWN_CATEGORIES = [
+  '本帮江浙菜',
+  '东南亚菜',
+  '意大利菜',
+  '日本料理',
+  '韩国料理',
+  '面包甜点',
+  '小吃快餐',
+  '潮汕牛肉火锅',
+  '茶餐厅',
+  '自助餐',
+  '西班牙菜',
+  '西餐',
+  '咖啡',
+  '火锅',
+  '烧烤',
+  '小笼',
+  '酒吧',
+  '川菜',
+  '粤菜',
+  '湘菜',
+  '素菜',
+  '海鲜',
+  '小吃',
+  '快餐',
+  '面馆',
+  '甜品',
+  '饮品',
+].sort((a, b) => b.length - a.length);
+const AMENITY_MARKERS = new Set([
+  '有大桌',
+  '付费停车',
+  '免费停车',
+  '有宝宝椅',
+  '有包间',
+  '可外带',
+  '可订座',
+  '可刷卡',
+  '有Wi-Fi',
+  '有WIFI',
+]);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -84,6 +125,125 @@ export function listingPageUrl(baseUrl, pageNumber) {
   return `${baseUrl}d500p${pageNumber}`;
 }
 
+function parseNumber(value) {
+  if (!value) return null;
+  const normalized = String(value).replace(/,/g, '');
+  const number = Number(normalized);
+  return Number.isFinite(number) ? number : null;
+}
+
+function parseAreaCategory(value) {
+  if (!value) return { area: null, category: null };
+  for (const category of KNOWN_CATEGORIES) {
+    if (value.endsWith(category) && value.length > category.length) {
+      const area = value.slice(0, -category.length).replace(/[/-]+$/g, '') || null;
+      return { area, category };
+    }
+  }
+  if (value.includes('/')) {
+    const parts = value.split('/');
+    return {
+      area: parts.slice(0, -1).join('/') || null,
+      category: parts.at(-1) || null,
+    };
+  }
+  return { area: null, category: value };
+}
+
+function parseScoreBreakdown(line) {
+  const scores = {};
+  for (const [, key, value] of line.matchAll(/(口味|环境|服务):([0-9]+(?:\.[0-9]+)?)/g)) {
+    scores[key] = Number(value);
+  }
+  return Object.keys(scores).length > 0 ? scores : null;
+}
+
+function parseDistance(line) {
+  const match = line.match(/距地铁(.+?站.*?)步行([0-9]+(?:\.[0-9]+)?)(m|米|km|公里)/i);
+  if (!match) return null;
+  const value = Number(match[2]);
+  const meters = match[3].toLowerCase() === 'km' || match[3] === '公里' ? value * 1000 : value;
+  return {
+    raw_text: line,
+    transit_text: match[1],
+    walking_distance_meters: Math.round(meters),
+  };
+}
+
+function parseRecommendedDishes(lines) {
+  const start = lines.indexOf('推荐菜');
+  if (start < 0) return [];
+  const dishes = [];
+  for (let i = start + 1; i < lines.length; i += 1) {
+    const line = lines[i];
+    if (line.startsWith('去大众点评App查看') || line.startsWith('菜单') || line === '评价' || line.startsWith('评价(')) break;
+    if (
+      line === '查看更多' ||
+      /^网友推荐\([0-9]+\)$/.test(line) ||
+      /^[0-9]+人推荐$/.test(line) ||
+      line.length > 30
+    ) {
+      continue;
+    }
+    dishes.push(line);
+    if (dishes.length >= 12) break;
+  }
+  return dishes;
+}
+
+function parseCountAfterLabel(lines, label) {
+  const line = lines.find((candidate) => candidate.startsWith(label));
+  const match = line?.match(/\(([0-9,]+)\)/);
+  return match ? parseNumber(match[1]) : null;
+}
+
+export function parseShopMetadata(lines) {
+  const reviewLineIndex = lines.findIndex((line) => /[0-9,]+条(?:评价)?(?:¥[0-9]+(?:\.[0-9]+)?\/人)?/.test(line));
+  const reviewLine = reviewLineIndex >= 0 ? lines[reviewLineIndex] : null;
+  const reviewMatch = reviewLine?.match(/([0-9,]+)条(?:评价)?(?:¥([0-9]+(?:\.[0-9]+)?)\/人)?/);
+  const rating = lines
+    .slice(Math.max(0, reviewLineIndex - 8), reviewLineIndex >= 0 ? reviewLineIndex : 0)
+    .map((line) => line.match(/^([0-5](?:\.[0-9]+)?)$/)?.[1])
+    .filter(Boolean)
+    .map(Number)
+    .find((value) => value >= 0 && value <= 5) || null;
+  const areaCategoryLine = reviewLineIndex >= 0 ? lines[reviewLineIndex + 1] : null;
+  const { area, category } = parseAreaCategory(areaCategoryLine);
+  const scoreBreakdown = lines.map(parseScoreBreakdown).find(Boolean) || null;
+  const openingLine = lines.find((line) => /^(营业中|休息中|尚未营业|已打烊|暂停营业)/.test(line));
+  const openingMatch = openingLine?.match(/^(营业中|休息中|尚未营业|已打烊|暂停营业)\s*(.*)$/);
+  const distance = lines.map(parseDistance).find(Boolean) || null;
+  const amenities = lines.filter((line) => AMENITY_MARKERS.has(line));
+
+  return {
+    rating,
+    review_count: reviewMatch ? parseNumber(reviewMatch[1]) : null,
+    avg_price_per_person: reviewMatch?.[2] ? Number(reviewMatch[2]) : null,
+    area,
+    category,
+    score_breakdown: scoreBreakdown,
+    ranking_badge: lines.find((line) => line.includes('榜') && /第[0-9]+名/.test(line)) || null,
+    open_status: openingMatch?.[1] || null,
+    opening_hours: openingMatch?.[2] || null,
+    distance_from_station: distance,
+    amenities,
+    recommended_dishes: parseRecommendedDishes(lines),
+    menu_count: parseCountAfterLabel(lines, '菜单'),
+    review_section_count: parseCountAfterLabel(lines, '评价'),
+  };
+}
+
+function parseOfferDetails(title, lines) {
+  const validTime = lines.find((line) => /^周[一二三四五六日至、-]+/.test(line) || /^[0-9]{1,2}:[0-9]{2}-[0-9]{1,2}:[0-9]{2}$/.test(line)) || null;
+  const earliestUsable = lines.find((line) => /^最早[0-9]{2}\.[0-9]{2}可用$/.test(line)) || null;
+  const groupSizeMatch = title.match(/(单人|双人|[0-9]+-[0-9]+人|[0-9]+人)/);
+  return {
+    group_size: groupSizeMatch?.[1] || null,
+    valid_time: validTime,
+    earliest_usable: earliestUsable,
+  };
+}
+
 export function parseOffers(lines) {
   const offers = [];
   const stopMarkers = new Set(['推荐菜', '菜单', '评价', '商户信息']);
@@ -138,6 +298,7 @@ export function parseOffers(lines) {
         : null;
       if (actionSet.has(lines[j])) j += 1;
 
+      const rawLines = lines.slice(i, j);
       offers.push({
         type,
         title: title.replace(/[>›]$/, '').trim(),
@@ -146,7 +307,8 @@ export function parseOffers(lines) {
         discount,
         original_price,
         flags,
-        raw_text: lines.slice(i, j).join(' '),
+        details: parseOfferDetails(title, rawLines),
+        raw_text: rawLines.join(' '),
       });
       i = j;
     }
@@ -205,6 +367,7 @@ export async function extractShopRecord(browser, shop, scanId, baseUrl) {
     const detailsHidden = lines.some((line) => line.includes('打开大众点评App查看'));
     const addressIndex = lines.findIndex((line) => /^.+[0-9]+号/.test(line));
     const shopId = new URL(shop.url).pathname.split('/').pop();
+    const metadata = parseShopMetadata(lines);
 
     return {
       scan_id: scanId,
@@ -217,6 +380,7 @@ export async function extractShopRecord(browser, shop, scanId, baseUrl) {
         url: page.href,
         shop_id: shopId,
         address: addressIndex >= 0 ? lines[addressIndex] : null,
+        ...metadata,
       },
       offers: verificationRequired || detailsHidden ? [] : parseOffers(lines),
       extraction: {

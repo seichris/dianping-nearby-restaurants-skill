@@ -93,7 +93,7 @@ The scanner visits listing pages like:
 - Page 2: `https://www.dianping.com/shanghai/ch10/r101837d500p2`
 - Page 3: `https://www.dianping.com/shanghai/ch10/r101837d500p3`
 
-It opens each restaurant page, extracts restaurant name, URL, shop id, address, vouchers, taocan, scan timestamp, and extraction status, then persists the scan.
+It opens each restaurant page, extracts restaurant name, URL, shop id, address, rating, review count, average price, category, area, opening status, opening hours, station distance, ranking badge, amenities, recommended dishes, vouchers, taocan, scan timestamp, and extraction status, then persists the scan.
 
 After a normal scan, commit and push the returned data paths:
 

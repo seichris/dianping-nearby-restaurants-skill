@@ -152,6 +152,19 @@ node scripts/view-dianping-taocan.mjs --json
 
 `--new` compares `latest.json` against earlier timestamped snapshots and shows only offers not seen before.
 
+## Data Fields
+
+Each restaurant record includes:
+
+- shop identity: name, URL, shop ID, address
+- source metadata: listing page, page number, result index
+- ratings: overall rating, review count, taste/environment/service scores when visible
+- pricing and location: average price per person, area, category, distance from station
+- visit context: open status, opening hours, ranking badge, amenities
+- food context: recommended dishes, menu count, review count from the review section
+- offers: vouchers and set meals with title, price, discount, original price, refund/availability flags, group size, valid-time text, earliest usable date, and raw text
+- extraction status: whether details were visible, whether verification was required, capture time, method, and elapsed time
+
 ## Notes
 
 Dianping sometimes exposes only schedule text, such as `周一至周日`, where a richer package title might be hidden in the rendered page. The JSON keeps `raw_text` for parser improvements.

@@ -1,0 +1,8 @@
+{
+  "name": "dianping-nearby-restaurants",
+  "description": "Find Dianping restaurants near subway stations, save snapshots, and answer questions from saved restaurant data.",
+  "version": "0.1.0",
+  "author": {
+    "name": "seichris"
+  }
+}

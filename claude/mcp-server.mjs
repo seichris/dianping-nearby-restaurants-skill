@@ -16,10 +16,15 @@ const SERVER_VERSION = '0.1.0';
 const __filename = fileURLToPath(import.meta.url);
 const repoRoot = path.resolve(path.dirname(__filename), '..');
 const projectDir = process.env.CLAUDE_PROJECT_DIR || repoRoot;
-const socketPath = process.env.DIANPING_BROWSER_BRIDGE_SOCKET ||
-  path.join(os.tmpdir(), 'dianping-nearby-restaurants-bridge.sock');
+const socketPath = process.env.DIANPING_BROWSER_BRIDGE_SOCKET || defaultSocketPath();
 
-let requestBuffer = '';
+let requestBuffer = Buffer.alloc(0);
+let transportMode = null;
+
+function defaultSocketPath() {
+  if (process.platform === 'win32') return '\\\\.\\pipe\\dianping-nearby-restaurants-bridge';
+  return path.join(os.tmpdir(), 'dianping-nearby-restaurants-bridge.sock');
+}
 
 function safePathSegment(value, fallback) {
   return String(value || fallback)
@@ -48,7 +53,12 @@ function stationDirFromArgs(outDir, args) {
 }
 
 function send(message) {
-  process.stdout.write(`${JSON.stringify(message)}\n`);
+  const body = JSON.stringify(message);
+  if (transportMode === 'headers') {
+    process.stdout.write(`Content-Length: ${Buffer.byteLength(body, 'utf8')}\r\n\r\n${body}`);
+    return;
+  }
+  process.stdout.write(`${body}\n`);
 }
 
 function ok(id, result) {
@@ -394,18 +404,59 @@ async function handleRequest(request) {
   if (request.id !== undefined) fail(request.id, -32601, `Unsupported method: ${request.method}`);
 }
 
-process.stdin.on('data', (chunk) => {
-  requestBuffer += chunk.toString('utf8');
+function handleRequestBody(body) {
+  try {
+    const request = JSON.parse(body);
+    handleRequest(request).catch((error) => fail(request.id, -32603, error.message));
+  } catch (error) {
+    fail(null, -32700, error.message);
+  }
+}
+
+function contentLengthFromHeader(header) {
+  const match = /^content-length:\s*(\d+)\s*$/im.exec(header);
+  if (!match) throw new Error('Missing Content-Length header.');
+  return Number(match[1]);
+}
+
+function readHeaderFramedRequests() {
+  while (requestBuffer.length > 0) {
+    const headerEnd = requestBuffer.indexOf('\r\n\r\n');
+    if (headerEnd < 0) return;
+    const header = requestBuffer.subarray(0, headerEnd).toString('utf8');
+    let contentLength;
+    try {
+      contentLength = contentLengthFromHeader(header);
+    } catch (error) {
+      requestBuffer = Buffer.alloc(0);
+      fail(null, -32600, error.message);
+      return;
+    }
+    const bodyStart = headerEnd + 4;
+    const bodyEnd = bodyStart + contentLength;
+    if (requestBuffer.length < bodyEnd) return;
+    const body = requestBuffer.subarray(bodyStart, bodyEnd).toString('utf8');
+    requestBuffer = requestBuffer.subarray(bodyEnd);
+    handleRequestBody(body);
+  }
+}
+
+function readLineDelimitedRequests() {
   let newlineIndex;
   while ((newlineIndex = requestBuffer.indexOf('\n')) >= 0) {
-    const line = requestBuffer.slice(0, newlineIndex).trim();
-    requestBuffer = requestBuffer.slice(newlineIndex + 1);
-    if (!line) continue;
-    try {
-      const request = JSON.parse(line);
-      handleRequest(request).catch((error) => fail(request.id, -32603, error.message));
-    } catch (error) {
-      fail(null, -32700, error.message);
-    }
+    const line = requestBuffer.subarray(0, newlineIndex).toString('utf8').trim();
+    requestBuffer = requestBuffer.subarray(newlineIndex + 1);
+    if (line) handleRequestBody(line);
   }
+}
+
+process.stdin.on('data', (chunk) => {
+  requestBuffer = Buffer.concat([requestBuffer, chunk]);
+  if (!transportMode) {
+    const prefix = requestBuffer.subarray(0, Math.min(requestBuffer.length, 32)).toString('utf8').toLowerCase();
+    if (prefix.startsWith('content-length:')) transportMode = 'headers';
+    else if (requestBuffer.indexOf('\n') >= 0) transportMode = 'lines';
+  }
+  if (transportMode === 'headers') readHeaderFramedRequests();
+  else if (transportMode === 'lines') readLineDelimitedRequests();
 });

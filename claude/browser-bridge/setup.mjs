@@ -26,6 +26,12 @@ function browserLabel(browser) {
   return browser === 'edge' ? 'Microsoft Edge' : 'Google Chrome';
 }
 
+function validateBrowser(browser) {
+  if (!['chrome', 'edge'].includes(browser)) {
+    throw new Error(`Unsupported browser "${browser}". Use "chrome" or "edge".`);
+  }
+}
+
 function userDataDir(browser) {
   if (process.platform === 'darwin') {
     return browser === 'edge'
@@ -94,6 +100,12 @@ function printLoadInstructions(browser) {
 }
 
 const args = parseArgs(process.argv.slice(2));
+try {
+  validateBrowser(args.browser);
+} catch (error) {
+  console.error(error.message);
+  process.exit(1);
+}
 let extensionId = args.extensionId;
 if (!extensionId) {
   const candidates = await detectExtensionIds(args.browser);

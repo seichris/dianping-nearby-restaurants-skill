@@ -27,6 +27,12 @@ function validateExtensionId(extensionId) {
   }
 }
 
+function validateBrowser(browser) {
+  if (!['chrome', 'edge'].includes(browser)) {
+    throw new Error(`Unsupported browser "${browser}". Use "chrome" or "edge".`);
+  }
+}
+
 function browserName(browser) {
   return browser === 'edge' ? 'Microsoft Edge' : 'Google Chrome';
 }
@@ -89,11 +95,22 @@ async function installUnix(manifest) {
 }
 
 const args = parseArgs(process.argv.slice(2));
+try {
+  validateBrowser(args.browser);
+} catch (error) {
+  console.error(error.message);
+  process.exit(1);
+}
 if (!args.extensionId) {
   console.error('Usage: node claude/browser-bridge/install-native-host.mjs --browser chrome --extension-id EXTENSION_ID');
   process.exit(1);
 }
-validateExtensionId(args.extensionId);
+try {
+  validateExtensionId(args.extensionId);
+} catch (error) {
+  console.error(error.message);
+  process.exit(1);
+}
 
 const manifest = {
   name: HOST_NAME,

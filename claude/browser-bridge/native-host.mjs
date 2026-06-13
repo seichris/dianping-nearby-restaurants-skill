@@ -4,12 +4,16 @@ import net from 'node:net';
 import os from 'node:os';
 import path from 'node:path';
 
-const SOCKET_PATH = process.env.DIANPING_BROWSER_BRIDGE_SOCKET ||
-  path.join(os.tmpdir(), 'dianping-nearby-restaurants-bridge.sock');
+const SOCKET_PATH = process.env.DIANPING_BROWSER_BRIDGE_SOCKET || defaultSocketPath();
 
 const pending = new Map();
 const clients = new Set();
 let inputBuffer = Buffer.alloc(0);
+
+function defaultSocketPath() {
+  if (process.platform === 'win32') return '\\\\.\\pipe\\dianping-nearby-restaurants-bridge';
+  return path.join(os.tmpdir(), 'dianping-nearby-restaurants-bridge.sock');
+}
 
 function sendNativeMessage(message) {
   const body = Buffer.from(JSON.stringify(message), 'utf8');
@@ -48,10 +52,12 @@ function handleClientRequest(socket, line) {
 }
 
 function startSocketServer() {
-  try {
-    fs.unlinkSync(SOCKET_PATH);
-  } catch (error) {
-    if (error.code !== 'ENOENT') throw error;
+  if (process.platform !== 'win32') {
+    try {
+      fs.unlinkSync(SOCKET_PATH);
+    } catch (error) {
+      if (error.code !== 'ENOENT') throw error;
+    }
   }
 
   const server = net.createServer((socket) => {
@@ -77,7 +83,7 @@ function startSocketServer() {
   });
 
   server.listen(SOCKET_PATH, () => {
-    fs.chmodSync(SOCKET_PATH, 0o600);
+    if (process.platform !== 'win32') fs.chmodSync(SOCKET_PATH, 0o600);
   });
 }
 
@@ -93,9 +99,11 @@ process.stdin.on('data', (chunk) => {
 });
 
 function cleanupAndExit(code = 0) {
-  try {
-    fs.unlinkSync(SOCKET_PATH);
-  } catch {}
+  if (process.platform !== 'win32') {
+    try {
+      fs.unlinkSync(SOCKET_PATH);
+    } catch {}
+  }
   process.exit(code);
 }
 
@@ -104,9 +112,11 @@ process.stdin.on('error', () => cleanupAndExit(1));
 process.on('SIGINT', () => cleanupAndExit(130));
 process.on('SIGTERM', () => cleanupAndExit(143));
 process.on('exit', () => {
-  try {
-    fs.unlinkSync(SOCKET_PATH);
-  } catch {}
+  if (process.platform !== 'win32') {
+    try {
+      fs.unlinkSync(SOCKET_PATH);
+    } catch {}
+  }
 });
 
 startSocketServer();

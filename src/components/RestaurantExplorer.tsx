@@ -1,6 +1,6 @@
 "use client";
 
-import { Github, MapPin, Search } from "lucide-react";
+import { MapPin, Plus, Search } from "lucide-react";
 import { type CSSProperties, useCallback, useMemo, useRef, useState } from "react";
 
 import RestaurantMap from "@/components/RestaurantMap";
@@ -132,8 +132,8 @@ export default function RestaurantExplorer({ dataset, amapConfig }: RestaurantEx
             rel="noreferrer"
             className="flex items-center gap-2 rounded-md border bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700"
           >
-            <Github className="h-4 w-4" />
-            <span>Ask claude/codex to add restaurants near you</span>
+            <Plus className="h-4 w-4" />
+            <span>Ask your Claude or Codex AI to add restaurants near you</span>
           </a>
         </div>
       </div>

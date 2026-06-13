@@ -12,6 +12,7 @@
   "dependencies": {
     "clsx": "^2.1.1",
     "lucide-react": "^0.468.0",
+    "maplibre-gl": "^5.24.0",
     "next": "16.2.9",
     "pinyin-pro": "^3.28.1",
     "react": "19.2.4",

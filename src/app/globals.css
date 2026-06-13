@@ -61,7 +61,7 @@ body {
   color: hsl(var(--foreground));
 }
 
-.amap-marker-pin {
+.restaurant-marker-pin {
   align-items: center;
   background: #2563eb;
   border: 2px solid #ffffff;
@@ -77,11 +77,11 @@ body {
   width: 28px;
 }
 
-.amap-marker-pin > span {
+.restaurant-marker-pin > span {
   transform: rotate(45deg);
 }
 
-.amap-marker-pin[data-active="true"] {
+.restaurant-marker-pin[data-active="true"] {
   background: #dc2626;
   height: 34px;
   width: 34px;

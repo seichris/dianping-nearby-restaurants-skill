@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import type { LngLatBounds, Map as MapLibreMap, Marker as MapLibreMarker, Popup as MapLibrePopup } from "maplibre-gl";
 
 import { loadAMap, loadAMapPlugins } from "@/lib/client/amapLoader";
 import type { AMapClientConfig } from "@/lib/amapMaps";
@@ -13,6 +14,8 @@ interface RestaurantMapProps {
   onSelect: (id: string) => void;
   amapConfig: AMapClientConfig;
 }
+
+type MapProvider = "openfreemap" | "amap";
 
 interface Point {
   lng: number;
@@ -35,6 +38,7 @@ interface AMapMarkerInstance {
 
 interface AMapMapInstance {
   addControl?: (control: unknown) => void;
+  destroy?: () => void;
   panTo?: (position: unknown) => void;
   resize?: () => void;
   setCenter?: (center: [number, number]) => void;
@@ -68,9 +72,16 @@ interface AMapNamespace {
   plugin?: (plugins: string[], callback: () => void) => void;
 }
 
+const OPENFREEMAP_STYLE_URL = "https://tiles.openfreemap.org/styles/liberty";
+
 const CITY_CENTERS: Record<string, Point> = {
   beijing: { lng: 116.4074, lat: 39.9042 },
   shanghai: { lng: 121.4737, lat: 31.2304 },
+};
+
+const STATION_CENTERS: Record<string, Point> = {
+  "beijing::团结湖": { lng: 116.4618, lat: 39.9338 },
+  "shanghai::静安寺": { lng: 121.446, lat: 31.2231 },
 };
 
 const CITY_NAMES: Record<string, string> = {
@@ -79,6 +90,8 @@ const CITY_NAMES: Record<string, string> = {
 };
 
 function fallbackCenter(records: RestaurantRecord[], activeCity?: string): Point {
+  const stationCenter = records[0]?.stationKey ? STATION_CENTERS[records[0].stationKey] : null;
+  if (stationCenter && records.every((record) => record.stationKey === records[0].stationKey)) return stationCenter;
   if (activeCity && CITY_CENTERS[activeCity]) return CITY_CENTERS[activeCity];
   const firstCity = records[0]?.city;
   if (firstCity && records.every((record) => record.city === firstCity)) {
@@ -93,7 +106,7 @@ function markerLabel(index: number): string {
 
 function createMarkerElement(index: number, active: boolean): HTMLElement {
   const marker = document.createElement("div");
-  marker.className = "amap-marker-pin";
+  marker.className = "restaurant-marker-pin";
   marker.dataset.active = active ? "true" : "false";
   const label = document.createElement("span");
   label.textContent = markerLabel(index);
@@ -101,10 +114,14 @@ function createMarkerElement(index: number, active: boolean): HTMLElement {
   return marker;
 }
 
-function setMarkerActive(marker: AMapMarkerInstance, active: boolean): void {
+function setMarkerElementActive(element: HTMLElement | null | undefined, active: boolean): void {
+  if (element) element.dataset.active = active ? "true" : "false";
+}
+
+function setAMapMarkerActive(marker: AMapMarkerInstance, active: boolean): void {
   const content = marker?.getContent?.();
   if (content instanceof HTMLElement) {
-    content.dataset.active = active ? "true" : "false";
+    setMarkerElementActive(content, active);
   }
 }
 
@@ -134,6 +151,30 @@ function geocodeAddress(AMap: AMapNamespace, record: RestaurantRecord): Promise<
       resolve(getLngLat(result.geocodes?.[0]?.location));
     });
   });
+}
+
+function hashString(value: string): number {
+  let hash = 2166136261;
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+}
+
+function offsetPoint(center: Point, distanceMeters: number, bearingDegrees: number): Point {
+  const bearing = (bearingDegrees * Math.PI) / 180;
+  const latRadians = (center.lat * Math.PI) / 180;
+  const latOffset = (Math.cos(bearing) * distanceMeters) / 111_320;
+  const lngOffset = (Math.sin(bearing) * distanceMeters) / (111_320 * Math.cos(latRadians));
+  return { lng: center.lng + lngOffset, lat: center.lat + latOffset };
+}
+
+function approximateOpenMapPoint(record: RestaurantRecord, index: number): Point {
+  const center = STATION_CENTERS[record.stationKey] || CITY_CENTERS[record.city] || CITY_CENTERS.shanghai;
+  const distance = Math.max(80, Math.min(record.distanceMeters || 420, 1800));
+  const bearing = (hashString(`${record.id}:${record.name}`) + index * 23) % 360;
+  return offsetPoint(center, distance, bearing);
 }
 
 function infoWindowContent(record: RestaurantRecord): HTMLElement {
@@ -170,45 +211,155 @@ function infoWindowContent(record: RestaurantRecord): HTMLElement {
 
 export default function RestaurantMap({ records, activeCity, selectedId, onSelect, amapConfig }: RestaurantMapProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const mapRef = useRef<AMapMapInstance | null>(null);
+  const amapMapRef = useRef<AMapMapInstance | null>(null);
   const amapRef = useRef<AMapNamespace | null>(null);
-  const markersRef = useRef<Map<string, AMapMarkerInstance>>(new Map());
-  const pointCacheRef = useRef<Map<string, Point | null>>(new Map());
-  const infoWindowRef = useRef<AMapInfoWindowInstance | null>(null);
+  const amapMarkersRef = useRef<Map<string, AMapMarkerInstance>>(new Map());
+  const amapPointCacheRef = useRef<Map<string, Point | null>>(new Map());
+  const amapInfoWindowRef = useRef<AMapInfoWindowInstance | null>(null);
+  const openMapRef = useRef<MapLibreMap | null>(null);
+  const openMarkersRef = useRef<Map<string, { marker: MapLibreMarker; point: Point }>>(new Map());
+  const openPopupRef = useRef<MapLibrePopup | null>(null);
+  const [provider, setProvider] = useState<MapProvider>("openfreemap");
   const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState("Preparing map");
-  const [mapReady, setMapReady] = useState(false);
+  const [amapReady, setAMapReady] = useState(false);
+  const [openMapReady, setOpenMapReady] = useState(false);
   const activeCityRef = useRef(activeCity);
 
   const limitedRecords = useMemo(() => records.slice(0, 250), [records]);
   const configError = amapConfig.configError || (!amapConfig.jsApiKey ? "Missing AMAP_JS_API_KEY." : null);
-  const visibleError = configError || error;
+  const visibleError = provider === "amap" ? configError || error : error;
 
   useEffect(() => {
     activeCityRef.current = activeCity;
   }, [activeCity]);
 
   useEffect(() => {
-    if (configError) return;
-    if (!containerRef.current || mapRef.current) return;
+    if (!containerRef.current) return;
+    const observer = new ResizeObserver(() => {
+      amapMapRef.current?.resize?.();
+      openMapRef.current?.resize();
+    });
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (provider !== "openfreemap") return;
+    if (!containerRef.current || openMapRef.current) return;
 
     let cancelled = false;
 
-    async function initializeMap() {
+    async function initializeOpenMap() {
       try {
+        setError(null);
+        setStatus("Loading OpenFreeMap");
+        const maplibregl = await import("maplibre-gl");
+        if (cancelled || !containerRef.current) return;
+
+        containerRef.current.replaceChildren();
+        const center = fallbackCenter([], activeCityRef.current);
+        const map = new maplibregl.Map({
+          container: containerRef.current,
+          style: OPENFREEMAP_STYLE_URL,
+          center: [center.lng, center.lat],
+          zoom: activeCityRef.current ? 11 : 5,
+          attributionControl: { compact: true },
+        });
+
+        map.addControl(new maplibregl.NavigationControl({ visualizePitch: false }), "top-right");
+        map.addControl(new maplibregl.ScaleControl(), "bottom-right");
+        openMapRef.current = map;
+        openPopupRef.current = new maplibregl.Popup({ closeButton: false, offset: 28 });
+        map.once("load", () => {
+          if (cancelled) return;
+          setOpenMapReady(true);
+          setStatus("Ready");
+        });
+      } catch (mapError) {
+        if (!cancelled) {
+          setError(mapError instanceof Error ? mapError.message : "Failed to initialize OpenFreeMap.");
+        }
+      }
+    }
+
+    void initializeOpenMap();
+
+    return () => {
+      cancelled = true;
+      openMarkersRef.current.forEach(({ marker }) => marker.remove());
+      openMarkersRef.current = new Map();
+      openPopupRef.current?.remove();
+      openPopupRef.current = null;
+      openMapRef.current?.remove();
+      openMapRef.current = null;
+      setOpenMapReady(false);
+    };
+  }, [provider]);
+
+  useEffect(() => {
+    if (provider !== "openfreemap" || !openMapReady) return;
+    const map = openMapRef.current;
+    if (!map) return;
+
+    const renderOpenMarkers = async () => {
+      const maplibregl = await import("maplibre-gl");
+      openMarkersRef.current.forEach(({ marker }) => marker.remove());
+      openMarkersRef.current = new Map();
+
+      const points = limitedRecords.map((record, index) => ({ record, point: approximateOpenMapPoint(record, index) }));
+      const bounds = new maplibregl.LngLatBounds() as LngLatBounds;
+
+      points.forEach(({ record, point }, index) => {
+        bounds.extend([point.lng, point.lat]);
+        const element = createMarkerElement(index, record.id === selectedId);
+        element.addEventListener("click", () => {
+          onSelect(record.id);
+          openPopupRef.current?.setDOMContent(infoWindowContent(record)).setLngLat([point.lng, point.lat]).addTo(map);
+        });
+        const marker = new maplibregl.Marker({ element, anchor: "bottom" }).setLngLat([point.lng, point.lat]).addTo(map);
+        openMarkersRef.current.set(record.id, { marker, point });
+      });
+
+      if (points.length) {
+        map.fitBounds(bounds, { padding: 72, maxZoom: 15, duration: 400 });
+      } else {
+        const center = fallbackCenter(limitedRecords, activeCityRef.current);
+        map.flyTo({ center: [center.lng, center.lat], zoom: 11, duration: 300 });
+      }
+
+      setStatus(`${points.length} mapped`);
+    };
+
+    void renderOpenMarkers();
+  }, [limitedRecords, onSelect, openMapReady, provider, selectedId]);
+
+  useEffect(() => {
+    if (provider !== "amap") return;
+    if (configError) {
+      return;
+    }
+    if (!containerRef.current || amapMapRef.current) return;
+
+    let cancelled = false;
+
+    async function initializeAMap() {
+      try {
+        setError(null);
         setStatus("Loading AMap");
         const AMap = (await loadAMap(amapConfig.jsApiKey, amapConfig.securityJsCode, amapConfig.serviceHost)) as AMapNamespace;
         if (cancelled || !containerRef.current) return;
 
-        const center = fallbackCenter(limitedRecords, activeCityRef.current);
+        containerRef.current.replaceChildren();
+        const center = fallbackCenter([], activeCityRef.current);
         const map = new AMap.Map(containerRef.current, {
           center: [center.lng, center.lat],
-          zoom: limitedRecords.length > 0 && limitedRecords.every((record) => record.city === limitedRecords[0].city) ? 12 : 5,
+          zoom: activeCityRef.current ? 11 : 5,
           resizeEnable: true,
           viewMode: "2D",
         });
 
-        mapRef.current = map;
+        amapMapRef.current = map;
         amapRef.current = AMap;
         setStatus("Loading map tools");
 
@@ -216,8 +367,8 @@ export default function RestaurantMap({ records, activeCity, selectedId, onSelec
         if (cancelled) return;
         map.addControl?.(new AMap.ToolBar({ position: "RT" }));
         map.addControl?.(new AMap.Scale());
-        infoWindowRef.current = new AMap.InfoWindow({ offset: new AMap.Pixel(0, -30) });
-        setMapReady(true);
+        amapInfoWindowRef.current = new AMap.InfoWindow({ offset: new AMap.Pixel(0, -30) });
+        setAMapReady(true);
         setStatus("Ready");
       } catch (mapError) {
         if (!cancelled) {
@@ -226,43 +377,42 @@ export default function RestaurantMap({ records, activeCity, selectedId, onSelec
       }
     }
 
-    void initializeMap();
+    void initializeAMap();
 
     return () => {
       cancelled = true;
+      amapMarkersRef.current.forEach((marker) => marker.setMap(null));
+      amapMarkersRef.current = new Map();
+      amapInfoWindowRef.current = null;
+      amapMapRef.current?.destroy?.();
+      amapMapRef.current = null;
+      amapRef.current = null;
+      setAMapReady(false);
     };
-  }, [amapConfig.jsApiKey, amapConfig.securityJsCode, amapConfig.serviceHost, configError, limitedRecords]);
+  }, [amapConfig.jsApiKey, amapConfig.securityJsCode, amapConfig.serviceHost, configError, provider]);
 
   useEffect(() => {
-    if (!containerRef.current) return;
-    const observer = new ResizeObserver(() => {
-      mapRef.current?.resize?.();
-    });
-    observer.observe(containerRef.current);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
+    if (provider !== "amap") return;
     const AMap = amapRef.current;
-    const map = mapRef.current;
-    if (!AMap || !map || !mapReady) return;
+    const map = amapMapRef.current;
+    if (!AMap || !map || !amapReady) return;
     const amapNamespace = AMap;
     const mapInstance = map;
 
     let cancelled = false;
 
-    async function renderMarkers() {
+    async function renderAMapMarkers() {
       setStatus("Geocoding addresses");
-      markersRef.current.forEach((marker) => marker.setMap(null));
-      markersRef.current = new Map();
+      amapMarkersRef.current.forEach((marker) => marker.setMap(null));
+      amapMarkersRef.current = new Map();
 
       const points = await Promise.all(
         limitedRecords.map(async (record) => {
           const cacheKey = `${record.city}:${record.address || record.name}`;
-          if (!pointCacheRef.current.has(cacheKey)) {
-            pointCacheRef.current.set(cacheKey, await geocodeAddress(amapNamespace, record));
+          if (!amapPointCacheRef.current.has(cacheKey)) {
+            amapPointCacheRef.current.set(cacheKey, await geocodeAddress(amapNamespace, record));
           }
-          return { record, point: pointCacheRef.current.get(cacheKey) || null };
+          return { record, point: amapPointCacheRef.current.get(cacheKey) || null };
         })
       );
 
@@ -280,11 +430,11 @@ export default function RestaurantMap({ records, activeCity, selectedId, onSelec
         });
         marker.on?.("click", () => {
           onSelect(record.id);
-          infoWindowRef.current?.setContent?.(infoWindowContent(record));
-          infoWindowRef.current?.open?.(mapInstance, marker.getPosition?.());
+          amapInfoWindowRef.current?.setContent?.(infoWindowContent(record));
+          amapInfoWindowRef.current?.open?.(mapInstance, marker.getPosition?.());
         });
         marker.setMap(mapInstance);
-        markersRef.current.set(record.id, marker);
+        amapMarkersRef.current.set(record.id, marker);
         fitMarkers.push(marker);
       });
 
@@ -298,20 +448,29 @@ export default function RestaurantMap({ records, activeCity, selectedId, onSelec
       setStatus(`${fitMarkers.length} mapped`);
     }
 
-    void renderMarkers();
+    void renderAMapMarkers();
 
     return () => {
       cancelled = true;
     };
-  }, [limitedRecords, mapReady, onSelect, selectedId]);
+  }, [amapReady, limitedRecords, onSelect, provider, selectedId]);
 
   useEffect(() => {
-    const marker = selectedId ? markersRef.current.get(selectedId) : null;
-    const map = mapRef.current;
-    markersRef.current.forEach((currentMarker, id) => setMarkerActive(currentMarker, id === selectedId));
+    if (provider === "openfreemap") {
+      const entry = selectedId ? openMarkersRef.current.get(selectedId) : null;
+      openMarkersRef.current.forEach(({ marker }, id) => setMarkerElementActive(marker.getElement(), id === selectedId));
+      if (entry && openMapRef.current) {
+        openMapRef.current.panTo([entry.point.lng, entry.point.lat], { duration: 300 });
+      }
+      return;
+    }
+
+    const marker = selectedId ? amapMarkersRef.current.get(selectedId) : null;
+    const map = amapMapRef.current;
+    amapMarkersRef.current.forEach((currentMarker, id) => setAMapMarkerActive(currentMarker, id === selectedId));
     if (!marker || !map) return;
     map.panTo?.(marker.getPosition?.());
-  }, [selectedId]);
+  }, [provider, selectedId]);
 
   return (
     <div className="relative h-full min-h-[420px] bg-slate-100">
@@ -319,8 +478,17 @@ export default function RestaurantMap({ records, activeCity, selectedId, onSelec
       <div className="pointer-events-none absolute left-3 top-3 rounded-md border bg-white/95 px-3 py-2 text-xs text-slate-700 shadow-sm">
         {visibleError ? <span className="font-medium text-red-700">{visibleError}</span> : <span>{status}</span>}
       </div>
-      <div className="pointer-events-none absolute bottom-3 left-3 rounded-md bg-white/95 px-3 py-2 text-xs text-slate-600 shadow-sm">
-        Markers are geocoded from Dianping shop addresses.
+      <button
+        type="button"
+        onClick={() => setProvider((current) => (current === "openfreemap" ? "amap" : "openfreemap"))}
+        className="absolute bottom-3 left-3 rounded-md border bg-white/95 px-3 py-2 text-xs font-medium text-slate-700 shadow-sm transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700"
+      >
+        {provider === "openfreemap" ? "AMap" : "Open Map"}
+      </button>
+      <div className="pointer-events-none absolute bottom-3 right-3 max-w-[260px] rounded-md bg-white/95 px-3 py-2 text-xs text-slate-600 shadow-sm">
+        {provider === "openfreemap"
+          ? "OpenFreeMap markers are approximated from station distance."
+          : "AMap markers are geocoded from Dianping shop addresses."}
       </div>
     </div>
   );

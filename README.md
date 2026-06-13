@@ -98,12 +98,18 @@ For browser-backed scans, install the optional Chrome/Edge bridge so Claude can 
 # 1. Load this directory as an unpacked Chrome or Edge extension:
 # claude/browser-bridge/extension
 #
-# 2. Copy the extension ID, then install the native host:
-node claude/browser-bridge/install-native-host.mjs --browser chrome --extension-id EXTENSION_ID
+# 2. Run the guided setup. It auto-detects the extension ID when possible:
+node claude/browser-bridge/setup.mjs --browser chrome
 ```
 
-Use `--browser edge` for Microsoft Edge. The bridge is scoped to Dianping URLs and opens scan tabs with `active: false`.
-If Claude reports that the bridge is not connected, click the extension icon once or restart the browser.
+Use `--browser edge` for Microsoft Edge. If auto-detection fails, pass the extension ID directly:
+
+```bash
+node claude/browser-bridge/setup.mjs --browser chrome --extension-id EXTENSION_ID
+```
+
+The bridge is scoped to Dianping URLs and opens scan tabs with `active: false`.
+If Claude reports that the bridge is not connected, open the extension popup and click Reconnect, or restart the browser.
 
 ## Station Setup
 

@@ -13,7 +13,8 @@
     "https://*.dianping.com/*"
   ],
   "action": {
-    "default_title": "Connect Dianping Restaurant Bridge"
+    "default_popup": "popup.html",
+    "default_title": "Dianping Restaurant Bridge"
   },
   "background": {
     "service_worker": "service-worker.js"

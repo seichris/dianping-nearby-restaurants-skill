@@ -1,5 +1,22 @@
 const NATIVE_HOST = 'com.seichris.dianping_nearby_restaurants_bridge';
 let nativePort = null;
+let reconnectTimer = null;
+let status = {
+  connected: false,
+  last_error: null,
+  last_connected_at: null,
+  last_disconnected_at: null,
+};
+
+function setStatus(patch) {
+  status = { ...status, ...patch };
+  const badgeText = status.connected ? 'ON' : 'OFF';
+  const badgeColor = status.connected ? '#137333' : '#a50e0e';
+  try {
+    chrome.action.setBadgeText({ text: badgeText });
+    chrome.action.setBadgeBackgroundColor({ color: badgeColor });
+  } catch {}
+}
 
 function isAllowedUrl(value) {
   if (value === 'about:blank') return true;
@@ -14,8 +31,17 @@ function isAllowedUrl(value) {
 
 function connectNativeHost() {
   if (nativePort) return;
+  if (reconnectTimer) {
+    clearTimeout(reconnectTimer);
+    reconnectTimer = null;
+  }
   try {
     nativePort = chrome.runtime.connectNative(NATIVE_HOST);
+    setStatus({
+      connected: true,
+      last_error: null,
+      last_connected_at: new Date().toISOString(),
+    });
     nativePort.onMessage.addListener((message) => {
       handleNativeMessage(message).catch((error) => {
         sendResult(message?.id, null, {
@@ -25,12 +51,23 @@ function connectNativeHost() {
       });
     });
     nativePort.onDisconnect.addListener(() => {
+      const error = chrome.runtime.lastError?.message || null;
       nativePort = null;
-      setTimeout(connectNativeHost, 2000);
+      setStatus({
+        connected: false,
+        last_error: error,
+        last_disconnected_at: new Date().toISOString(),
+      });
+      reconnectTimer = setTimeout(connectNativeHost, 2000);
     });
-  } catch {
+  } catch (error) {
     nativePort = null;
-    setTimeout(connectNativeHost, 5000);
+    setStatus({
+      connected: false,
+      last_error: error.message,
+      last_disconnected_at: new Date().toISOString(),
+    });
+    reconnectTimer = setTimeout(connectNativeHost, 5000);
   }
 }
 
@@ -152,7 +189,7 @@ async function handleNativeMessage(message) {
   } else if (message.method === 'closeTab') {
     result = await closeTab(params);
   } else if (message.method === 'healthcheck') {
-    result = { ok: true };
+    result = { ok: true, status };
   } else {
     throw new Error(`Unknown bridge method: ${message.method}`);
   }
@@ -162,5 +199,21 @@ async function handleNativeMessage(message) {
 chrome.runtime.onInstalled.addListener(connectNativeHost);
 chrome.runtime.onStartup.addListener(connectNativeHost);
 chrome.action.onClicked.addListener(connectNativeHost);
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message?.type === 'status') {
+    if (!nativePort) connectNativeHost();
+    sendResponse(status);
+    return false;
+  }
+  if (message?.type === 'reconnect') {
+    if (nativePort) nativePort.disconnect();
+    nativePort = null;
+    connectNativeHost();
+    sendResponse(status);
+    return false;
+  }
+  return false;
+});
 
+setStatus(status);
 connectNativeHost();

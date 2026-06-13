@@ -142,6 +142,8 @@ async function resolveStationUrl(args) {
   const city = args.city || 'shanghai';
   const stationName = args.station_name;
   if (!stationName) throw new Error('station_name is required when base_url is not supplied.');
+  const businessAreaCandidates = [];
+  const stationCandidates = [];
 
   const browser = createBridgeBrowser();
   const tab = await browser.tabs.new();
@@ -153,6 +155,13 @@ async function resolveStationUrl(args) {
 
     const direct = firstLinks.find((link) => link.text === stationName);
     if (direct) return { base_url: direct.href.replace(/^http:/, 'https:'), source: 'station-link' };
+    businessAreaCandidates.push(...firstLinks
+      .filter((link) => link.text.includes(stationName) && !/号线$/.test(link.text))
+      .map((link) => ({
+        text: link.text,
+        base_url: link.href.replace(/^http:/, 'https:'),
+        source: 'business-area',
+      })));
 
     let lineLinks = [];
     if (args.line_name) {
@@ -178,8 +187,27 @@ async function resolveStationUrl(args) {
           source: 'metro-filter',
         };
       }
+      stationCandidates.push(...stationLinks
+        .filter((link) => link.text.includes(stationName))
+        .map((link) => ({
+          text: link.text,
+          line_name: lineLink.text,
+          base_url: link.href.replace(/^http:/, 'https:'),
+          source: 'station-candidate',
+        })));
     }
-    throw new Error(`Could not find station ${stationName} on metro lines: ${attemptedLines.join(', ')}.`);
+    if (args.allow_business_area && businessAreaCandidates.length > 0) {
+      return {
+        ...businessAreaCandidates[0],
+        line_name: null,
+        source: 'business-area-fallback',
+      };
+    }
+    const candidates = [...stationCandidates, ...businessAreaCandidates].slice(0, 10);
+    const candidateText = candidates.length > 0
+      ? ` Candidates: ${candidates.map((candidate) => `${candidate.text} (${candidate.source})`).join(', ')}.`
+      : '';
+    throw new Error(`Could not find exact station ${stationName} on metro lines: ${attemptedLines.join(', ')}.${candidateText} Pass line_name for an exact metro match or allow_business_area to use a business-area listing.`);
   } finally {
     await tab.close();
   }
@@ -274,6 +302,7 @@ const tools = [
         station_name: { type: 'string' },
         line_name: { type: 'string' },
         base_url: { type: 'string' },
+        allow_business_area: { type: 'boolean' },
       },
       required: ['station_name'],
     },
@@ -291,6 +320,7 @@ const tools = [
         pages: { type: 'number' },
         limit: { type: 'number' },
         notes: { type: 'string' },
+        allow_business_area: { type: 'boolean' },
       },
       required: ['city', 'station_name'],
     },

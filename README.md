@@ -1,6 +1,8 @@
 # Dianping Nearby Restaurant Discovery
 
-Use your Codex to find Dianping restaurants nearby and their set meals (TaoCan / 套餐).
+Use your Codex or Claude to find Dianping restaurants nearby and their set meals (TaoCan / 套餐).
+
+<img width="1858" height="788" alt="beijing_restaurants" src="https://github.com/user-attachments/assets/1a1ca8d8-379e-4f1c-b1e7-b181e6b75901" />
 
 ## 1. Get the Restaurant Data
 

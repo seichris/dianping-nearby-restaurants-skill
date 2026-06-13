@@ -26,7 +26,7 @@ data/restaurants/<city>/<station>/
 - `<scan-timestamp>.json`: immutable full scan snapshot using a filename derived from the scan timestamp.
 - `latest.json`: latest full scan snapshot for querying and human review.
 
-After every successful normal scan, persist the GitHub-backed storage by committing and pushing the changed files under the returned `result.paths.stationDir`. Before committing, run `git pull --rebase` to pick up other agents' snapshots. Then stage only the station data directory, commit with a scan-specific message, and push.
+After every successful normal scan, run `npm run enrich:data` from the repo if available, then persist the GitHub-backed storage by committing and pushing the changed files under the returned `result.paths.stationDir`. If `AMAP_WEB_SERVICE_KEY` or `AMAP_REST_API_KEY` is set, enrichment also writes shared AMap geocodes to `shop.amap_location`; without a key, it skips geocoding and still updates derived text fields. Before committing, run `git pull --rebase` to pick up other agents' snapshots. Then stage only the station data directory, commit with a scan-specific message, and push.
 
 If multiple people write to the same repo, the timestamped JSON snapshots should not conflict. `latest.json` can conflict when two scans overlap; resolve it by keeping the snapshot with the newest `updated_at`, while preserving both timestamped snapshot files. Avoid adding a database unless the user asks for multi-user access, remote writes outside Codex, or server-side querying.
 
@@ -94,9 +94,10 @@ The scanner visits listing pages like:
 
 It opens each restaurant page, extracts restaurant name, URL, shop id, address, rating, review count, average price, category, area, opening status, opening hours, station distance, ranking badge, amenities, recommended dishes, vouchers, taocan, scan timestamp, and extraction status, then persists the scan.
 
-After a normal scan, commit and push the returned data paths:
+After a normal scan, enrich, commit, and push the returned data paths:
 
 ```bash
+npm run enrich:data
 git pull --rebase
 git add "$STATION_DIR"
 git commit -m "Update Dianping restaurant snapshot"

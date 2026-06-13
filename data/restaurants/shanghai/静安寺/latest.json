@@ -62,7 +62,16 @@
           "小杂粮包"
         ],
         "menu_count": 4,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 121.446332,
+          "lat": 31.223814,
+          "formatted_address": null,
+          "level": null,
+          "query": "上海南京西路1618号久光百货1楼S102室",
+          "source": "amap_js_browser",
+          "geocoded_at": "2026-06-13T11:26:12.496Z"
+        }
       },
       "offers": [
         {
@@ -183,7 +192,16 @@
           "厚切猪颈肉"
         ],
         "menu_count": 40,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 121.451315,
+          "lat": 31.223418,
+          "formatted_address": null,
+          "level": null,
+          "query": "上海铜仁路88号L1层L114",
+          "source": "amap_js_browser",
+          "geocoded_at": "2026-06-13T11:26:12.496Z"
+        }
       },
       "offers": [],
       "extraction": {
@@ -245,7 +263,16 @@
           "玫瑰花生冰粉"
         ],
         "menu_count": 41,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 121.447323,
+          "lat": 31.22327,
+          "formatted_address": null,
+          "level": null,
+          "query": "上海南京西路1601号芮欧百货4层4A",
+          "source": "amap_js_browser",
+          "geocoded_at": "2026-06-13T11:26:12.496Z"
+        }
       },
       "offers": [],
       "extraction": {
@@ -306,7 +333,16 @@
           "开心果布蕾泡芙"
         ],
         "menu_count": 2,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 121.446268,
+          "lat": 31.223906,
+          "formatted_address": null,
+          "level": null,
+          "query": "上海南京西路1618号久光百货b1",
+          "source": "amap_js_browser",
+          "geocoded_at": "2026-06-13T11:26:12.496Z"
+        }
       },
       "offers": [
         {
@@ -412,7 +448,16 @@
           "甜虾刺"
         ],
         "menu_count": 64,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 121.447089,
+          "lat": 31.225874,
+          "formatted_address": null,
+          "level": null,
+          "query": "上海愚园路8号CP静安四楼L4-12室",
+          "source": "amap_js_browser",
+          "geocoded_at": "2026-06-13T11:26:12.496Z"
+        }
       },
       "offers": [],
       "extraction": {
@@ -474,7 +519,16 @@
           "东坡牛肋排拼盘"
         ],
         "menu_count": 36,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 121.44532,
+          "lat": 31.223505,
+          "formatted_address": null,
+          "level": null,
+          "query": "上海静安寺商圈距地铁7号线静安寺站6口步行170m",
+          "source": "amap_js_browser",
+          "geocoded_at": "2026-06-13T11:26:12.496Z"
+        }
       },
       "offers": [],
       "extraction": {
@@ -532,7 +586,16 @@
           "本帮豆腐皮包子"
         ],
         "menu_count": 68,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 121.446533,
+          "lat": 31.223231,
+          "formatted_address": null,
+          "level": null,
+          "query": "上海距地铁2号线静安寺地铁站出入口20m",
+          "source": "amap_js_browser",
+          "geocoded_at": "2026-06-13T11:26:12.496Z"
+        }
       },
       "offers": [],
       "extraction": {
@@ -594,7 +657,16 @@
           "茄盒"
         ],
         "menu_count": null,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 121.44336,
+          "lat": 31.22491,
+          "formatted_address": null,
+          "level": null,
+          "query": "上海静安寺商圈北京西路1738号",
+          "source": "amap_js_browser",
+          "geocoded_at": "2026-06-13T11:26:12.496Z"
+        }
       },
       "offers": [],
       "extraction": {
@@ -656,7 +728,16 @@
           "鲜鹅肠"
         ],
         "menu_count": 4,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 121.449134,
+          "lat": 31.226472,
+          "formatted_address": null,
+          "level": null,
+          "query": "上海静安寺商圈重庆愚园东路20号东海广场4号楼1层,可承接各类团建聚餐",
+          "source": "amap_js_browser",
+          "geocoded_at": "2026-06-13T11:26:12.496Z"
+        }
       },
       "offers": [
         {
@@ -780,7 +861,16 @@
           "铁板牛肉炒面"
         ],
         "menu_count": 6,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 121.44651,
+          "lat": 31.226763,
+          "formatted_address": null,
+          "level": null,
+          "query": "上海静安寺商圈北京西路1535号",
+          "source": "amap_js_browser",
+          "geocoded_at": "2026-06-13T11:26:12.496Z"
+        }
       },
       "offers": [
         {
@@ -884,7 +974,16 @@
           "招牌艇仔粥"
         ],
         "menu_count": 65,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 121.446037,
+          "lat": 31.223699,
+          "formatted_address": null,
+          "level": null,
+          "query": "上海静安寺商圈南京西路1618号久光百货B1楼",
+          "source": "amap_js_browser",
+          "geocoded_at": "2026-06-13T11:26:12.496Z"
+        }
       },
       "offers": [],
       "extraction": {
@@ -945,7 +1044,16 @@
           "摘星拿铁"
         ],
         "menu_count": null,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 121.440973,
+          "lat": 31.231056,
+          "formatted_address": null,
+          "level": null,
+          "query": "上海静安寺商圈《品·108美食广场》愚园路108号1层（近愚园路与胶州路交叉口）",
+          "source": "amap_js_browser",
+          "geocoded_at": "2026-06-13T11:26:12.496Z"
+        }
       },
       "offers": [
         {
@@ -1049,7 +1157,16 @@
           "咸蛋黄千层"
         ],
         "menu_count": 38,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 121.446155,
+          "lat": 31.223978,
+          "formatted_address": null,
+          "level": null,
+          "query": "上海静安寺商圈南京西路1618号久光百货2楼（正门旁露天平台）",
+          "source": "amap_js_browser",
+          "geocoded_at": "2026-06-13T11:26:12.496Z"
+        }
       },
       "offers": [
         {
@@ -1150,7 +1267,16 @@
           "鹿肉塔塔"
         ],
         "menu_count": 8,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 121.450698,
+          "lat": 31.220488,
+          "formatted_address": null,
+          "level": null,
+          "query": "上海静安寺商圈富民路83-3号（醉美梧桐区沿街阳光露台餐厅、停车可导航巨富大厦）",
+          "source": "amap_js_browser",
+          "geocoded_at": "2026-06-13T11:26:12.496Z"
+        }
       },
       "offers": [
         {
@@ -1273,7 +1399,16 @@
           "吉士麻薯"
         ],
         "menu_count": 3,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 121.446198,
+          "lat": 31.223687,
+          "formatted_address": null,
+          "level": null,
+          "query": "上海静安寺街道南京西路1618号久光百货B1FDB17-19(近静安寺)",
+          "source": "amap_js_browser",
+          "geocoded_at": "2026-06-13T11:26:12.496Z"
+        }
       },
       "offers": [],
       "extraction": {
@@ -1335,7 +1470,16 @@
           "土豆沙拉"
         ],
         "menu_count": 46,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 121.449257,
+          "lat": 31.223167,
+          "formatted_address": null,
+          "level": null,
+          "query": "上海南京西路1515号静安嘉里中心南区3楼S3-01",
+          "source": "amap_js_browser",
+          "geocoded_at": "2026-06-13T11:26:12.496Z"
+        }
       },
       "offers": [
         {

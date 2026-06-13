@@ -64,7 +64,16 @@
           "猪碎肉吐司"
         ],
         "menu_count": 23,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.456362,
+          "lat": 39.93219,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯/工体工人体育场北路4号院10号楼1层104（本垒隔壁）",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.929Z"
+        }
       },
       "offers": [
         {
@@ -188,7 +197,16 @@
           "西班牙油浸蒜香虾"
         ],
         "menu_count": 38,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.457168,
+          "lat": 39.931634,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯/工体工人体育场北路工体北路4号院",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [
         {
@@ -313,7 +331,16 @@
           "西冷牛排"
         ],
         "menu_count": null,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.460407,
+          "lat": 39.937935,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯/工体西式三里屯东三街4号（博茨瓦纳使馆对面）",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.929Z"
+        }
       },
       "offers": [
         {
@@ -418,7 +445,16 @@
           "烧鹅例牌"
         ],
         "menu_count": null,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.466771,
+          "lat": 39.934301,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京朝阳公园农展馆南路13号瑞辰国际中心2层",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [
         {
@@ -543,7 +579,16 @@
           "焦糖布丁"
         ],
         "menu_count": 15,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.456999,
+          "lat": 39.931855,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯/工体工人体育场北路工体北路4号院80号楼1层107室",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.929Z"
+        }
       },
       "offers": [
         {
@@ -660,7 +705,16 @@
           "巧克力蛋糕"
         ],
         "menu_count": 8,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.448401,
+          "lat": 39.933669,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯工人体育场北路三里屯四号院81号楼一层110室",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.929Z"
+        }
       },
       "offers": [
         {
@@ -765,7 +819,16 @@
           "葱烤八宝葫芦鸭"
         ],
         "menu_count": null,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.458974,
+          "lat": 39.932654,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯工人体育场北路甲2号盈科中心临街底商一层",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [],
       "extraction": {
@@ -827,7 +890,16 @@
           "提拉米苏"
         ],
         "menu_count": null,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.448401,
+          "lat": 39.933669,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯/工体工人体育场北路四号院11号楼",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.929Z"
+        }
       },
       "offers": [
         {
@@ -933,7 +1005,16 @@
           "霞浦海带苗"
         ],
         "menu_count": 30,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.460078,
+          "lat": 39.933061,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯工人体育场北路2号兆龙饭店1-03、1-04",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [
         {
@@ -1056,7 +1137,16 @@
           "甘蔗鸡"
         ],
         "menu_count": 12,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.460433,
+          "lat": 39.933233,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯三里屯街道工体北路2号兆龙饭店3层",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.929Z"
+        }
       },
       "offers": [],
       "extraction": {
@@ -1104,7 +1194,16 @@
         "amenities": [],
         "recommended_dishes": [],
         "menu_count": null,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.467568,
+          "lat": 39.929852,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯距地铁10号线团结湖站D口步行520m",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [],
       "extraction": {
@@ -1166,7 +1265,16 @@
           "每日白桃茉莉"
         ],
         "menu_count": 3,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.456878,
+          "lat": 39.932274,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯工人体育场北路机电院4号院10号楼一层112号,下酒（BM楼下,中国银行对面）",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [
         {
@@ -1276,7 +1384,16 @@
         "amenities": [],
         "recommended_dishes": [],
         "menu_count": null,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.467568,
+          "lat": 39.929852,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯/工体距地铁10号线团结湖站出入口步行30m",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [],
       "extraction": {
@@ -1324,7 +1441,16 @@
         "amenities": [],
         "recommended_dishes": [],
         "menu_count": null,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.464229,
+          "lat": 39.932193,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京朝阳公园团结湖北头条8号1幢",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [],
       "extraction": {
@@ -1374,7 +1500,16 @@
           "可续面骨汤拉面冷菜拼盘"
         ],
         "menu_count": null,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.467568,
+          "lat": 39.929852,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯/工体粉距地铁10号线团结湖站出入口步行90m",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [
         {
@@ -1499,7 +1634,16 @@
           "烟熏烤玉米Smoke Corn"
         ],
         "menu_count": 48,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.456362,
+          "lat": 39.93219,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯/工体工人体育场北路4号10号楼一层106号",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [
         {
@@ -1622,7 +1766,16 @@
           "白桃乌龙"
         ],
         "menu_count": 1,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.462585,
+          "lat": 39.934131,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯农展馆南路12号2号楼",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [
         {
@@ -1725,7 +1878,16 @@
           "烤猪蹄"
         ],
         "menu_count": 2,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.464445,
+          "lat": 39.932192,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京朝阳公园团结湖北头条8号",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [
         {
@@ -1843,7 +2005,16 @@
           "明天见金针菇"
         ],
         "menu_count": 4,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.455848,
+          "lat": 39.932699,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯工人体育场北路甲6号中宇大厦正门进入坐电梯下B1（或中宇大厦地下停车场入口下去右转）",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [],
       "extraction": {
@@ -1905,7 +2076,16 @@
           "烤鸡胗"
         ],
         "menu_count": 5,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.457168,
+          "lat": 39.931634,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯/工体工体北路4号院楠火锅背面",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [
         {
@@ -2008,7 +2188,16 @@
           "海鲜拼盘"
         ],
         "menu_count": 14,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.458433,
+          "lat": 39.93213,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯工体北路甲2号盈科中心西南侧捌坊一层",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [
         {
@@ -2132,7 +2321,16 @@
           "小食拼盘"
         ],
         "menu_count": 5,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.467913,
+          "lat": 39.934063,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京朝阳公园/团结湖农展南路甲9号东枫国际体育园内1层",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.929Z"
+        }
       },
       "offers": [],
       "extraction": {
@@ -2195,7 +2393,16 @@
           "冰鲜毛豆"
         ],
         "menu_count": null,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.469119,
+          "lat": 39.929484,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京朝阳公园距地铁10号线团结湖站C口步行310m",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [
         {
@@ -2314,7 +2521,16 @@
           "敦煌李广杏皮茶"
         ],
         "menu_count": 3,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.469719,
+          "lat": 39.928944,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京朝阳公园/团结湖粉东三环北路26号",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [
         {
@@ -2426,7 +2642,16 @@
           "石锅虾籽豆腐珠海大万山蒸鱼"
         ],
         "menu_count": null,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.460078,
+          "lat": 39.933061,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯/工体工人体育场北路2号兆龙饭店一层",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [],
       "extraction": {
@@ -2487,7 +2712,16 @@
           "干姜美式"
         ],
         "menu_count": 2,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.457167,
+          "lat": 39.933032,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯/工体工人体育场北路甲6号1层010F室",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.929Z"
+        }
       },
       "offers": [],
       "extraction": {
@@ -2549,7 +2783,16 @@
           "馋嘴牛蛙香辣美容蹄炸饺子金丝饼藤儿菜"
         ],
         "menu_count": 3,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.458683,
+          "lat": 39.93289,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯/工体鱼工人体育场北路甲2号地下部分-01层",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [
         {
@@ -2646,7 +2889,16 @@
           "柠檬百香果气泡水芝士蛋糕"
         ],
         "menu_count": 3,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.467,
+          "lat": 39.933349,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京朝阳公园/团结湖团结湖北口3号楼一层部分二层、三层",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [
         {
@@ -2744,7 +2996,16 @@
           "猪肉大葱包素馅包牛肉大葱包猪肉茴香水饺豆腐脑"
         ],
         "menu_count": 1,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.47069,
+          "lat": 39.932281,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京朝阳公园团结湖北路1号",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [],
       "extraction": {
@@ -2804,7 +3065,16 @@
           "芽菜蛋炒饭"
         ],
         "menu_count": 2,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.462224,
+          "lat": 39.929833,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京朝阳公园东三环北路26-1号",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [
         {
@@ -2924,7 +3194,16 @@
           "明太子鸡翅饺子炸竹荚鱼原味豆沙铜锣烧焦糖布丁抹茶铜锣烧"
         ],
         "menu_count": null,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.458521,
+          "lat": 39.931863,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯/工体三里屯街道三里屯工体北路4号院机电院JINGYARD西门外南侧",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [],
       "extraction": {
@@ -2976,7 +3255,16 @@
           "粘豆包"
         ],
         "menu_count": null,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.463408,
+          "lat": 39.931956,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京朝阳公园团结湖街道团结湖北头条8号",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [
         {
@@ -3097,7 +3385,16 @@
           "烤鸡脚筋"
         ],
         "menu_count": 3,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.457168,
+          "lat": 39.931634,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯/工体三里屯街道工体北路4号(北京机电研究院)",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [
         {
@@ -3217,7 +3514,16 @@
           "羊尾"
         ],
         "menu_count": 21,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.462883,
+          "lat": 39.934207,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京朝阳公园/团结湖羊蝎子农展馆南路12号通广商用楼2号楼2层201",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [
         {
@@ -3318,7 +3624,16 @@
           "浓缩espresso"
         ],
         "menu_count": 2,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.458683,
+          "lat": 39.93289,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯/工体工人体育场北路甲2号地下部分-01层133单元",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.929Z"
+        }
       },
       "offers": [],
       "extraction": {
@@ -3380,7 +3695,16 @@
           "凉拌黄瓜"
         ],
         "menu_count": 4,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.456362,
+          "lat": 39.93219,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯/工体粉工人体育场北路4号80号楼一层101室",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [
         {
@@ -3504,7 +3828,16 @@
           "酸菜鱼"
         ],
         "menu_count": 18,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.458355,
+          "lat": 39.935488,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯三里屯街道三里屯东二街东三里屯13号楼西平房(武警北京总队医院北门旁)",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [],
       "extraction": {
@@ -3562,7 +3895,16 @@
           "酸辣土豆丝"
         ],
         "menu_count": 3,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.464445,
+          "lat": 39.932192,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京朝阳公园团结湖北头条8号",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [],
       "extraction": {
@@ -3624,7 +3966,16 @@
           "武汉热干面"
         ],
         "menu_count": 8,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.460407,
+          "lat": 39.937935,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯三里屯东三街4号",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [
         {
@@ -3702,7 +4053,16 @@
           "纤纤白玉"
         ],
         "menu_count": 2,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.45855,
+          "lat": 39.932977,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京朝阳公园/团结湖工人体育场北路甲2号盈科中心1F",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.929Z"
+        }
       },
       "offers": [],
       "extraction": {
@@ -3763,7 +4123,16 @@
           "奶酪核桃馕"
         ],
         "menu_count": 10,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.444478,
+          "lat": 39.934217,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京朝阳公园工人体育场北路1-3号",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [],
       "extraction": {
@@ -3826,7 +4195,16 @@
           "炸鱼排"
         ],
         "menu_count": 7,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.456999,
+          "lat": 39.931855,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯/工体南三里屯路工体北路4号院80号楼E区东南侧第一间101一层",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.929Z"
+        }
       },
       "offers": [
         {
@@ -3927,7 +4305,16 @@
           "米乳拿铁"
         ],
         "menu_count": 3,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.460662,
+          "lat": 39.929624,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯/工体东三环北路19号嘉盛中心（北侧50米）",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [
         {
@@ -4018,7 +4405,16 @@
         "amenities": [],
         "recommended_dishes": [],
         "menu_count": null,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.466933,
+          "lat": 39.936156,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京朝阳公园团结湖上泗路2号8幢1层01、9幢1层01、10幢1层01室",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [
         {
@@ -4122,7 +4518,16 @@
           "扁桃仁巧克力甜甜圈"
         ],
         "menu_count": 2,
-        "review_section_count": null
+        "review_section_count": null,
+        "amap_location": {
+          "lng": 116.458683,
+          "lat": 39.93289,
+          "formatted_address": null,
+          "level": null,
+          "query": "北京三里屯工人体育场北路甲2号地下部分-01层125单元",
+          "source": "browser_local_storage",
+          "geocoded_at": "2026-06-13T11:25:30.930Z"
+        }
       },
       "offers": [
         {

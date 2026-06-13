@@ -1,7 +1,7 @@
 "use client";
 
 import { MapPin, Search, Utensils } from "lucide-react";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { type CSSProperties, useCallback, useMemo, useRef, useState } from "react";
 
 import RestaurantMap from "@/components/RestaurantMap";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -153,8 +153,8 @@ export default function RestaurantExplorer({ dataset, amapConfig }: RestaurantEx
 
       <div ref={containerRef} className="flex min-h-0 flex-1 flex-col md:flex-row">
         <section
-          className="flex min-h-0 flex-col border-r bg-white"
-          style={{ width: `${leftWidth}%` }}
+          className="flex min-h-0 w-full flex-col border-r bg-white md:w-[var(--left-width)]"
+          style={{ "--left-width": `${leftWidth}%` } as CSSProperties}
         >
           <div className="border-b px-4 py-3">
             <div className="grid gap-2">
@@ -313,7 +313,7 @@ export default function RestaurantExplorer({ dataset, amapConfig }: RestaurantEx
           className="hidden w-2 cursor-col-resize touch-none bg-slate-200 transition hover:bg-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 md:block"
         />
 
-        <section className="min-h-[46vh] min-w-0 flex-1 md:min-h-0">
+        <section className="min-h-[46vh] w-full min-w-0 flex-1 md:min-h-0">
           <RestaurantMap
             records={filteredRecords}
             activeCity={activeCityGroup?.city || activeCity}

@@ -4,31 +4,6 @@ import { pinyin } from 'pinyin-pro';
 
 const DEFAULT_ROOT = 'data/restaurants';
 
-const TAOCAN_TITLE_TRANSLATIONS = {
-  '【收鑶+拍照打卡专属福利】古法陈皮红豆沙': 'Traditional aged tangerine peel red bean soup',
-  '【尝鲜】老火煲汤（位）': 'Trial offer: slow-cooked Cantonese soup, per person',
-  '精选双人套餐': 'Selected set meal for two',
-  '经典双人套餐': 'Classic set meal for two',
-  '豪华牛排双人套餐': 'Deluxe steak set meal for two',
-  '超值双人商务套餐': 'Value business set meal for two',
-  '【夏日上新】经典双人餐•每晚驻唱': 'New summer offer: classic dinner for two with nightly live singing',
-  '【鲜活海鲜】精选招牌海鲜饭双人餐': 'Fresh seafood: signature seafood rice set for two',
-  '【踏夏寻味】招牌双人套餐': 'Summer flavors: signature set meal for two',
-  '【Coops精选】切角蛋糕四选二': 'Coops selection: choose two cake slices',
-  '抹茶热压可颂华夫下午茶': 'Matcha pressed croissant waffle afternoon tea',
-  '下午茶 · 咖啡甜点套餐': 'Afternoon tea coffee and dessert set',
-  '经典热销 · 咖啡单人份': 'Popular classic coffee for one',
-  '可配送': 'Delivery available',
-  '【优雅时光】烤肉拼盘双人餐（含烟熏烤玉米/可乐）': 'Elegant time: grilled meat platter for two with smoked corn and cola',
-  '2人汉堡套餐': 'Burger set meal for two',
-  '【人气特惠】法式冰淇淋单人餐（口味4选1）': 'Popular special: French ice cream set for one, choose one of four flavors',
-  '【福利】热拿铁双人餐': 'Special offer: hot latte set for two',
-  '蜂蜜蛋糕礼盒': 'Honey cake gift box',
-  '馥郁伴手礼盒': 'Richly flavored gift box',
-  '端午飘香礼盒': 'Dragon Boat Festival fragrant gift box',
-  '粽横四海礼盒': 'Zongzi gift box',
-};
-
 function toPinyin(value) {
   if (!value || typeof value !== 'string') return null;
   return pinyin(value, { toneType: 'none', nonZh: 'consecutive' })
@@ -90,7 +65,7 @@ async function listJsonFiles(root) {
   return files;
 }
 
-function enrichSnapshot(snapshot) {
+function enrichSnapshot(snapshot, missingTitleTranslations) {
   if (!Array.isArray(snapshot.records)) return false;
   let changed = false;
 
@@ -111,11 +86,7 @@ function enrichSnapshot(snapshot) {
 
     for (const offer of record.offers || []) {
       if (offer.type !== 'taocan') continue;
-      const titleEn = TAOCAN_TITLE_TRANSLATIONS[offer.title] || null;
-      if (titleEn && offer.title_en !== titleEn) {
-        offer.title_en = titleEn;
-        changed = true;
-      }
+      if (offer.title && !offer.title_en) missingTitleTranslations.add(offer.title);
 
       if (!offer.details || typeof offer.details !== 'object') offer.details = {};
       const validTimeEn = translateValidTime(offer.details.valid_time);
@@ -138,16 +109,23 @@ async function main() {
   const root = path.resolve(process.cwd(), process.argv[2] || DEFAULT_ROOT);
   const files = await listJsonFiles(root);
   let updated = 0;
+  const missingTitleTranslations = new Set();
 
   for (const file of files) {
     const raw = await fs.readFile(file, 'utf8');
     const snapshot = JSON.parse(raw);
-    if (!enrichSnapshot(snapshot)) continue;
+    if (!enrichSnapshot(snapshot, missingTitleTranslations)) continue;
     await fs.writeFile(file, `${JSON.stringify(snapshot, null, 2)}\n`);
     updated += 1;
   }
 
   console.log(`Enriched ${updated} file${updated === 1 ? '' : 's'}.`);
+  if (missingTitleTranslations.size) {
+    console.log('Missing taocan title translations:');
+    for (const title of [...missingTitleTranslations].sort((a, b) => a.localeCompare(b, 'zh-Hans-CN'))) {
+      console.log(`- ${title}`);
+    }
+  }
 }
 
 main().catch((error) => {

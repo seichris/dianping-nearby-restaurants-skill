@@ -1,10 +1,11 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { pinyin } from 'pinyin-pro';
 
 const DEFAULT_BASE_URL = 'https://www.dianping.com/shanghai/ch10/r101837';
 const DEFAULT_OUT_DIR = 'data/restaurants';
-const DEFAULT_PAGES = 1;
+const DEFAULT_PAGES = 3;
 const DEFAULT_LIMIT = Number.POSITIVE_INFINITY;
 const KNOWN_CATEGORIES = [
   '本帮江浙菜',
@@ -91,7 +92,8 @@ export function resolveOutDir(outDir = DEFAULT_OUT_DIR, cwd = defaultCwd()) {
 
 export function sanitizeStationConfig(config) {
   if (!config) return null;
-  const { address, ...safeConfig } = config;
+  const safeConfig = { ...config };
+  delete safeConfig.address;
   return safeConfig;
 }
 
@@ -153,6 +155,14 @@ function parseNumber(value) {
   const normalized = String(value).replace(/,/g, '');
   const number = Number(normalized);
   return Number.isFinite(number) ? number : null;
+}
+
+function toPinyin(value) {
+  if (!value || typeof value !== 'string') return null;
+  return pinyin(value, { toneType: 'none', nonZh: 'consecutive' })
+    .replace(/\b(\d) (?=\d\b)/g, '$1')
+    .replace(/\s+/g, ' ')
+    .trim() || null;
 }
 
 function parseAreaCategory(value) {
@@ -267,6 +277,16 @@ function parseOfferDetails(title, lines) {
   };
 }
 
+function findOfferImageUrl(offer, candidates = []) {
+  if (!offer?.title) return null;
+  const priceText = offer.price === null || offer.price === undefined ? null : String(offer.price);
+  const match = candidates.find((candidate) => {
+    if (!candidate?.image_url || !candidate.text?.includes(offer.title)) return false;
+    return !priceText || candidate.text.includes(priceText);
+  });
+  return match?.image_url || null;
+}
+
 function isOfferDetailLine(line, flagSet) {
   return flagSet.has(line) ||
     /^周[周一二三四五六日至、-]+$/.test(line) ||
@@ -356,6 +376,60 @@ export async function extractListingShops(tab, pageNumber, pageUrl) {
   await tab.goto(pageUrl);
   await tab.playwright.waitForLoadState({ state: 'domcontentloaded', timeoutMs: 15000 });
   const shops = await tab.playwright.evaluate(() => {
+    const normalizeImageUrl = (value, baseUrl) => {
+      if (!value || typeof value !== 'string') return null;
+      const firstCandidate = value
+        .split(',')
+        .map((part) => part.trim().split(/\s+/)[0])
+        .find(Boolean);
+      if (!firstCandidate || firstCandidate.startsWith('data:')) return null;
+
+      const styleMatch = firstCandidate.match(/url\(["']?([^"')]+)["']?\)/);
+      const rawUrl = styleMatch?.[1] || firstCandidate;
+      if (!rawUrl || rawUrl.startsWith('data:')) return null;
+
+      try {
+        return new URL(rawUrl, baseUrl).toString();
+      } catch {
+        if (rawUrl.startsWith('//')) return `https:${rawUrl}`;
+        return null;
+      }
+    };
+
+    const findImageUrl = (root, baseUrl) => {
+      if (!root) return null;
+      const imageSelectors = [
+        'img[data-src]',
+        'img[data-original]',
+        'img[data-lazy-src]',
+        'img[data-lazyload]',
+        'img[srcset]',
+        'img[src]',
+      ];
+
+      for (const selector of imageSelectors) {
+        for (const image of root.querySelectorAll(selector)) {
+          const imageUrl = normalizeImageUrl(
+            image.getAttribute('data-src') ||
+              image.getAttribute('data-original') ||
+              image.getAttribute('data-lazy-src') ||
+              image.getAttribute('data-lazyload') ||
+              image.getAttribute('srcset') ||
+              image.getAttribute('src'),
+            baseUrl
+          );
+          if (imageUrl) return imageUrl;
+        }
+      }
+
+      for (const element of root.querySelectorAll('[style*="background"]')) {
+        const imageUrl = normalizeImageUrl(element.style.backgroundImage, baseUrl);
+        if (imageUrl) return imageUrl;
+      }
+
+      return null;
+    };
+
     const anchors = [...document.querySelectorAll('a[href*="/shop/"]')];
     const seen = new Set();
     const result = [];
@@ -366,7 +440,8 @@ export async function extractListingShops(tab, pageNumber, pageUrl) {
       if (!text || text.includes('条评价') || text.includes('人均')) continue;
       if (seen.has(href.pathname)) continue;
       seen.add(href.pathname);
-      result.push({ name: text, url: href.origin + href.pathname });
+      const container = a.closest('li, .item, .shop-list-item, .shop-item, [class*="shop"], [class*="item"]') || a.parentElement;
+      result.push({ name: text, url: href.origin + href.pathname, image_url: findImageUrl(container, location.href) });
     }
     return result;
   }, undefined, { timeoutMs: 15000 });
@@ -388,20 +463,103 @@ export async function extractShopRecord(browser, shop, scanId, baseUrl) {
     await tab.goto(shop.url);
     await tab.playwright.waitForLoadState({ state: 'domcontentloaded', timeoutMs: 15000 });
     const page = await tab.playwright.evaluate(() => {
+      const normalizeImageUrl = (value, baseUrl) => {
+        if (!value || typeof value !== 'string') return null;
+        const firstCandidate = value
+          .split(',')
+          .map((part) => part.trim().split(/\s+/)[0])
+          .find(Boolean);
+        if (!firstCandidate || firstCandidate.startsWith('data:')) return null;
+
+        const styleMatch = firstCandidate.match(/url\(["']?([^"')]+)["']?\)/);
+        const rawUrl = styleMatch?.[1] || firstCandidate;
+        if (!rawUrl || rawUrl.startsWith('data:')) return null;
+
+        try {
+          return new URL(rawUrl, baseUrl).toString();
+        } catch {
+          if (rawUrl.startsWith('//')) return `https:${rawUrl}`;
+          return null;
+        }
+      };
+
+      const findImageUrl = (root, baseUrl) => {
+        if (!root) return null;
+        const imageSelectors = [
+          'img[data-src]',
+          'img[data-original]',
+          'img[data-lazy-src]',
+          'img[data-lazyload]',
+          'img[srcset]',
+          'img[src]',
+        ];
+
+        for (const selector of imageSelectors) {
+          for (const image of root.querySelectorAll(selector)) {
+            const imageUrl = normalizeImageUrl(
+              image.getAttribute('data-src') ||
+                image.getAttribute('data-original') ||
+                image.getAttribute('data-lazy-src') ||
+                image.getAttribute('data-lazyload') ||
+                image.getAttribute('srcset') ||
+                image.getAttribute('src'),
+              baseUrl
+            );
+            if (imageUrl) return imageUrl;
+          }
+        }
+
+        for (const element of root.querySelectorAll('[style*="background"]')) {
+          const imageUrl = normalizeImageUrl(element.style.backgroundImage, baseUrl);
+          if (imageUrl) return imageUrl;
+        }
+
+        return null;
+      };
+
+      const offerImageCandidates = () => {
+        const seen = new Set();
+        return [...document.querySelectorAll('img, [style*="background"]')]
+          .map((element) => {
+            const container =
+              element.closest(
+                'li, .item, .shop-list-item, .shop-item, [class*="deal"], [class*="group"], [class*="coupon"], [class*="package"], [class*="promo"], [class*="offer"], [class*="item"]'
+              ) || element.parentElement;
+            const text = container?.innerText?.trim() || '';
+            const imageUrl = findImageUrl(container, location.href);
+            if (!text || !imageUrl || seen.has(`${text}:${imageUrl}`)) return null;
+            seen.add(`${text}:${imageUrl}`);
+            return { text, image_url: imageUrl };
+          })
+          .filter(Boolean);
+      };
+
       const lines = document.body.innerText
         .split(/\n+/)
         .map((line) => line.trim())
         .filter(Boolean);
-      return { title: document.title, href: location.href, lines };
+      return {
+        title: document.title,
+        href: location.href,
+        imageUrl: findImageUrl(document.body, location.href),
+        offerImageCandidates: offerImageCandidates(),
+        lines,
+      };
     }, undefined, { timeoutMs: 15000 });
 
     const lines = page.lines;
     const verificationRequired = lines.some((line) => line.includes('身份核实') || line.includes('滑块'));
     const detailsHidden = lines.some((line) => line.includes('打开大众点评App查看'));
     const addressIndex = lines.findIndex((line) => /^.+[0-9]+号/.test(line));
+    const address = addressIndex >= 0 ? lines[addressIndex] : null;
     const shopId = new URL(shop.url).pathname.split('/').pop();
     const metadata = parseShopMetadata(lines);
-    const offers = verificationRequired ? [] : parseOffers(lines);
+    const offers = verificationRequired
+      ? []
+      : parseOffers(lines).map((offer) => ({
+        ...offer,
+        image_url: findOfferImageUrl(offer, page.offerImageCandidates),
+      }));
     const extractionStatus = verificationRequired
       ? 'verification_required'
       : detailsHidden && offers.length === 0
@@ -418,7 +576,10 @@ export async function extractShopRecord(browser, shop, scanId, baseUrl) {
         name: lines.find((line) => line === shop.name) || shop.name,
         url: page.href,
         shop_id: shopId,
-        address: addressIndex >= 0 ? lines[addressIndex] : null,
+        image_url: shop.image_url || page.imageUrl || null,
+        name_pinyin: toPinyin(lines.find((line) => line === shop.name) || shop.name),
+        address,
+        address_pinyin: toPinyin(address),
         ...metadata,
       },
       offers,

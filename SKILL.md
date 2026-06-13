@@ -72,7 +72,7 @@ Use this `browser` object for all Dianping navigation and extraction.
 Run the bundled scanner from a Node REPL after the extension-backed `browser` object exists:
 
 ```js
-const { runScan } = await import(`${nodeRepl.homeDir}/.codex/skills/dianping-taocan-discovery/scripts/scan-dianping-taocan.mjs`);
+const { runScan } = await import(`${nodeRepl.cwd}/scripts/scan-dianping-taocan.mjs`);
 
 const result = await runScan({
   browser,

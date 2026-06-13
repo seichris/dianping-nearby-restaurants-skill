@@ -46,12 +46,19 @@ function parseOffers(value: unknown): RestaurantOffer[] {
     .map((item) => {
       const offer = asRecord(item);
       if (!offer) return null;
+      const details = asRecord(offer.details);
       return {
         type: asString(offer.type) || "offer",
         title: asString(offer.title) || "Untitled offer",
+        titleEn: asString(offer.title_en),
         price: asNumber(offer.price),
         originalPrice: asNumber(offer.original_price),
         discount: asString(offer.discount),
+        validTime: asString(details?.valid_time),
+        validTimeEn: asString(details?.valid_time_en),
+        earliestUsable: asString(details?.earliest_usable),
+        earliestUsableEn: asString(details?.earliest_usable_en),
+        imageUrl: asString(offer.image_url),
       };
     })
     .filter((item): item is RestaurantOffer => Boolean(item));
@@ -94,9 +101,12 @@ function parseLatestJson(city: string, stationDirName: string, json: unknown): R
         scanId,
         sourceUrl: asString(source?.page_url) || asString(root.base_url),
         name,
+        namePinyin: asString(shop.name_pinyin),
         shopUrl: asString(shop.url),
         shopId,
+        imageUrl: asString(shop.image_url),
         address: asString(shop.address),
+        addressPinyin: asString(shop.address_pinyin),
         rating: asNumber(shop.rating),
         reviewCount: asNumber(shop.review_count),
         avgPricePerPerson: asNumber(shop.avg_price_per_person),

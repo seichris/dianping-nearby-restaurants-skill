@@ -1,6 +1,6 @@
 "use client";
 
-import { MapPin, Search, Utensils } from "lucide-react";
+import { Github, MapPin, Search } from "lucide-react";
 import { type CSSProperties, useCallback, useMemo, useRef, useState } from "react";
 
 import RestaurantMap from "@/components/RestaurantMap";
@@ -22,40 +22,25 @@ function formatRating(value: number | null): string {
   return value === null ? "—" : value.toFixed(1);
 }
 
-function formatDate(value: string | null): string {
-  if (!value) return "No timestamp";
-  return new Intl.DateTimeFormat("en", {
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(new Date(value));
-}
-
 function matchesSearch(record: RestaurantRecord, query: string): boolean {
   const normalized = query.trim().toLowerCase();
   if (!normalized) return true;
 
   return [
     record.name,
+    record.namePinyin,
     record.address,
+    record.addressPinyin,
     record.category,
     record.area,
     record.stationName,
     record.rankingBadge,
     ...record.recommendedDishes.slice(0, 6),
     ...record.offers.map((offer) => offer.title),
+    ...record.offers.map((offer) => offer.titleEn),
   ]
     .filter(Boolean)
     .some((value) => String(value).toLowerCase().includes(normalized));
-}
-
-function bestOffer(record: RestaurantRecord): string {
-  const firstTaocan = record.offers.find((offer) => offer.type === "taocan");
-  const firstOffer = firstTaocan || record.offers[0];
-  if (!firstOffer) return "No offers";
-  const price = firstOffer.price === null ? "" : ` · ¥${firstOffer.price}`;
-  return `${firstOffer.title}${price}`;
 }
 
 function defaultCity(cities: RestaurantDataset["cities"]): string {
@@ -90,6 +75,7 @@ export default function RestaurantExplorer({ dataset, amapConfig }: RestaurantEx
         : [],
     [activeCityGroup, query, stationFilter]
   );
+  const showStationColumn = stationFilter === "all";
 
   const handleCityChange = useCallback(
     (nextCity: string) => {
@@ -139,15 +125,16 @@ export default function RestaurantExplorer({ dataset, amapConfig }: RestaurantEx
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <h1 className="text-lg font-semibold tracking-tight">Dianping Nearby Restaurants</h1>
-            <p className="text-sm text-slate-500">
-              {dataset.totalRecords} shops · {dataset.totalTaocanShops} with taocan · updated{" "}
-              {formatDate(dataset.latestUpdatedAt)}
-            </p>
           </div>
-          <div className="flex items-center gap-2 rounded-md border bg-slate-50 px-3 py-2 text-sm text-slate-600">
-            <Utensils className="h-4 w-4 text-blue-600" />
-            <span>{filteredRecords.length} visible</span>
-          </div>
+          <a
+            href="https://github.com/seichris/dianping-nearby-restaurants-skill"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-2 rounded-md border bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700"
+          >
+            <Github className="h-4 w-4" />
+            <span>Ask claude/codex to add restaurants near you</span>
+          </a>
         </div>
       </div>
 
@@ -224,10 +211,10 @@ export default function RestaurantExplorer({ dataset, amapConfig }: RestaurantEx
                     <TableHeader>
                       <TableRow>
                         <TableHead className="min-w-[220px]">Shop</TableHead>
-                        <TableHead className="min-w-[110px]">Station</TableHead>
+                        {showStationColumn ? <TableHead className="min-w-[110px]">Station</TableHead> : null}
                         <TableHead className="w-[84px]">Rating</TableHead>
                         <TableHead className="w-[90px]">Avg</TableHead>
-                        <TableHead className="min-w-[220px]">Best Offer</TableHead>
+                        <TableHead className="min-w-[260px]">Taocan</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -239,36 +226,57 @@ export default function RestaurantExplorer({ dataset, amapConfig }: RestaurantEx
                           onClick={() => setSelectedId(record.id)}
                         >
                           <TableCell>
-                            <div className="space-y-1">
-                              <div className="flex items-center gap-2">
-                                {record.shopUrl ? (
-                                  <a
-                                    href={record.shopUrl}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    onClick={(event) => event.stopPropagation()}
-                                    className="font-medium text-slate-950 underline-offset-4 hover:underline"
-                                  >
-                                    {record.name}
-                                  </a>
-                                ) : (
-                                  <span className="font-medium">{record.name}</span>
-                                )}
-                                {record.taocanCount > 0 ? (
-                                  <span className="rounded-md bg-teal-50 px-1.5 py-0.5 text-[11px] font-medium text-teal-700">
-                                    {record.taocanCount} taocan
-                                  </span>
+                            <div className="flex gap-3">
+                              {record.imageUrl ? (
+                                // eslint-disable-next-line @next/next/no-img-element
+                                <img
+                                  src={record.imageUrl}
+                                  alt=""
+                                  loading="lazy"
+                                  referrerPolicy="no-referrer"
+                                  className="h-14 w-14 shrink-0 rounded-md border object-cover"
+                                />
+                              ) : null}
+                              <div className="min-w-0 space-y-1.5">
+                                <div>
+                                  <div className="flex flex-wrap items-center gap-2">
+                                    {record.shopUrl ? (
+                                      <a
+                                        href={record.shopUrl}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        onClick={(event) => event.stopPropagation()}
+                                        className="font-medium text-slate-950 underline-offset-4 hover:underline"
+                                      >
+                                        {record.name}
+                                      </a>
+                                    ) : (
+                                      <span className="font-medium">{record.name}</span>
+                                    )}
+                                    {record.taocanCount > 0 ? (
+                                      <span className="rounded-md bg-teal-50 px-1.5 py-0.5 text-[11px] font-medium text-teal-700">
+                                        {record.taocanCount} taocan
+                                      </span>
+                                    ) : null}
+                                  </div>
+                                  {record.namePinyin ? <div className="text-xs text-slate-500">{record.namePinyin}</div> : null}
+                                </div>
+                                {record.category ? <div className="text-xs text-slate-500">{record.category}</div> : null}
+                                {record.address ? <div className="line-clamp-2 text-xs text-slate-500">{record.address}</div> : null}
+                                {record.addressPinyin ? (
+                                  <div className="line-clamp-2 text-xs text-slate-400">{record.addressPinyin}</div>
                                 ) : null}
-                              </div>
-                              <div className="line-clamp-2 text-xs text-slate-500">
-                                {[record.category, record.address].filter(Boolean).join(" · ")}
                               </div>
                             </div>
                           </TableCell>
-                          <TableCell>
-                            <div className="text-sm">{record.stationName}</div>
-                            <div className="text-xs text-slate-500">{record.distanceMeters ? `${record.distanceMeters}m` : record.lineName}</div>
-                          </TableCell>
+                          {showStationColumn ? (
+                            <TableCell>
+                              <div className="text-sm">{record.stationName}</div>
+                              <div className="text-xs text-slate-500">
+                                {record.distanceMeters ? `${record.distanceMeters}m` : record.lineName}
+                              </div>
+                            </TableCell>
+                          ) : null}
                           <TableCell>
                             <div className={cn("font-medium", record.rating && record.rating >= 4.5 ? "text-emerald-700" : "")}>
                               {formatRating(record.rating)}
@@ -277,11 +285,47 @@ export default function RestaurantExplorer({ dataset, amapConfig }: RestaurantEx
                           </TableCell>
                           <TableCell>{formatCurrency(record.avgPricePerPerson)}</TableCell>
                           <TableCell>
-                            <div className="line-clamp-2 text-sm">{bestOffer(record)}</div>
-                            <div className="mt-1 text-xs text-slate-500">
-                              {record.openStatus || "Status unknown"}
-                              {record.openingHours ? ` · ${record.openingHours}` : ""}
-                            </div>
+                            {record.offers.some((offer) => offer.type === "taocan") ? (
+                              <div className="space-y-2">
+                                {record.offers
+                                  .filter((offer) => offer.type === "taocan")
+                                  .map((offer, offerIndex) => (
+                                    <div key={`${record.id}:taocan:${offerIndex}`} className="flex gap-2 text-sm">
+                                      {offer.imageUrl ? (
+                                        // eslint-disable-next-line @next/next/no-img-element
+                                        <img
+                                          src={offer.imageUrl}
+                                          alt=""
+                                          loading="lazy"
+                                          referrerPolicy="no-referrer"
+                                          className="h-12 w-12 shrink-0 rounded-md border object-cover"
+                                        />
+                                      ) : null}
+                                      <div className="min-w-0 space-y-1">
+                                        <div>
+                                          <div className="font-medium text-slate-900">{offer.title}</div>
+                                          {offer.titleEn ? <div className="text-xs text-slate-500">{offer.titleEn}</div> : null}
+                                        </div>
+                                        <div className="flex flex-wrap gap-x-2 gap-y-1 text-xs text-slate-500">
+                                          {offer.price === null ? null : (
+                                            <span className="font-medium text-slate-900">¥{offer.price}</span>
+                                          )}
+                                          {offer.originalPrice === null ? null : <span>Was ¥{offer.originalPrice}</span>}
+                                          {offer.discount ? <span>{offer.discount}</span> : null}
+                                          {offer.validTimeEn || offer.validTime ? (
+                                            <span>Valid {offer.validTimeEn || offer.validTime}</span>
+                                          ) : null}
+                                          {offer.earliestUsableEn || offer.earliestUsable ? (
+                                            <span>{offer.earliestUsableEn || offer.earliestUsable}</span>
+                                          ) : null}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ))}
+                              </div>
+                            ) : (
+                              <span className="text-sm text-slate-400">No taocan</span>
+                            )}
                           </TableCell>
                         </TableRow>
                       ))}

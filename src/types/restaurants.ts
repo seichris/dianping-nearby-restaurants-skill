@@ -1,9 +1,15 @@
 export interface RestaurantOffer {
   type: string;
   title: string;
+  titleEn: string | null;
   price: number | null;
   originalPrice: number | null;
   discount: string | null;
+  validTime: string | null;
+  validTimeEn: string | null;
+  earliestUsable: string | null;
+  earliestUsableEn: string | null;
+  imageUrl: string | null;
 }
 
 export interface RestaurantRecord {
@@ -17,9 +23,12 @@ export interface RestaurantRecord {
   scanId: string | null;
   sourceUrl: string | null;
   name: string;
+  namePinyin: string | null;
   shopUrl: string | null;
   shopId: string | null;
+  imageUrl: string | null;
   address: string | null;
+  addressPinyin: string | null;
   rating: number | null;
   reviewCount: number | null;
   avgPricePerPerson: number | null;

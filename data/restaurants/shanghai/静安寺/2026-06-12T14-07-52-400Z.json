@@ -59,7 +59,9 @@
           "杏仁可颂"
         ],
         "menu_count": 4,
-        "review_section_count": null
+        "review_section_count": null,
+        "name_pinyin": "PAIN CHAUD bai qiu ( jing an jiu guang dian )",
+        "address_pinyin": "nan jing xi lu 1618 hao jiu guang bai huo 1 lou S102 shi"
       },
       "offers": [
         {
@@ -94,9 +96,11 @@
           "details": {
             "group_size": "单人",
             "valid_time": "周一至周日",
-            "earliest_usable": null
+            "earliest_usable": null,
+            "valid_time_en": "Monday to Sunday"
           },
-          "raw_text": "【人气特惠】法式冰淇淋单人餐（口味4选1） 周一至周日 随时退 过期自动退 ¥ 19.9 6.7折 ￥30 抢购"
+          "raw_text": "【人气特惠】法式冰淇淋单人餐（口味4选1） 周一至周日 随时退 过期自动退 ¥ 19.9 6.7折 ￥30 抢购",
+          "title_en": "Popular special: French ice cream set for one, choose one of four flavors"
         },
         {
           "type": "taocan",
@@ -112,9 +116,11 @@
           "details": {
             "group_size": "双人",
             "valid_time": "周一至周日",
-            "earliest_usable": null
+            "earliest_usable": null,
+            "valid_time_en": "Monday to Sunday"
           },
-          "raw_text": "【福利】热拿铁双人餐 周一至周日 随时退 过期自动退 ¥ 54 8.5折 ￥64 抢购"
+          "raw_text": "【福利】热拿铁双人餐 周一至周日 随时退 过期自动退 ¥ 54 8.5折 ￥64 抢购",
+          "title_en": "Special offer: hot latte set for two"
         }
       ],
       "extraction": {
@@ -170,7 +176,9 @@
           "厚切猪颈肉"
         ],
         "menu_count": 40,
-        "review_section_count": null
+        "review_section_count": null,
+        "name_pinyin": "pu tong shi tang · jia ting shi kao rou ( tong ren lu dian )",
+        "address_pinyin": "tong ren lu 88 hao L1 ceng L114"
       },
       "offers": [],
       "extraction": {
@@ -229,7 +237,9 @@
           "玫瑰花生冰粉"
         ],
         "menu_count": 41,
-        "review_section_count": null
+        "review_section_count": null,
+        "name_pinyin": "hao hai huo shao yun dai jia cai ( rui ou bai huo dian )",
+        "address_pinyin": "nan jing xi lu 1601 hao rui ou bai huo 4 ceng 4A"
       },
       "offers": [],
       "extraction": {
@@ -289,7 +299,9 @@
           "甜虾刺"
         ],
         "menu_count": 64,
-        "review_section_count": null
+        "review_section_count": null,
+        "name_pinyin": "Maki House shou si (CP jing an dian )",
+        "address_pinyin": "yu yuan lu 8 hao CP jing an si lou L4-12 shi"
       },
       "offers": [],
       "extraction": {
@@ -347,7 +359,9 @@
           "开心果布蕾泡芙"
         ],
         "menu_count": 2,
-        "review_section_count": null
+        "review_section_count": null,
+        "name_pinyin": "FASCINO Selection( jiu guang bai huo dian )",
+        "address_pinyin": "nan jing xi lu 1618 hao jiu guang bai huo b1"
       },
       "offers": [
         {
@@ -364,9 +378,11 @@
           "details": {
             "group_size": null,
             "valid_time": "周一至周日",
-            "earliest_usable": null
+            "earliest_usable": null,
+            "valid_time_en": "Monday to Sunday"
           },
-          "raw_text": "蜂蜜蛋糕礼盒 周一至周日 随时退 过期自动退 ¥ 70 8.8折 ￥80 抢购"
+          "raw_text": "蜂蜜蛋糕礼盒 周一至周日 随时退 过期自动退 ¥ 70 8.8折 ￥80 抢购",
+          "title_en": "Honey cake gift box"
         },
         {
           "type": "taocan",
@@ -382,9 +398,11 @@
           "details": {
             "group_size": null,
             "valid_time": "周一至周日",
-            "earliest_usable": null
+            "earliest_usable": null,
+            "valid_time_en": "Monday to Sunday"
           },
-          "raw_text": "馥郁伴手礼盒 周一至周日 随时退 过期自动退 ¥ 210 9.7折 ￥218 抢购"
+          "raw_text": "馥郁伴手礼盒 周一至周日 随时退 过期自动退 ¥ 210 9.7折 ￥218 抢购",
+          "title_en": "Richly flavored gift box"
         }
       ],
       "extraction": {
@@ -443,7 +461,9 @@
           "铁板牛肉炒面"
         ],
         "menu_count": 6,
-        "review_section_count": null
+        "review_section_count": null,
+        "name_pinyin": "wang jia sha dian xin zhuang yuan ( jing an si dian )",
+        "address_pinyin": "bei jing xi lu 1535 hao"
       },
       "offers": [
         {
@@ -460,9 +480,11 @@
           "details": {
             "group_size": null,
             "valid_time": "周一至周日",
-            "earliest_usable": null
+            "earliest_usable": null,
+            "valid_time_en": "Monday to Sunday"
           },
-          "raw_text": "端午飘香礼盒 周一至周日 随时退 过期自动退 ¥ 100 9.2折 ￥109 抢购"
+          "raw_text": "端午飘香礼盒 周一至周日 随时退 过期自动退 ¥ 100 9.2折 ￥109 抢购",
+          "title_en": "Dragon Boat Festival fragrant gift box"
         },
         {
           "type": "taocan",
@@ -478,9 +500,11 @@
           "details": {
             "group_size": null,
             "valid_time": "周一至周日",
-            "earliest_usable": null
+            "earliest_usable": null,
+            "valid_time_en": "Monday to Sunday"
           },
-          "raw_text": "粽横四海礼盒 周一至周日 随时退 过期自动退 ¥ 150 9.4折 ￥160 抢购"
+          "raw_text": "粽横四海礼盒 周一至周日 随时退 过期自动退 ¥ 150 9.4折 ￥160 抢购",
+          "title_en": "Zongzi gift box"
         }
       ],
       "extraction": {
@@ -539,7 +563,9 @@
           "茄盒"
         ],
         "menu_count": null,
-        "review_section_count": null
+        "review_section_count": null,
+        "name_pinyin": "hu xi lao long tang mian guan ( jing an si dian )",
+        "address_pinyin": "bei jing xi lu 1738 hao"
       },
       "offers": [],
       "extraction": {
@@ -598,7 +624,9 @@
           "东坡牛肋排拼盘"
         ],
         "menu_count": 36,
-        "review_section_count": null
+        "review_section_count": null,
+        "name_pinyin": "O'mills Sourdough Bakery&Bistro( jia li zhong xin dian )",
+        "address_pinyin": "ju di tie 7 hao xian jing an si zhan 6 kou bu xing 170m"
       },
       "offers": [],
       "extraction": {
@@ -653,7 +681,9 @@
           "本帮豆腐皮包子"
         ],
         "menu_count": 68,
-        "review_section_count": null
+        "review_section_count": null,
+        "name_pinyin": "chun feng song yue lou ( jiu guang bai huo dian )",
+        "address_pinyin": "ju di tie 2 hao xian jing an si di tie zhan chu ru kou 20m"
       },
       "offers": [],
       "extraction": {
@@ -711,7 +741,9 @@
           "招牌艇仔粥"
         ],
         "menu_count": 65,
-        "review_section_count": null
+        "review_section_count": null,
+        "name_pinyin": "long ji xiang gang cha can ting ( jiu guang bai huo dian )",
+        "address_pinyin": "nan jing xi lu 1618 hao jiu guang bai huo B1 lou"
       },
       "offers": [],
       "extraction": {

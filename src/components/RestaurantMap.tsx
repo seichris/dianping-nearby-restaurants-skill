@@ -8,6 +8,7 @@ import type { RestaurantRecord } from "@/types/restaurants";
 
 interface RestaurantMapProps {
   records: RestaurantRecord[];
+  activeCity: string;
   selectedId: string | null;
   onSelect: (id: string) => void;
   amapConfig: AMapClientConfig;
@@ -77,7 +78,8 @@ const CITY_NAMES: Record<string, string> = {
   shanghai: "上海",
 };
 
-function fallbackCenter(records: RestaurantRecord[]): Point {
+function fallbackCenter(records: RestaurantRecord[], activeCity?: string): Point {
+  if (activeCity && CITY_CENTERS[activeCity]) return CITY_CENTERS[activeCity];
   const firstCity = records[0]?.city;
   if (firstCity && records.every((record) => record.city === firstCity)) {
     return CITY_CENTERS[firstCity] || CITY_CENTERS.shanghai;
@@ -166,7 +168,7 @@ function infoWindowContent(record: RestaurantRecord): HTMLElement {
   return wrap;
 }
 
-export default function RestaurantMap({ records, selectedId, onSelect, amapConfig }: RestaurantMapProps) {
+export default function RestaurantMap({ records, activeCity, selectedId, onSelect, amapConfig }: RestaurantMapProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<AMapMapInstance | null>(null);
   const amapRef = useRef<AMapNamespace | null>(null);
@@ -176,10 +178,15 @@ export default function RestaurantMap({ records, selectedId, onSelect, amapConfi
   const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState("Preparing map");
   const [mapReady, setMapReady] = useState(false);
+  const activeCityRef = useRef(activeCity);
 
   const limitedRecords = useMemo(() => records.slice(0, 250), [records]);
   const configError = amapConfig.configError || (!amapConfig.jsApiKey ? "Missing AMAP_JS_API_KEY." : null);
   const visibleError = configError || error;
+
+  useEffect(() => {
+    activeCityRef.current = activeCity;
+  }, [activeCity]);
 
   useEffect(() => {
     if (configError) return;
@@ -193,7 +200,7 @@ export default function RestaurantMap({ records, selectedId, onSelect, amapConfi
         const AMap = (await loadAMap(amapConfig.jsApiKey, amapConfig.securityJsCode, amapConfig.serviceHost)) as AMapNamespace;
         if (cancelled || !containerRef.current) return;
 
-        const center = fallbackCenter(limitedRecords);
+        const center = fallbackCenter(limitedRecords, activeCityRef.current);
         const map = new AMap.Map(containerRef.current, {
           center: [center.lng, center.lat],
           zoom: limitedRecords.length > 0 && limitedRecords.every((record) => record.city === limitedRecords[0].city) ? 12 : 5,
@@ -284,7 +291,7 @@ export default function RestaurantMap({ records, selectedId, onSelect, amapConfi
       if (fitMarkers.length) {
         mapInstance.setFitView?.(fitMarkers, false, [72, 72, 72, 72], 16);
       } else {
-        const center = fallbackCenter(limitedRecords);
+        const center = fallbackCenter(limitedRecords, activeCityRef.current);
         mapInstance.setCenter?.([center.lng, center.lat]);
       }
 

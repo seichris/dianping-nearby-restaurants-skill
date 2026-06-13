@@ -58,27 +58,57 @@ function bestOffer(record: RestaurantRecord): string {
   return `${firstOffer.title}${price}`;
 }
 
+function defaultCity(cities: RestaurantDataset["cities"]): string {
+  return cities.some((city) => city.city === "beijing") ? "beijing" : cities[0]?.city || "";
+}
+
 export default function RestaurantExplorer({ dataset, amapConfig }: RestaurantExplorerProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const [activeCity, setActiveCity] = useState(() => defaultCity(dataset.cities));
   const [stationFilter, setStationFilter] = useState("all");
   const [query, setQuery] = useState("");
   const [leftWidth, setLeftWidth] = useState(52);
-  const [selectedId, setSelectedId] = useState<string | null>(dataset.cities[0]?.records[0]?.id || null);
+  const initialCity = dataset.cities.find((city) => city.city === defaultCity(dataset.cities));
+  const [selectedId, setSelectedId] = useState<string | null>(initialCity?.records[0]?.id || null);
 
-  const filteredCities = useMemo(
-    () =>
-      dataset.cities
-        .map((city) => ({
-          ...city,
-          records: city.records.filter(
-            (record) => (stationFilter === "all" || record.stationKey === stationFilter) && matchesSearch(record, query)
-          ),
-        }))
-        .filter((city) => city.records.length > 0),
-    [dataset.cities, query, stationFilter]
+  const activeCityGroup = useMemo(
+    () => dataset.cities.find((city) => city.city === activeCity) || dataset.cities[0] || null,
+    [activeCity, dataset.cities]
   );
 
-  const filteredRecords = useMemo(() => filteredCities.flatMap((city) => city.records), [filteredCities]);
+  const stationOptions = useMemo(
+    () => dataset.stations.filter((station) => station.city === activeCityGroup?.city),
+    [activeCityGroup?.city, dataset.stations]
+  );
+
+  const filteredRecords = useMemo(
+    () =>
+      activeCityGroup
+        ? activeCityGroup.records.filter(
+            (record) => (stationFilter === "all" || record.stationKey === stationFilter) && matchesSearch(record, query)
+          )
+        : [],
+    [activeCityGroup, query, stationFilter]
+  );
+
+  const handleCityChange = useCallback(
+    (nextCity: string) => {
+      const nextCityGroup = dataset.cities.find((city) => city.city === nextCity);
+      setActiveCity(nextCity);
+      setStationFilter("all");
+      setSelectedId(nextCityGroup?.records[0]?.id || null);
+    },
+    [dataset.cities]
+  );
+
+  const handleStationChange = useCallback(
+    (nextStation: string) => {
+      setStationFilter(nextStation);
+      const nextRecord = activeCityGroup?.records.find((record) => nextStation === "all" || record.stationKey === nextStation);
+      setSelectedId(nextRecord?.id || null);
+    },
+    [activeCityGroup]
+  );
 
   const handlePointerDown = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
     const container = containerRef.current;
@@ -127,7 +157,7 @@ export default function RestaurantExplorer({ dataset, amapConfig }: RestaurantEx
           style={{ width: `${leftWidth}%` }}
         >
           <div className="border-b px-4 py-3">
-            <div className="grid gap-2 lg:grid-cols-[minmax(0,1fr)_220px]">
+            <div className="grid gap-2">
               <label className="relative block">
                 <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                 <input
@@ -137,109 +167,126 @@ export default function RestaurantExplorer({ dataset, amapConfig }: RestaurantEx
                   className="h-10 w-full rounded-md border bg-white pl-9 pr-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                 />
               </label>
-              <label className="relative block">
-                <MapPin className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-                <select
-                  value={stationFilter}
-                  onChange={(event) => setStationFilter(event.target.value)}
-                  className="h-10 w-full appearance-none rounded-md border bg-white pl-9 pr-8 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-                >
-                  <option value="all">All subway stations</option>
-                  {dataset.stations.map((station) => (
-                    <option key={station.key} value={station.key}>
-                      {station.cityLabel} · {station.stationName}
-                      {station.lineName ? ` · ${station.lineName}` : ""}
-                    </option>
+              <div className="flex flex-wrap items-center gap-2">
+                <label className="relative block min-w-[220px] flex-1 sm:flex-none">
+                  <MapPin className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <select
+                    value={stationFilter}
+                    onChange={(event) => handleStationChange(event.target.value)}
+                    className="h-10 w-full appearance-none rounded-md border bg-white pl-9 pr-8 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  >
+                    <option value="all">All subway stations</option>
+                    {stationOptions.map((station) => (
+                      <option key={station.key} value={station.key}>
+                        {station.stationName}
+                        {station.lineName ? ` · ${station.lineName}` : ""}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <div className="flex flex-wrap items-center gap-2">
+                  {dataset.cities.map((city) => (
+                    <button
+                      key={city.city}
+                      type="button"
+                      onClick={() => handleCityChange(city.city)}
+                      className={cn(
+                        "h-10 rounded-md border px-3 text-sm font-medium transition",
+                        city.city === activeCity
+                          ? "border-blue-600 bg-blue-600 text-white shadow-sm"
+                          : "border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:bg-blue-50"
+                      )}
+                    >
+                      {city.cityLabel}
+                    </button>
                   ))}
-                </select>
-              </label>
+                </div>
+              </div>
             </div>
           </div>
 
           <div className="min-h-0 flex-1 overflow-auto">
-            {filteredCities.length === 0 ? (
+            {!activeCityGroup || filteredRecords.length === 0 ? (
               <div className="flex h-full items-center justify-center px-6 text-center text-sm text-slate-500">
                 No restaurants match the current filters.
               </div>
             ) : (
               <div className="space-y-5 p-4">
-                {filteredCities.map((city) => (
-                  <section key={city.city} className="overflow-hidden rounded-lg border bg-white">
-                    <div className="flex items-center justify-between border-b bg-slate-50 px-4 py-3">
-                      <div>
-                        <h2 className="font-semibold">{city.cityLabel}</h2>
-                        <p className="text-xs text-slate-500">{city.records.length} shops in current view</p>
-                      </div>
+                <section className="overflow-hidden rounded-lg border bg-white">
+                  <div className="flex items-center justify-between border-b bg-slate-50 px-4 py-3">
+                    <div>
+                      <h2 className="font-semibold">{activeCityGroup.cityLabel}</h2>
+                      <p className="text-xs text-slate-500">{filteredRecords.length} shops in current view</p>
                     </div>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead className="min-w-[220px]">Shop</TableHead>
-                          <TableHead className="min-w-[110px]">Station</TableHead>
-                          <TableHead className="w-[84px]">Rating</TableHead>
-                          <TableHead className="w-[90px]">Avg</TableHead>
-                          <TableHead className="min-w-[220px]">Best Offer</TableHead>
+                  </div>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="min-w-[220px]">Shop</TableHead>
+                        <TableHead className="min-w-[110px]">Station</TableHead>
+                        <TableHead className="w-[84px]">Rating</TableHead>
+                        <TableHead className="w-[90px]">Avg</TableHead>
+                        <TableHead className="min-w-[220px]">Best Offer</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredRecords.map((record) => (
+                        <TableRow
+                          key={record.id}
+                          data-state={selectedId === record.id ? "selected" : undefined}
+                          className="cursor-pointer"
+                          onClick={() => setSelectedId(record.id)}
+                        >
+                          <TableCell>
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-2">
+                                {record.shopUrl ? (
+                                  <a
+                                    href={record.shopUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    onClick={(event) => event.stopPropagation()}
+                                    className="font-medium text-slate-950 underline-offset-4 hover:underline"
+                                  >
+                                    {record.name}
+                                  </a>
+                                ) : (
+                                  <span className="font-medium">{record.name}</span>
+                                )}
+                                {record.taocanCount > 0 ? (
+                                  <span className="rounded-md bg-teal-50 px-1.5 py-0.5 text-[11px] font-medium text-teal-700">
+                                    {record.taocanCount} taocan
+                                  </span>
+                                ) : null}
+                              </div>
+                              <div className="line-clamp-2 text-xs text-slate-500">
+                                {[record.category, record.address].filter(Boolean).join(" · ")}
+                              </div>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="text-sm">{record.stationName}</div>
+                            <div className="text-xs text-slate-500">{record.distanceMeters ? `${record.distanceMeters}m` : record.lineName}</div>
+                          </TableCell>
+                          <TableCell>
+                            <div className={cn("font-medium", record.rating && record.rating >= 4.5 ? "text-emerald-700" : "")}>
+                              {formatRating(record.rating)}
+                            </div>
+                            <div className="text-xs text-slate-500">{record.reviewCount?.toLocaleString() || "—"} reviews</div>
+                          </TableCell>
+                          <TableCell>{formatCurrency(record.avgPricePerPerson)}</TableCell>
+                          <TableCell>
+                            <div className="line-clamp-2 text-sm">{bestOffer(record)}</div>
+                            <div className="mt-1 text-xs text-slate-500">
+                              {record.openStatus || "Status unknown"}
+                              {record.openingHours ? ` · ${record.openingHours}` : ""}
+                            </div>
+                          </TableCell>
                         </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {city.records.map((record) => (
-                          <TableRow
-                            key={record.id}
-                            data-state={selectedId === record.id ? "selected" : undefined}
-                            className="cursor-pointer"
-                            onClick={() => setSelectedId(record.id)}
-                          >
-                            <TableCell>
-                              <div className="space-y-1">
-                                <div className="flex items-center gap-2">
-                                  {record.shopUrl ? (
-                                    <a
-                                      href={record.shopUrl}
-                                      target="_blank"
-                                      rel="noreferrer"
-                                      onClick={(event) => event.stopPropagation()}
-                                      className="font-medium text-slate-950 underline-offset-4 hover:underline"
-                                    >
-                                      {record.name}
-                                    </a>
-                                  ) : (
-                                    <span className="font-medium">{record.name}</span>
-                                  )}
-                                  {record.taocanCount > 0 ? (
-                                    <span className="rounded-md bg-teal-50 px-1.5 py-0.5 text-[11px] font-medium text-teal-700">
-                                      {record.taocanCount} taocan
-                                    </span>
-                                  ) : null}
-                                </div>
-                                <div className="line-clamp-2 text-xs text-slate-500">
-                                  {[record.category, record.address].filter(Boolean).join(" · ")}
-                                </div>
-                              </div>
-                            </TableCell>
-                            <TableCell>
-                              <div className="text-sm">{record.stationName}</div>
-                              <div className="text-xs text-slate-500">{record.distanceMeters ? `${record.distanceMeters}m` : record.lineName}</div>
-                            </TableCell>
-                            <TableCell>
-                              <div className={cn("font-medium", record.rating && record.rating >= 4.5 ? "text-emerald-700" : "")}>
-                                {formatRating(record.rating)}
-                              </div>
-                              <div className="text-xs text-slate-500">{record.reviewCount?.toLocaleString() || "—"} reviews</div>
-                            </TableCell>
-                            <TableCell>{formatCurrency(record.avgPricePerPerson)}</TableCell>
-                            <TableCell>
-                              <div className="line-clamp-2 text-sm">{bestOffer(record)}</div>
-                              <div className="mt-1 text-xs text-slate-500">
-                                {record.openStatus || "Status unknown"}
-                                {record.openingHours ? ` · ${record.openingHours}` : ""}
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </section>
-                ))}
+                      ))}
+                    </TableBody>
+                  </Table>
+                </section>
               </div>
             )}
           </div>
@@ -254,7 +301,13 @@ export default function RestaurantExplorer({ dataset, amapConfig }: RestaurantEx
         />
 
         <section className="min-h-[46vh] min-w-0 flex-1 md:min-h-0">
-          <RestaurantMap records={filteredRecords} selectedId={selectedId} onSelect={setSelectedId} amapConfig={amapConfig} />
+          <RestaurantMap
+            records={filteredRecords}
+            activeCity={activeCityGroup?.city || activeCity}
+            selectedId={selectedId}
+            onSelect={setSelectedId}
+            amapConfig={amapConfig}
+          />
         </section>
       </div>
     </main>

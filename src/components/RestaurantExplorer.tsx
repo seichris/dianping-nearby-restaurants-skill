@@ -189,6 +189,7 @@ export default function RestaurantExplorer({ dataset, amapConfig }: RestaurantEx
                     <button
                       key={city.city}
                       type="button"
+                      aria-pressed={city.city === activeCity}
                       onClick={() => handleCityChange(city.city)}
                       className={cn(
                         "h-10 rounded-md border px-3 text-sm font-medium transition",
@@ -296,8 +297,20 @@ export default function RestaurantExplorer({ dataset, amapConfig }: RestaurantEx
           role="separator"
           aria-orientation="vertical"
           aria-label="Resize table and map panes"
+          aria-valuemin={32}
+          aria-valuemax={72}
+          aria-valuenow={Math.round(leftWidth)}
+          tabIndex={0}
           onPointerDown={handlePointerDown}
-          className="hidden w-2 cursor-col-resize touch-none bg-slate-200 transition hover:bg-blue-300 md:block"
+          onKeyDown={(event) => {
+            if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+            event.preventDefault();
+            setLeftWidth((current) => {
+              const delta = event.key === "ArrowLeft" ? -4 : 4;
+              return Math.min(72, Math.max(32, current + delta));
+            });
+          }}
+          className="hidden w-2 cursor-col-resize touch-none bg-slate-200 transition hover:bg-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 md:block"
         />
 
         <section className="min-h-[46vh] min-w-0 flex-1 md:min-h-0">

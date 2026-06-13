@@ -1,0 +1,262 @@
+"use client";
+
+import { MapPin, Search, Utensils } from "lucide-react";
+import { useCallback, useMemo, useRef, useState } from "react";
+
+import RestaurantMap from "@/components/RestaurantMap";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import type { AMapClientConfig } from "@/lib/amapMaps";
+import { cn } from "@/lib/utils";
+import type { RestaurantDataset, RestaurantRecord } from "@/types/restaurants";
+
+interface RestaurantExplorerProps {
+  dataset: RestaurantDataset;
+  amapConfig: AMapClientConfig;
+}
+
+function formatCurrency(value: number | null): string {
+  return value === null ? "—" : `¥${value}`;
+}
+
+function formatRating(value: number | null): string {
+  return value === null ? "—" : value.toFixed(1);
+}
+
+function formatDate(value: string | null): string {
+  if (!value) return "No timestamp";
+  return new Intl.DateTimeFormat("en", {
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(value));
+}
+
+function matchesSearch(record: RestaurantRecord, query: string): boolean {
+  const normalized = query.trim().toLowerCase();
+  if (!normalized) return true;
+
+  return [
+    record.name,
+    record.address,
+    record.category,
+    record.area,
+    record.stationName,
+    record.rankingBadge,
+    ...record.recommendedDishes.slice(0, 6),
+    ...record.offers.map((offer) => offer.title),
+  ]
+    .filter(Boolean)
+    .some((value) => String(value).toLowerCase().includes(normalized));
+}
+
+function bestOffer(record: RestaurantRecord): string {
+  const firstTaocan = record.offers.find((offer) => offer.type === "taocan");
+  const firstOffer = firstTaocan || record.offers[0];
+  if (!firstOffer) return "No offers";
+  const price = firstOffer.price === null ? "" : ` · ¥${firstOffer.price}`;
+  return `${firstOffer.title}${price}`;
+}
+
+export default function RestaurantExplorer({ dataset, amapConfig }: RestaurantExplorerProps) {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [stationFilter, setStationFilter] = useState("all");
+  const [query, setQuery] = useState("");
+  const [leftWidth, setLeftWidth] = useState(52);
+  const [selectedId, setSelectedId] = useState<string | null>(dataset.cities[0]?.records[0]?.id || null);
+
+  const filteredCities = useMemo(
+    () =>
+      dataset.cities
+        .map((city) => ({
+          ...city,
+          records: city.records.filter(
+            (record) => (stationFilter === "all" || record.stationKey === stationFilter) && matchesSearch(record, query)
+          ),
+        }))
+        .filter((city) => city.records.length > 0),
+    [dataset.cities, query, stationFilter]
+  );
+
+  const filteredRecords = useMemo(() => filteredCities.flatMap((city) => city.records), [filteredCities]);
+
+  const handlePointerDown = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
+    const container = containerRef.current;
+    if (!container) return;
+    event.currentTarget.setPointerCapture(event.pointerId);
+
+    const updateWidth = (clientX: number) => {
+      const bounds = container.getBoundingClientRect();
+      const next = ((clientX - bounds.left) / bounds.width) * 100;
+      setLeftWidth(Math.min(72, Math.max(32, next)));
+    };
+
+    updateWidth(event.clientX);
+
+    const handleMove = (moveEvent: PointerEvent) => updateWidth(moveEvent.clientX);
+    const handleUp = () => {
+      window.removeEventListener("pointermove", handleMove);
+      window.removeEventListener("pointerup", handleUp);
+    };
+
+    window.addEventListener("pointermove", handleMove);
+    window.addEventListener("pointerup", handleUp);
+  }, []);
+
+  return (
+    <main className="flex h-dvh min-h-screen flex-col overflow-hidden bg-slate-50 text-slate-950">
+      <div className="border-b bg-white px-5 py-3">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h1 className="text-lg font-semibold tracking-tight">Dianping Nearby Restaurants</h1>
+            <p className="text-sm text-slate-500">
+              {dataset.totalRecords} shops · {dataset.totalTaocanShops} with taocan · updated{" "}
+              {formatDate(dataset.latestUpdatedAt)}
+            </p>
+          </div>
+          <div className="flex items-center gap-2 rounded-md border bg-slate-50 px-3 py-2 text-sm text-slate-600">
+            <Utensils className="h-4 w-4 text-blue-600" />
+            <span>{filteredRecords.length} visible</span>
+          </div>
+        </div>
+      </div>
+
+      <div ref={containerRef} className="flex min-h-0 flex-1 flex-col md:flex-row">
+        <section
+          className="flex min-h-0 flex-col border-r bg-white"
+          style={{ width: `${leftWidth}%` }}
+        >
+          <div className="border-b px-4 py-3">
+            <div className="grid gap-2 lg:grid-cols-[minmax(0,1fr)_220px]">
+              <label className="relative block">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <input
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="Search shops, dishes, categories, offers"
+                  className="h-10 w-full rounded-md border bg-white pl-9 pr-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                />
+              </label>
+              <label className="relative block">
+                <MapPin className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <select
+                  value={stationFilter}
+                  onChange={(event) => setStationFilter(event.target.value)}
+                  className="h-10 w-full appearance-none rounded-md border bg-white pl-9 pr-8 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                >
+                  <option value="all">All subway stations</option>
+                  {dataset.stations.map((station) => (
+                    <option key={station.key} value={station.key}>
+                      {station.cityLabel} · {station.stationName}
+                      {station.lineName ? ` · ${station.lineName}` : ""}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <div className="min-h-0 flex-1 overflow-auto">
+            {filteredCities.length === 0 ? (
+              <div className="flex h-full items-center justify-center px-6 text-center text-sm text-slate-500">
+                No restaurants match the current filters.
+              </div>
+            ) : (
+              <div className="space-y-5 p-4">
+                {filteredCities.map((city) => (
+                  <section key={city.city} className="overflow-hidden rounded-lg border bg-white">
+                    <div className="flex items-center justify-between border-b bg-slate-50 px-4 py-3">
+                      <div>
+                        <h2 className="font-semibold">{city.cityLabel}</h2>
+                        <p className="text-xs text-slate-500">{city.records.length} shops in current view</p>
+                      </div>
+                    </div>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="min-w-[220px]">Shop</TableHead>
+                          <TableHead className="min-w-[110px]">Station</TableHead>
+                          <TableHead className="w-[84px]">Rating</TableHead>
+                          <TableHead className="w-[90px]">Avg</TableHead>
+                          <TableHead className="min-w-[220px]">Best Offer</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {city.records.map((record) => (
+                          <TableRow
+                            key={record.id}
+                            data-state={selectedId === record.id ? "selected" : undefined}
+                            className="cursor-pointer"
+                            onClick={() => setSelectedId(record.id)}
+                          >
+                            <TableCell>
+                              <div className="space-y-1">
+                                <div className="flex items-center gap-2">
+                                  {record.shopUrl ? (
+                                    <a
+                                      href={record.shopUrl}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                      onClick={(event) => event.stopPropagation()}
+                                      className="font-medium text-slate-950 underline-offset-4 hover:underline"
+                                    >
+                                      {record.name}
+                                    </a>
+                                  ) : (
+                                    <span className="font-medium">{record.name}</span>
+                                  )}
+                                  {record.taocanCount > 0 ? (
+                                    <span className="rounded-md bg-teal-50 px-1.5 py-0.5 text-[11px] font-medium text-teal-700">
+                                      {record.taocanCount} taocan
+                                    </span>
+                                  ) : null}
+                                </div>
+                                <div className="line-clamp-2 text-xs text-slate-500">
+                                  {[record.category, record.address].filter(Boolean).join(" · ")}
+                                </div>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <div className="text-sm">{record.stationName}</div>
+                              <div className="text-xs text-slate-500">{record.distanceMeters ? `${record.distanceMeters}m` : record.lineName}</div>
+                            </TableCell>
+                            <TableCell>
+                              <div className={cn("font-medium", record.rating && record.rating >= 4.5 ? "text-emerald-700" : "")}>
+                                {formatRating(record.rating)}
+                              </div>
+                              <div className="text-xs text-slate-500">{record.reviewCount?.toLocaleString() || "—"} reviews</div>
+                            </TableCell>
+                            <TableCell>{formatCurrency(record.avgPricePerPerson)}</TableCell>
+                            <TableCell>
+                              <div className="line-clamp-2 text-sm">{bestOffer(record)}</div>
+                              <div className="mt-1 text-xs text-slate-500">
+                                {record.openStatus || "Status unknown"}
+                                {record.openingHours ? ` · ${record.openingHours}` : ""}
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </section>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+
+        <div
+          role="separator"
+          aria-orientation="vertical"
+          aria-label="Resize table and map panes"
+          onPointerDown={handlePointerDown}
+          className="hidden w-2 cursor-col-resize touch-none bg-slate-200 transition hover:bg-blue-300 md:block"
+        />
+
+        <section className="min-h-[46vh] min-w-0 flex-1 md:min-h-0">
+          <RestaurantMap records={filteredRecords} selectedId={selectedId} onSelect={setSelectedId} amapConfig={amapConfig} />
+        </section>
+      </div>
+    </main>
+  );
+}

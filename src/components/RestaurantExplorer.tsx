@@ -167,8 +167,8 @@ export default function RestaurantExplorer({ dataset, amapConfig }: RestaurantEx
                   className="h-10 w-full rounded-md border bg-white pl-9 pr-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                 />
               </label>
-              <div className="flex flex-wrap items-center gap-2">
-                <label className="relative block min-w-[220px] flex-1 sm:flex-none">
+              <div className="flex flex-nowrap items-center gap-2 overflow-x-auto pb-1">
+                <label className="relative block w-[16rem] shrink-0">
                   <MapPin className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                   <select
                     value={stationFilter}
@@ -184,7 +184,7 @@ export default function RestaurantExplorer({ dataset, amapConfig }: RestaurantEx
                     ))}
                   </select>
                 </label>
-                <div className="flex flex-wrap items-center gap-2">
+                <div className="flex shrink-0 flex-nowrap items-center gap-2">
                   {dataset.cities.map((city) => (
                     <button
                       key={city.city}

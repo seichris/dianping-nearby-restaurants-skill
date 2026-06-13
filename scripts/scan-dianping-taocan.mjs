@@ -97,6 +97,100 @@ export function sanitizeStationConfig(config) {
   return safeConfig;
 }
 
+function isValidAmapLocation(value) {
+  return (
+    value &&
+    typeof value === 'object' &&
+    typeof value.lng === 'number' &&
+    Number.isFinite(value.lng) &&
+    typeof value.lat === 'number' &&
+    Number.isFinite(value.lat)
+  );
+}
+
+function sanitizeGeocodeAddress(value) {
+  if (!value || typeof value !== 'string') return null;
+  return value
+    .replace(/不行/g, '步行')
+    .replace(/[（(]\s*距[^）)]*(?:步行|不行)[^）)]*[）)]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim() || null;
+}
+
+function normalizeCacheValue(value) {
+  return typeof value === 'string' && value.trim() ? value.trim() : null;
+}
+
+function geocodeCarryForwardKeys(snapshot, shop) {
+  const city = normalizeCacheValue(snapshot?.station?.city);
+  const stationName = normalizeCacheValue(snapshot?.station?.station_name);
+  const keys = [];
+
+  const shopId = normalizeCacheValue(shop?.shop_id);
+  if (city && stationName && shopId) keys.push(`shop:${city}:${stationName}:${shopId}`);
+
+  const query = normalizeCacheValue(shop?.amap_location?.query);
+  if (query) keys.push(`query:${query}`);
+
+  const name = normalizeCacheValue(shop?.name);
+  const address = sanitizeGeocodeAddress(shop?.address);
+  if (city && stationName && name && address) keys.push(`name-address:${city}:${stationName}:${name}:${address}`);
+
+  return keys;
+}
+
+function cloneAmapLocation(location) {
+  return isValidAmapLocation(location) ? JSON.parse(JSON.stringify(location)) : null;
+}
+
+function buildAmapLocationCarryForwardCache(previousLatest) {
+  const cache = new Map();
+  if (!Array.isArray(previousLatest?.records)) return cache;
+
+  for (const record of previousLatest.records) {
+    const shop = record?.shop;
+    if (!shop || typeof shop !== 'object') continue;
+    const location = cloneAmapLocation(shop.amap_location);
+    if (!location) continue;
+
+    for (const key of geocodeCarryForwardKeys(previousLatest, shop)) {
+      cache.set(key, location);
+    }
+  }
+
+  return cache;
+}
+
+function carryForwardAmapLocations(latest, previousLatest) {
+  const cache = buildAmapLocationCarryForwardCache(previousLatest);
+  if (!cache.size || !Array.isArray(latest?.records)) return 0;
+
+  let copied = 0;
+  for (const record of latest.records) {
+    const shop = record?.shop;
+    if (!shop || typeof shop !== 'object' || isValidAmapLocation(shop.amap_location)) continue;
+
+    for (const key of geocodeCarryForwardKeys(latest, shop)) {
+      const location = cloneAmapLocation(cache.get(key));
+      if (!location) continue;
+      shop.amap_location = location;
+      copied += 1;
+      break;
+    }
+  }
+
+  return copied;
+}
+
+async function readJsonFile(filePath) {
+  try {
+    return JSON.parse(await fs.readFile(filePath, 'utf8'));
+  } catch (error) {
+    if (error.code === 'ENOENT') return null;
+    throw error;
+  }
+}
+
 export async function readStationConfig(options = {}) {
   const cwd = options.cwd || defaultCwd();
   const configPath = options.configPath
@@ -679,6 +773,7 @@ export async function persistScan({ outDir, scanId, baseUrl, stationConfig, reco
     shops_with_taocan: records.filter((record) => record.offers.some((offer) => offer.type === 'taocan')).length,
     records,
   };
+  carryForwardAmapLocations(latest, await readJsonFile(latestPath));
   await fs.writeFile(stationConfigPath, `${JSON.stringify(effectiveStationConfig, null, 2)}\n`);
   await fs.writeFile(snapshotPath, `${JSON.stringify(latest, null, 2)}\n`);
   await fs.writeFile(latestPath, `${JSON.stringify(latest, null, 2)}\n`);

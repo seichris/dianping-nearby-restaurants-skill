@@ -143,16 +143,22 @@ function sharedMapPoint(record: RestaurantRecord): Point | null {
     : null;
 }
 
+function geocodeQuery(record: RestaurantRecord): string | null {
+  if (!record.address) return null;
+  const city = CITY_NAMES[record.city] || record.cityLabel || record.city;
+  return `${city}${record.address}`;
+}
+
 function geocodeAddress(AMap: AMapNamespace, record: RestaurantRecord): Promise<Point | null> {
   const sharedPoint = sharedMapPoint(record);
   if (sharedPoint) return Promise.resolve(sharedPoint);
-  if (!record.address) return Promise.resolve(null);
+  const query = geocodeQuery(record);
+  if (!query) return Promise.resolve(null);
 
   return new Promise((resolve) => {
     const geocoder = new AMap.Geocoder({
       city: CITY_NAMES[record.city] || record.cityLabel || record.city,
     });
-    const query = `${CITY_NAMES[record.city] || record.cityLabel}${record.address}`;
     geocoder.getLocation(query, (status, result) => {
       if (status !== "complete" || result?.info !== "OK") {
         resolve(null);
@@ -161,6 +167,37 @@ function geocodeAddress(AMap: AMapNamespace, record: RestaurantRecord): Promise<
       resolve(getLngLat(result.geocodes?.[0]?.location));
     });
   });
+}
+
+function geocodeExportEntry(record: RestaurantRecord, point: Point, source: string) {
+  return {
+    shop_id: record.shopId,
+    name: record.name,
+    address: record.address,
+    city: record.city,
+    station_name: record.stationName,
+    amap_location: {
+      lng: point.lng,
+      lat: point.lat,
+      formatted_address: null,
+      level: null,
+      query: record.amapLocation?.query || geocodeQuery(record),
+      source,
+      geocoded_at: record.amapLocation?.geocodedAt || new Date().toISOString(),
+    },
+  };
+}
+
+function logGeocodeExport(entries: ReturnType<typeof geocodeExportEntry>[]): void {
+  if (!entries.length) return;
+  const payload = {
+    type: "restaurants_nearby_amap_locations",
+    note: "Copy each amap_location into the matching records[].shop entry in data/restaurants/<city>/<station>/latest.json.",
+    count: entries.length,
+    records: entries,
+  };
+  console.info("[restaurants-nearby] AMap geocode JSON for latest.json:");
+  console.log(JSON.stringify(payload, null, 2));
 }
 
 function hashString(value: string): number {
@@ -228,6 +265,7 @@ export default function RestaurantMap({ records, activeCity, selectedId, onSelec
   const amapMarkersRef = useRef<Map<string, AMapMarkerInstance>>(new Map());
   const amapPointCacheRef = useRef<Map<string, Point | null>>(new Map());
   const amapInfoWindowRef = useRef<AMapInfoWindowInstance | null>(null);
+  const loggedGeocodeExportKeyRef = useRef<string | null>(null);
   const openMapRef = useRef<MapLibreMap | null>(null);
   const openMarkersRef = useRef<Map<string, { marker: MapLibreMarker; point: Point }>>(new Map());
   const openPopupRef = useRef<MapLibrePopup | null>(null);
@@ -421,12 +459,12 @@ export default function RestaurantMap({ records, activeCity, selectedId, onSelec
       const points = await Promise.all(
         limitedRecords.map(async (record) => {
           const sharedPoint = sharedMapPoint(record);
-          if (sharedPoint) return { record, point: sharedPoint, shared: true };
+          if (sharedPoint) return { record, point: sharedPoint, source: record.amapLocation?.source || "saved_amap_location" };
           const cacheKey = `${record.city}:${record.address || record.name}`;
           if (!amapPointCacheRef.current.has(cacheKey)) {
             amapPointCacheRef.current.set(cacheKey, await geocodeAddress(amapNamespace, record));
           }
-          return { record, point: amapPointCacheRef.current.get(cacheKey) || null, shared: false };
+          return { record, point: amapPointCacheRef.current.get(cacheKey) || null, source: "amap_js_browser" };
         })
       );
 
@@ -459,7 +497,15 @@ export default function RestaurantMap({ records, activeCity, selectedId, onSelec
         mapInstance.setCenter?.([center.lng, center.lat]);
       }
 
-      const sharedCount = points.filter(({ point, shared }) => point && shared).length;
+      const sharedCount = points.filter(({ point, source }) => point && source !== "amap_js_browser").length;
+      const exportEntries = points
+        .filter((item): item is { record: RestaurantRecord; point: Point; source: string } => Boolean(item.point))
+        .map(({ record, point, source }) => geocodeExportEntry(record, point, source));
+      const exportKey = exportEntries.map((entry) => `${entry.shop_id || entry.name}:${entry.amap_location.lng},${entry.amap_location.lat}`).join("|");
+      if (exportKey && loggedGeocodeExportKeyRef.current !== exportKey) {
+        loggedGeocodeExportKeyRef.current = exportKey;
+        logGeocodeExport(exportEntries);
+      }
       setStatus(sharedCount ? `${fitMarkers.length} mapped · ${sharedCount} cached` : `${fitMarkers.length} mapped`);
     }
 

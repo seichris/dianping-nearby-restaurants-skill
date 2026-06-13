@@ -55,7 +55,7 @@ If you only want to inspect or try the skill without saving scan history, point 
 - `SKILL.md`: Codex skill workflow.
 - `agents/openai.yaml`: Codex UI metadata for the skill.
 - `scripts/scan-dianping-taocan.mjs`: scanner module used from the Codex extension-backed browser.
-- `scripts/enrich-restaurant-data.mjs`: adds pinyin, English schedule labels, and optional shared AMap geocodes to saved JSON.
+- `scripts/enrich-restaurant-data.mjs`: adds pinyin, English schedule labels, and carries forward saved AMap geocodes.
 - `scripts/view-dianping-taocan.mjs`: local viewer for saved data.
 - `scripts/install-codex-skill.sh`: installs the native Codex skill payload.
 - `data/restaurants/station.json`: active saved station/listing URL.
@@ -148,13 +148,9 @@ Run enrichment after scans to add derived fields:
 npm run enrich:data
 ```
 
-Without an AMap REST key, enrichment still updates local text fields and skips geocoding. To persist map coordinates for everyone who loads the site, use an AMap Web Service key:
+Enrichment does not call AMap or require AMap keys. Existing `shop.amap_location` coordinates are reused when the same shop appears again, so committed JSON acts as the shared geocode cache. The scanner also carries coordinates forward from the previous `latest.json` before writing a new scan.
 
-```bash
-AMAP_WEB_SERVICE_KEY=... npm run enrich:data
-```
-
-`AMAP_REST_API_KEY` is also accepted. Successful lookups are written to each restaurant as `shop.amap_location` with the query, source, timestamp, and coordinates. Existing coordinates are reused when the query has not changed, so committed JSON acts as the shared geocode cache. The map uses these saved points before falling back to browser-side AMap geocoding or station-distance estimates.
+When the website geocodes restaurants in the AMap view, it logs a copy-pasteable JSON payload in the browser console. Copy each `amap_location` into the matching `records[].shop` entry in `data/restaurants/<city>/<station>/latest.json`, then open a PR with the JSON data change.
 
 ## View
 
@@ -181,7 +177,7 @@ Each restaurant record includes:
 - source metadata: listing page, page number, result index
 - ratings: overall rating, review count, taste/environment/service scores when visible
 - pricing and location: average price per person, area, category, distance from station
-- optional shared map cache: AMap longitude/latitude and geocode metadata when enrichment runs with an AMap Web Service key
+- optional shared map cache: AMap longitude/latitude and geocode metadata stored in `shop.amap_location`
 - visit context: open status, opening hours, ranking badge, amenities
 - food context: recommended dishes, menu count, review count from the review section
 - offers: vouchers and set meals with title, price, discount, original price, refund/availability flags, group size, valid-time text, earliest usable date, and raw text

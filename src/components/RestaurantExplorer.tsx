@@ -167,15 +167,15 @@ export default function RestaurantExplorer({ dataset, amapConfig }: RestaurantEx
                   className="h-10 w-full rounded-md border bg-white pl-9 pr-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                 />
               </label>
-              <div className="flex flex-nowrap items-center gap-2 overflow-x-auto pb-1">
-                <label className="relative block w-[16rem] shrink-0">
+              <div className="flex flex-nowrap items-center gap-2">
+                <label className="relative block w-[10.75rem] shrink-0">
                   <MapPin className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                   <select
                     value={stationFilter}
                     onChange={(event) => handleStationChange(event.target.value)}
                     className="h-10 w-full appearance-none rounded-md border bg-white pl-9 pr-8 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                   >
-                    <option value="all">All subway stations</option>
+                    <option value="all">All stations</option>
                     {stationOptions.map((station) => (
                       <option key={station.key} value={station.key}>
                         {station.stationName}
@@ -192,7 +192,7 @@ export default function RestaurantExplorer({ dataset, amapConfig }: RestaurantEx
                       aria-pressed={city.city === activeCity}
                       onClick={() => handleCityChange(city.city)}
                       className={cn(
-                        "h-10 rounded-md border px-3 text-sm font-medium transition",
+                        "h-10 rounded-md border px-2.5 text-sm font-medium transition",
                         city.city === activeCity
                           ? "border-blue-600 bg-blue-600 text-white shadow-sm"
                           : "border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:bg-blue-50"

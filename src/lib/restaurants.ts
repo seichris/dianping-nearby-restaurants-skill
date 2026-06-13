@@ -1,7 +1,13 @@
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 
-import type { CityRestaurantGroup, RestaurantDataset, RestaurantOffer, RestaurantRecord } from "@/types/restaurants";
+import type {
+  CityRestaurantGroup,
+  RestaurantAmapLocation,
+  RestaurantDataset,
+  RestaurantOffer,
+  RestaurantRecord,
+} from "@/types/restaurants";
 
 const CITY_LABELS: Record<string, string> = {
   beijing: "Beijing",
@@ -64,6 +70,31 @@ function parseOffers(value: unknown): RestaurantOffer[] {
     .filter((item): item is RestaurantOffer => Boolean(item));
 }
 
+function parsePoint(value: unknown): { lng: number; lat: number } | null {
+  const point = asRecord(value);
+  if (!point) return null;
+  const lng = asNumber(point.lng);
+  const lat = asNumber(point.lat);
+  return lng !== null && lat !== null ? { lng, lat } : null;
+}
+
+function parseAmapLocation(value: unknown): RestaurantAmapLocation | null {
+  const location = asRecord(value);
+  const point = parsePoint(location);
+  if (!location || !point) return null;
+
+  return {
+    ...point,
+    formattedAddress: asString(location.formatted_address),
+    level: asString(location.level),
+    query: asString(location.query),
+    source: asString(location.source),
+    geocodedAt: asString(location.geocoded_at),
+    originalLocation: parsePoint(location.original_location),
+    maxExpectedStationDistanceMeters: asNumber(location.max_expected_station_distance_meters),
+  };
+}
+
 function parseLatestJson(city: string, stationDirName: string, json: unknown): RestaurantRecord[] {
   const root = asRecord(json);
   if (!root) return [];
@@ -107,6 +138,7 @@ function parseLatestJson(city: string, stationDirName: string, json: unknown): R
         imageUrl: asString(shop.image_url),
         address: asString(shop.address),
         addressPinyin: asString(shop.address_pinyin),
+        amapLocation: parseAmapLocation(shop.amap_location),
         rating: asNumber(shop.rating),
         reviewCount: asNumber(shop.review_count),
         avgPricePerPerson: asNumber(shop.avg_price_per_person),

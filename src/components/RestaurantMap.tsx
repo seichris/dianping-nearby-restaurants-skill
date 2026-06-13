@@ -135,7 +135,17 @@ function getLngLat(location: unknown): Point | null {
     : null;
 }
 
+function sharedMapPoint(record: RestaurantRecord): Point | null {
+  const location = record.amapLocation;
+  if (!location) return null;
+  return Number.isFinite(location.lng) && Number.isFinite(location.lat)
+    ? { lng: location.lng, lat: location.lat }
+    : null;
+}
+
 function geocodeAddress(AMap: AMapNamespace, record: RestaurantRecord): Promise<Point | null> {
+  const sharedPoint = sharedMapPoint(record);
+  if (sharedPoint) return Promise.resolve(sharedPoint);
   if (!record.address) return Promise.resolve(null);
 
   return new Promise((resolve) => {
@@ -171,6 +181,8 @@ function offsetPoint(center: Point, distanceMeters: number, bearingDegrees: numb
 }
 
 function approximateOpenMapPoint(record: RestaurantRecord, index: number): Point {
+  const sharedPoint = sharedMapPoint(record);
+  if (sharedPoint) return sharedPoint;
   const center = STATION_CENTERS[record.stationKey] || CITY_CENTERS[record.city] || CITY_CENTERS.shanghai;
   const distance = Math.max(80, Math.min(record.distanceMeters || 420, 1800));
   const bearing = (hashString(`${record.id}:${record.name}`) + index * 23) % 360;
@@ -408,11 +420,13 @@ export default function RestaurantMap({ records, activeCity, selectedId, onSelec
 
       const points = await Promise.all(
         limitedRecords.map(async (record) => {
+          const sharedPoint = sharedMapPoint(record);
+          if (sharedPoint) return { record, point: sharedPoint, shared: true };
           const cacheKey = `${record.city}:${record.address || record.name}`;
           if (!amapPointCacheRef.current.has(cacheKey)) {
             amapPointCacheRef.current.set(cacheKey, await geocodeAddress(amapNamespace, record));
           }
-          return { record, point: amapPointCacheRef.current.get(cacheKey) || null };
+          return { record, point: amapPointCacheRef.current.get(cacheKey) || null, shared: false };
         })
       );
 
@@ -445,7 +459,8 @@ export default function RestaurantMap({ records, activeCity, selectedId, onSelec
         mapInstance.setCenter?.([center.lng, center.lat]);
       }
 
-      setStatus(`${fitMarkers.length} mapped`);
+      const sharedCount = points.filter(({ point, shared }) => point && shared).length;
+      setStatus(sharedCount ? `${fitMarkers.length} mapped · ${sharedCount} cached` : `${fitMarkers.length} mapped`);
     }
 
     void renderAMapMarkers();
@@ -487,8 +502,8 @@ export default function RestaurantMap({ records, activeCity, selectedId, onSelec
       </button>
       <div className="pointer-events-none absolute bottom-3 right-3 max-w-[260px] rounded-md bg-white/95 px-3 py-2 text-xs text-slate-600 shadow-sm">
         {provider === "openfreemap"
-          ? "OpenFreeMap markers are approximated from station distance."
-          : "AMap markers are geocoded from Dianping shop addresses."}
+          ? "OpenFreeMap uses saved AMap points when available, then station-distance estimates."
+          : "AMap uses saved points when available, then geocodes Dianping shop addresses."}
       </div>
     </div>
   );

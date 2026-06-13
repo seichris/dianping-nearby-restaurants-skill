@@ -12,6 +12,21 @@ export interface RestaurantOffer {
   imageUrl: string | null;
 }
 
+export interface RestaurantAmapLocation {
+  lng: number;
+  lat: number;
+  formattedAddress: string | null;
+  level: string | null;
+  query: string | null;
+  source: string | null;
+  geocodedAt: string | null;
+  originalLocation: {
+    lng: number;
+    lat: number;
+  } | null;
+  maxExpectedStationDistanceMeters: number | null;
+}
+
 export interface RestaurantRecord {
   id: string;
   city: string;
@@ -29,6 +44,7 @@ export interface RestaurantRecord {
   imageUrl: string | null;
   address: string | null;
   addressPinyin: string | null;
+  amapLocation: RestaurantAmapLocation | null;
   rating: number | null;
   reviewCount: number | null;
   avgPricePerPerson: number | null;

@@ -134,7 +134,15 @@ export async function loadRestaurantDataset(): Promise<RestaurantDataset> {
       const latestPath = path.join(cityPath, stationEntry.name, "latest.json");
       const file = await readFile(latestPath, "utf8").catch(() => null);
       if (!file) continue;
-      records.push(...parseLatestJson(city, stationEntry.name, JSON.parse(file)));
+      try {
+        records.push(...parseLatestJson(city, stationEntry.name, JSON.parse(file)));
+      } catch (error) {
+        console.warn(
+          `Skipping invalid restaurant snapshot at ${latestPath}: ${
+            error instanceof Error ? error.message : "unknown parse error"
+          }`
+        );
+      }
     }
 
     if (records.length) {

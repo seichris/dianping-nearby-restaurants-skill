@@ -60,7 +60,9 @@
           "烧鹅例牌"
         ],
         "menu_count": null,
-        "review_section_count": null
+        "review_section_count": null,
+        "name_pinyin": "he xian ji ( rui chen guo ji zhong xin dian )",
+        "address_pinyin": "nong zhan guan nan lu 13 hao rui chen guo ji zhong xin 2 ceng"
       },
       "offers": [
         {
@@ -95,9 +97,11 @@
           "details": {
             "group_size": null,
             "valid_time": "周一至周日",
-            "earliest_usable": null
+            "earliest_usable": null,
+            "valid_time_en": "Monday to Sunday"
           },
-          "raw_text": "【收鑶+拍照打卡专属福利】古法陈皮红豆沙 周一至周日 随时退 过期自动退 ¥ 0.99 0.6折 ￥18 抢购"
+          "raw_text": "【收鑶+拍照打卡专属福利】古法陈皮红豆沙 周一至周日 随时退 过期自动退 ¥ 0.99 0.6折 ￥18 抢购",
+          "title_en": "Traditional aged tangerine peel red bean soup"
         },
         {
           "type": "taocan",
@@ -113,9 +117,11 @@
           "details": {
             "group_size": null,
             "valid_time": "周一至周日",
-            "earliest_usable": null
+            "earliest_usable": null,
+            "valid_time_en": "Monday to Sunday"
           },
-          "raw_text": "【尝鲜】老火煲汤（位） 周一至周日 随时退 过期自动退 ¥ 9.9 5.5折 ￥18 抢购"
+          "raw_text": "【尝鲜】老火煲汤（位） 周一至周日 随时退 过期自动退 ¥ 9.9 5.5折 ￥18 抢购",
+          "title_en": "Trial offer: slow-cooked Cantonese soup, per person"
         }
       ],
       "extraction": {
@@ -175,7 +181,9 @@
           "猪碎肉吐司"
         ],
         "menu_count": 23,
-        "review_section_count": null
+        "review_section_count": null,
+        "name_pinyin": "THE TACO BAR( san li tun dian )",
+        "address_pinyin": "gong ren ti yu chang bei lu 4 hao yuan 10 hao lou 1 ceng 104（ ben lei ge bi ）"
       },
       "offers": [
         {
@@ -210,9 +218,11 @@
           "details": {
             "group_size": "双人",
             "valid_time": "周一至周日",
-            "earliest_usable": null
+            "earliest_usable": null,
+            "valid_time_en": "Monday to Sunday"
           },
-          "raw_text": "精选双人套餐 周一至周日 随时退 过期自动退 ¥ 288 7.8折 ￥374 抢购"
+          "raw_text": "精选双人套餐 周一至周日 随时退 过期自动退 ¥ 288 7.8折 ￥374 抢购",
+          "title_en": "Selected set meal for two"
         },
         {
           "type": "taocan",
@@ -228,9 +238,11 @@
           "details": {
             "group_size": "双人",
             "valid_time": "周一至周日",
-            "earliest_usable": null
+            "earliest_usable": null,
+            "valid_time_en": "Monday to Sunday"
           },
-          "raw_text": "经典双人套餐 周一至周日 随时退 过期自动退 ¥ 288 7.8折 ￥374 抢购"
+          "raw_text": "经典双人套餐 周一至周日 随时退 过期自动退 ¥ 288 7.8折 ￥374 抢购",
+          "title_en": "Classic set meal for two"
         }
       ],
       "extraction": {
@@ -290,7 +302,9 @@
           "西冷牛排"
         ],
         "menu_count": null,
-        "review_section_count": null
+        "review_section_count": null,
+        "name_pinyin": "Scott's Family yi da li jia ting liao li ( san li tun dian )",
+        "address_pinyin": "san li tun dong san jie 4 hao （ bo ci wa na shi guan dui mian ）"
       },
       "offers": [
         {
@@ -307,9 +321,11 @@
           "details": {
             "group_size": "双人",
             "valid_time": "周一至周日",
-            "earliest_usable": null
+            "earliest_usable": null,
+            "valid_time_en": "Monday to Sunday"
           },
-          "raw_text": "豪华牛排双人套餐 周一至周日 随时退 过期自动退 ¥ 398 6.9折 ￥580 抢购"
+          "raw_text": "豪华牛排双人套餐 周一至周日 随时退 过期自动退 ¥ 398 6.9折 ￥580 抢购",
+          "title_en": "Deluxe steak set meal for two"
         },
         {
           "type": "taocan",
@@ -328,7 +344,8 @@
             "valid_time": null,
             "earliest_usable": null
           },
-          "raw_text": "超值双人商务套餐 今日可用 随时退 过期自动退 ¥ 158 7折 ￥226 抢购"
+          "raw_text": "超值双人商务套餐 今日可用 随时退 过期自动退 ¥ 158 7折 ￥226 抢购",
+          "title_en": "Value business set meal for two"
         }
       ],
       "extraction": {
@@ -387,7 +404,9 @@
           "西班牙油浸蒜香虾"
         ],
         "menu_count": 38,
-        "review_section_count": null
+        "review_section_count": null,
+        "name_pinyin": "Wood Garden( san li tun dian )",
+        "address_pinyin": "gong ren ti yu chang bei lu gong ti bei lu 4 hao yuan"
       },
       "offers": [
         {
@@ -425,7 +444,8 @@
             "valid_time": null,
             "earliest_usable": null
           },
-          "raw_text": "【夏日上新】经典双人餐•每晚驻唱 今日可用 随时退 过期自动退 ¥ 265 6.1折 ￥440 抢购"
+          "raw_text": "【夏日上新】经典双人餐•每晚驻唱 今日可用 随时退 过期自动退 ¥ 265 6.1折 ￥440 抢购",
+          "title_en": "New summer offer: classic dinner for two with nightly live singing"
         },
         {
           "type": "taocan",
@@ -444,7 +464,8 @@
             "valid_time": null,
             "earliest_usable": null
           },
-          "raw_text": "【鲜活海鲜】精选招牌海鲜饭双人餐 今日可用 随时退 过期自动退 ¥ 366 5.7折 ￥650 抢购"
+          "raw_text": "【鲜活海鲜】精选招牌海鲜饭双人餐 今日可用 随时退 过期自动退 ¥ 366 5.7折 ￥650 抢购",
+          "title_en": "Fresh seafood: signature seafood rice set for two"
         }
       ],
       "extraction": {
@@ -504,7 +525,9 @@
           "焦糖布丁"
         ],
         "menu_count": 15,
-        "review_section_count": null
+        "review_section_count": null,
+        "name_pinyin": "Q MEX ku mai mo xi ge can ba ( san li tun dian )",
+        "address_pinyin": "gong ren ti yu chang bei lu gong ti bei lu 4 hao yuan 80 hao lou 1 ceng 107 shi"
       },
       "offers": [
         {
@@ -539,9 +562,11 @@
           "details": {
             "group_size": "双人",
             "valid_time": "周一至周日",
-            "earliest_usable": null
+            "earliest_usable": null,
+            "valid_time_en": "Monday to Sunday"
           },
-          "raw_text": "【踏夏寻味】招牌双人套餐 周一至周日 随时退 过期自动退 ¥ 231 6.2折 ￥373 抢购"
+          "raw_text": "【踏夏寻味】招牌双人套餐 周一至周日 随时退 过期自动退 ¥ 231 6.2折 ￥373 抢购",
+          "title_en": "Summer flavors: signature set meal for two"
         },
         {
           "type": "taocan",
@@ -557,9 +582,11 @@
           "details": {
             "group_size": "双人",
             "valid_time": "周一至周日",
-            "earliest_usable": null
+            "earliest_usable": null,
+            "valid_time_en": "Monday to Sunday"
           },
-          "raw_text": "经典双人套餐 周一至周日 随时退 过期自动退 ¥ 244 8.4折 ￥293 抢购"
+          "raw_text": "经典双人套餐 周一至周日 随时退 过期自动退 ¥ 244 8.4折 ￥293 抢购",
+          "title_en": "Classic set meal for two"
         }
       ],
       "extraction": {
@@ -618,7 +645,9 @@
           "葱烤八宝葫芦鸭"
         ],
         "menu_count": null,
-        "review_section_count": null
+        "review_section_count": null,
+        "name_pinyin": "wu li xiang shang hai cai guan",
+        "address_pinyin": "gong ren ti yu chang bei lu jia 2 hao ying ke zhong xin lin jie di shang yi ceng"
       },
       "offers": [],
       "extraction": {
@@ -670,7 +699,9 @@
           "巧克力蛋糕"
         ],
         "menu_count": 8,
-        "review_section_count": null
+        "review_section_count": null,
+        "name_pinyin": "coops zi ran xing ( san li tun ji dian yuan dian )",
+        "address_pinyin": "gong ren ti yu chang bei lu san li tun si hao yuan 81 hao lou yi ceng 110 shi"
       },
       "offers": [
         {
@@ -690,7 +721,8 @@
             "valid_time": null,
             "earliest_usable": null
           },
-          "raw_text": "【Coops精选】切角蛋糕四选二 今日可用 随时退 过期自动退 ¥ 75 8.4折 ￥90 抢购"
+          "raw_text": "【Coops精选】切角蛋糕四选二 今日可用 随时退 过期自动退 ¥ 75 8.4折 ￥90 抢购",
+          "title_en": "Coops selection: choose two cake slices"
         },
         {
           "type": "taocan",
@@ -706,9 +738,11 @@
           "details": {
             "group_size": null,
             "valid_time": "周一至周日",
-            "earliest_usable": null
+            "earliest_usable": null,
+            "valid_time_en": "Monday to Sunday"
           },
-          "raw_text": "抹茶热压可颂华夫下午茶 周一至周日 随时退 过期自动退 ¥ 68 8.4折 ￥81 抢购"
+          "raw_text": "抹茶热压可颂华夫下午茶 周一至周日 随时退 过期自动退 ¥ 68 8.4折 ￥81 抢购",
+          "title_en": "Matcha pressed croissant waffle afternoon tea"
         }
       ],
       "extraction": {
@@ -767,7 +801,9 @@
           "提拉米苏"
         ],
         "menu_count": null,
-        "review_section_count": null
+        "review_section_count": null,
+        "name_pinyin": "LA PLATEA lan di di zhong hai can ba ( san li tun dian )",
+        "address_pinyin": "gong ren ti yu chang bei lu si hao yuan 11 hao lou"
       },
       "offers": [
         {
@@ -784,9 +820,11 @@
           "details": {
             "group_size": null,
             "valid_time": "周一至周日",
-            "earliest_usable": null
+            "earliest_usable": null,
+            "valid_time_en": "Monday to Sunday"
           },
-          "raw_text": "下午茶 · 咖啡甜点套餐 周一至周日 随时退 过期自动退 ¥ 29.9 3.8折 ￥80 抢购"
+          "raw_text": "下午茶 · 咖啡甜点套餐 周一至周日 随时退 过期自动退 ¥ 29.9 3.8折 ￥80 抢购",
+          "title_en": "Afternoon tea coffee and dessert set"
         },
         {
           "type": "taocan",
@@ -802,9 +840,11 @@
           "details": {
             "group_size": "单人",
             "valid_time": "周一至周日",
-            "earliest_usable": null
+            "earliest_usable": null,
+            "valid_time_en": "Monday to Sunday"
           },
-          "raw_text": "经典热销 · 咖啡单人份 周一至周日 随时退 过期自动退 ¥ 19.9 6.3折 ￥32 抢购"
+          "raw_text": "经典热销 · 咖啡单人份 周一至周日 随时退 过期自动退 ¥ 19.9 6.3折 ￥32 抢购",
+          "title_en": "Popular classic coffee for one"
         }
       ],
       "extraction": {
@@ -862,7 +902,9 @@
           "白桃乌龙"
         ],
         "menu_count": 1,
-        "review_section_count": null
+        "review_section_count": null,
+        "name_pinyin": "zhi xin hua SoulFlower( san li tun dian )",
+        "address_pinyin": "nong zhan guan nan lu 12 hao 2 hao lou"
       },
       "offers": [
         {
@@ -881,7 +923,8 @@
             "valid_time": null,
             "earliest_usable": null
           },
-          "raw_text": "可配送 随时退 过期自动退 ¥ 228 4.8折 ￥476 抢购"
+          "raw_text": "可配送 随时退 过期自动退 ¥ 228 4.8折 ￥476 抢购",
+          "title_en": "Delivery available"
         },
         {
           "type": "taocan",
@@ -899,7 +942,8 @@
             "valid_time": null,
             "earliest_usable": null
           },
-          "raw_text": "可配送 随时退 过期自动退 ¥ 218 6.6折 ￥335 抢购"
+          "raw_text": "可配送 随时退 过期自动退 ¥ 218 6.6折 ￥335 抢购",
+          "title_en": "Delivery available"
         }
       ],
       "extraction": {
@@ -959,7 +1003,9 @@
           "烟熏烤玉米Smoke Corn"
         ],
         "menu_count": 48,
-        "review_section_count": null
+        "review_section_count": null,
+        "name_pinyin": "ben lei mei shi kao rou ( san li tun dian )",
+        "address_pinyin": "gong ren ti yu chang bei lu 4 hao 10 hao lou yi ceng 106 hao"
       },
       "offers": [
         {
@@ -994,9 +1040,11 @@
           "details": {
             "group_size": "双人",
             "valid_time": null,
-            "earliest_usable": "最早06.15可用"
+            "earliest_usable": "最早06.15可用",
+            "earliest_usable_en": "Available from 06/15"
           },
-          "raw_text": "【优雅时光】烤肉拼盘双人餐（含烟熏烤玉米/可乐） 最早06.15可用 随时退 过期自动退 ¥ 320 8.5折 ￥380 抢购"
+          "raw_text": "【优雅时光】烤肉拼盘双人餐（含烟熏烤玉米/可乐） 最早06.15可用 随时退 过期自动退 ¥ 320 8.5折 ￥380 抢购",
+          "title_en": "Elegant time: grilled meat platter for two with smoked corn and cola"
         },
         {
           "type": "taocan",
@@ -1015,7 +1063,8 @@
             "valid_time": null,
             "earliest_usable": null
           },
-          "raw_text": "2人汉堡套餐 今日可用 随时退 过期自动退 ¥ 218 8折 ￥273 抢购"
+          "raw_text": "2人汉堡套餐 今日可用 随时退 过期自动退 ¥ 218 8折 ￥273 抢购",
+          "title_en": "Burger set meal for two"
         }
       ],
       "extraction": {

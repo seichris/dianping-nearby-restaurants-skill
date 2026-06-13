@@ -98,12 +98,12 @@ The raw address is not saved to `station.json`; only the confirmed station, city
 Run from a Codex Node REPL after creating the extension-backed `browser` object:
 
 ```js
-const { runScan } = await import(`${nodeRepl.homeDir}/.codex/skills/dianping-taocan-discovery/scripts/scan-dianping-taocan.mjs`);
+const { runScan } = await import(`${nodeRepl.cwd}/scripts/scan-dianping-taocan.mjs`);
 
 const result = await runScan({
   browser,
   cwd: nodeRepl.cwd,
-  pages: 2,
+  pages: 3,
 });
 
 await browser.tabs.finalize({ keep: [] });
@@ -112,7 +112,7 @@ result;
 
 Options:
 
-- `pages`: number of Dianping listing pages to scan.
+- `pages`: number of Dianping listing pages to scan, default `3`.
 - `limit`: maximum restaurants to scan, useful for smoke tests.
 - `baseUrl`: override the saved station listing URL.
 - `outDir`: output root, default `data/restaurants`.

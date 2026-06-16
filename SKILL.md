@@ -84,7 +84,9 @@ await browser.tabs.finalize({ keep: [] });
 result;
 ```
 
-`runScan` reads `station.json` by default and writes to `data/restaurants/<city>/<station>/`. Pass `baseUrl` to override the saved station URL, `pages` to scan multiple listing pages, `limit` for a small smoke test, and `outDir` to override the output root.
+`runScan` reads `station.json` by default and writes to `data/restaurants/<city>/<station>/`. Pass `baseUrl` to override the saved station URL, `pages` to scan multiple listing pages, `limit` for a small smoke test, `restaurantTabOpenDelayMs` to control the delay between opening restaurant detail tabs, and `outDir` to override the output root. The restaurant tab delay defaults to `2000` and can also be set with `DIANPING_RESTAURANT_TAB_OPEN_DELAY_MS` in the environment or local `.env.local`.
+
+If Dianping returns a captcha, rate-limit page, `403 Forbidden`, `openresty` error page, or an empty listing page, the scanner throws `DianpingBlockedError` and stops before persisting the scan. Notify the user and continue only after they explicitly say to proceed.
 
 The scanner visits listing pages like:
 

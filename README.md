@@ -119,6 +119,9 @@ Options:
 - `limit`: maximum restaurants to scan, useful for smoke tests.
 - `baseUrl`: override the saved station listing URL.
 - `outDir`: output root, default `data/restaurants`.
+- `restaurantTabOpenDelayMs`: delay between opening restaurant detail tabs, default `2000`. You can also set `DIANPING_RESTAURANT_TAB_OPEN_DELAY_MS=2000` in the environment or in local `.env.local`.
+
+If Dianping returns a captcha, rate-limit page, `403 Forbidden`, or an empty listing page, the scanner throws `DianpingBlockedError` and stops before persisting the scan. Notify the user and continue only after they explicitly say to proceed.
 
 By default, scans are written under the city and station:
 

@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+import fsSync from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { pinyin } from 'pinyin-pro';
@@ -7,6 +8,8 @@ const DEFAULT_BASE_URL = 'https://www.dianping.com/shanghai/ch10/r101837';
 const DEFAULT_OUT_DIR = 'data/restaurants';
 const DEFAULT_PAGES = 3;
 const DEFAULT_LIMIT = Number.POSITIVE_INFINITY;
+const DEFAULT_RESTAURANT_TAB_OPEN_DELAY_MS = 2000;
+const RESTAURANT_TAB_OPEN_DELAY_MS_ENV = 'DIANPING_RESTAURANT_TAB_OPEN_DELAY_MS';
 const KNOWN_CATEGORIES = [
   '本帮江浙菜',
   '东南亚菜',
@@ -58,6 +61,102 @@ function defaultCwd() {
   if (typeof nodeRepl !== 'undefined' && nodeRepl.cwd) return nodeRepl.cwd;
   if (globalThis.nodeRepl?.cwd) return globalThis.nodeRepl.cwd;
   return '.';
+}
+
+function sleep(ms) {
+  if (ms <= 0) return Promise.resolve();
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function parseNonNegativeMs(value, fallback, source) {
+  if (value === undefined || value === null || value === '') return fallback;
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed) || parsed < 0) {
+    throw new Error(`${source} must be a non-negative number of milliseconds.`);
+  }
+  return parsed;
+}
+
+function readLocalEnvValue(cwd, key) {
+  const filePath = path.resolve(cwd || defaultCwd(), '.env.local');
+  let contents;
+  try {
+    contents = fsSync.readFileSync(filePath, 'utf8');
+  } catch {
+    return undefined;
+  }
+
+  for (const line of contents.split(/\r?\n/)) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) continue;
+    const match = trimmed.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
+    if (!match || match[1] !== key) continue;
+    return match[2].trim().replace(/^(['"])(.*)\1$/, '$2');
+  }
+
+  return undefined;
+}
+
+export function resolveRestaurantTabOpenDelayMs(options = {}) {
+  const envValue = typeof process !== 'undefined'
+    ? process.env?.[RESTAURANT_TAB_OPEN_DELAY_MS_ENV]
+    : undefined;
+  const localEnvValue = readLocalEnvValue(options.cwd, RESTAURANT_TAB_OPEN_DELAY_MS_ENV);
+  return parseNonNegativeMs(
+    options.restaurantTabOpenDelayMs ?? envValue ?? localEnvValue,
+    DEFAULT_RESTAURANT_TAB_OPEN_DELAY_MS,
+    options.restaurantTabOpenDelayMs !== undefined
+      ? 'restaurantTabOpenDelayMs'
+      : envValue !== undefined
+      ? RESTAURANT_TAB_OPEN_DELAY_MS_ENV
+      : '.env.local DIANPING_RESTAURANT_TAB_OPEN_DELAY_MS'
+  );
+}
+
+export class DianpingBlockedError extends Error {
+  constructor(message, details = {}) {
+    super(message);
+    this.name = 'DianpingBlockedError';
+    this.code = 'DIANPING_BLOCKED';
+    this.details = details;
+  }
+}
+
+export function detectDianpingBlockedPage(page = {}) {
+  const title = String(page.title || '');
+  const href = String(page.href || '');
+  const text = [
+    title,
+    href,
+    ...(Array.isArray(page.lines) ? page.lines : []),
+    page.text || '',
+    page.html || '',
+  ].join('\n');
+
+  const checks = [
+    ['http_403', /\b403\s+Forbidden\b/i],
+    ['openresty_error', /\bopenresty\b/i],
+    ['captcha_or_verification', /身份核实|滑块|验证码|安全验证|请完成验证|验证中心/],
+    ['rate_limited', /访问过于频繁|请求过于频繁|操作太快|稍后再试|异常流量|禁止访问|Forbidden/i],
+  ];
+  const matched = checks.find(([, pattern]) => pattern.test(text));
+  if (!matched) return null;
+
+  return {
+    reason: matched[0],
+    title,
+    href,
+    text_sample: text.replace(/\s+/g, ' ').trim().slice(0, 500),
+  };
+}
+
+function throwIfDianpingBlocked(page, context) {
+  const blocked = detectDianpingBlockedPage(page);
+  if (!blocked) return;
+  throw new DianpingBlockedError(`Dianping blocked the scan: ${blocked.reason}`, {
+    ...context,
+    ...blocked,
+  });
 }
 
 function safePathSegment(value, fallback) {
@@ -469,6 +568,17 @@ export function parseOffers(lines) {
 export async function extractListingShops(tab, pageNumber, pageUrl) {
   await tab.goto(pageUrl);
   await tab.playwright.waitForLoadState({ state: 'domcontentloaded', timeoutMs: 15000 });
+  const page = await tab.playwright.evaluate(() => ({
+    title: document.title,
+    href: location.href,
+    text: document.body?.innerText || '',
+  }), undefined, { timeoutMs: 15000 });
+  throwIfDianpingBlocked(page, {
+    page_type: 'listing',
+    page_number: pageNumber,
+    page_url: pageUrl,
+  });
+
   const shops = await tab.playwright.evaluate(() => {
     const normalizeImageUrl = (value, baseUrl) => {
       if (!value || typeof value !== 'string') return null;
@@ -539,6 +649,17 @@ export async function extractListingShops(tab, pageNumber, pageUrl) {
     }
     return result;
   }, undefined, { timeoutMs: 15000 });
+  if (shops.length === 0) {
+    throw new DianpingBlockedError('Dianping listing page returned no restaurants.', {
+      page_type: 'listing',
+      page_number: pageNumber,
+      page_url: pageUrl,
+      title: page.title,
+      href: page.href,
+      reason: 'empty_listing',
+      text_sample: page.text.replace(/\s+/g, ' ').trim().slice(0, 500),
+    });
+  }
 
   return shops.map((shop, index) => ({
     ...shop,
@@ -640,6 +761,13 @@ export async function extractShopRecord(browser, shop, scanId, baseUrl) {
         lines,
       };
     }, undefined, { timeoutMs: 15000 });
+    throwIfDianpingBlocked(page, {
+      page_type: 'restaurant',
+      shop_name: shop.name,
+      shop_url: shop.url,
+      page_number: shop.source?.page_number,
+      result_index: shop.source?.result_index,
+    });
 
     const lines = page.lines;
     const verificationRequired = lines.some((line) => line.includes('身份核实') || line.includes('滑块'));
@@ -708,6 +836,7 @@ export async function runScan(options = {}) {
   const limit = Number.isFinite(Number(options.limit)) ? Number(options.limit) : DEFAULT_LIMIT;
   const outDir = resolveOutDir(options.outDir || DEFAULT_OUT_DIR, cwd);
   const scanId = options.scanId || new Date().toISOString();
+  const restaurantTabOpenDelayMs = resolveRestaurantTabOpenDelayMs(options);
 
   const seen = new Set();
   const shops = [];
@@ -729,7 +858,8 @@ export async function runScan(options = {}) {
   }
 
   const records = [];
-  for (const shop of shops) {
+  for (const [index, shop] of shops.entries()) {
+    if (index > 0) await sleep(restaurantTabOpenDelayMs);
     records.push(await extractShopRecord(options.browser, shop, scanId, baseUrl));
   }
 
@@ -745,6 +875,7 @@ export async function runScan(options = {}) {
     scan_id: scanId,
     base_url: baseUrl,
     pages,
+    restaurant_tab_open_delay_ms: restaurantTabOpenDelayMs,
     scanned_shops: records.length,
     shops_with_taocan: records.filter((record) => record.offers.some((offer) => offer.type === 'taocan')).length,
     paths,

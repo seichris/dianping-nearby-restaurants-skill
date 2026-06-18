@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Dianping Restaurant Bridge",
+  "version": "0.1.0",
+  "description": "Background-tab browser bridge for Claude restaurant scans.",
+  "permissions": [
+    "nativeMessaging",
+    "scripting",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://www.dianping.com/*",
+    "https://*.dianping.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Dianping Restaurant Bridge"
+  },
+  "background": {
+    "service_worker": "service-worker.js"
+  }
+}

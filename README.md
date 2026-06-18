@@ -82,6 +82,38 @@ The installer copies only the native skill payload:
 
 It intentionally does not copy `README.md` or `data/`; scan history stays in the workspace unless you commit and push it.
 
+## Claude Code Install
+
+Claude Code can load this repo as a plugin:
+
+```bash
+claude --plugin-dir .
+```
+
+The plugin provides two Claude skills:
+
+- `/dianping-nearby-restaurants:get-restaurant-data`
+- `/dianping-nearby-restaurants:ask-about-restaurants`
+
+For browser-backed scans, install the optional Chrome/Edge bridge so Claude can use the normal logged-in browser profile without a DevTools debug port:
+
+```bash
+# 1. Load this directory as an unpacked Chrome or Edge extension:
+# claude/browser-bridge/extension
+#
+# 2. Run the guided setup. It auto-detects the extension ID when possible:
+node claude/browser-bridge/setup.mjs --browser chrome
+```
+
+Use `--browser edge` for Microsoft Edge. If auto-detection fails, pass the extension ID directly:
+
+```bash
+node claude/browser-bridge/setup.mjs --browser chrome --extension-id EXTENSION_ID
+```
+
+The bridge is scoped to Dianping URLs and opens scan tabs with `active: false`.
+If Claude reports that the bridge is not connected, open the extension popup and click Reconnect, or restart the browser.
+
 ## Station Setup
 
 The skill accepts either an address or a subway station.

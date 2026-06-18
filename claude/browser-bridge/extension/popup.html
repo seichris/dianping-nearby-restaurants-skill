@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>
+      body {
+        font: 13px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        margin: 12px;
+        min-width: 260px;
+        color: #202124;
+      }
+      h1 {
+        font-size: 14px;
+        margin: 0 0 10px;
+      }
+      dl {
+        display: grid;
+        grid-template-columns: max-content 1fr;
+        gap: 6px 10px;
+        margin: 0 0 12px;
+      }
+      dt {
+        color: #5f6368;
+      }
+      dd {
+        margin: 0;
+        overflow-wrap: anywhere;
+      }
+      button {
+        width: 100%;
+        border: 1px solid #dadce0;
+        border-radius: 6px;
+        background: #fff;
+        padding: 7px 10px;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #f8fafd;
+      }
+      .ok {
+        color: #137333;
+        font-weight: 600;
+      }
+      .bad {
+        color: #a50e0e;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Dianping Restaurant Bridge</h1>
+    <dl>
+      <dt>Status</dt>
+      <dd id="status">Checking...</dd>
+      <dt>Connected</dt>
+      <dd id="connected">-</dd>
+      <dt>Last Error</dt>
+      <dd id="error">-</dd>
+    </dl>
+    <button id="reconnect" type="button">Reconnect</button>
+    <script src="popup.js"></script>
+  </body>
+</html>
